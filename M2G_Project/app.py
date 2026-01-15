@@ -1,148 +1,23 @@
 import flet as ft
-import os
-import sys
-import subprocess
-import shutil
-import webbrowser
 
-# --- 0. AUTO-INSTALLAZIONE PYGAME ---
-try:
-    import pygame
-except ImportError:
-    # Se siamo nell'exe, pygame è già impacchettato, quindi ignoriamo l'errore di pip
-    if not getattr(sys, 'frozen', False):
-        print("Installazione pygame...")
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "pygame"])
-    import pygame
+# --- CONFIGURAZIONE ---
+# NOTA: Ho RIMOSSO lo slash "/" iniziale. 
+# Con assets_dir="assets", Flet cerca direttamente dentro quella cartella.
+BOOKS_DATA = {
+    "Lodi Mattutine": ["lodi1.jpg", "lodi2.jpg", "lodi3.jpg", "lodi4.jpg", "lodi5.jpg"],
+    "Libretto": ["lib1.jpg", "lib2.jpg", "lib3.jpg", "lib4.jpg", "lib5.jpg"],
+    "Foto ricordo": [] 
+}
 
-# --- 1. CONFIGURAZIONE PERCORSI INTELLIGENTE (PER EXE) ---
+FEATHER_MAP = {
+    "sunrise": "sunrise.svg", "book-open": "book-open.svg", "music": "music.svg", 
+    "camera": "camera.svg", "chevron-right": "chevron-right.svg", "home": "home.svg", 
+    "user": "user.svg", "arrow-left": "arrow-left.svg", "save": "save.svg", 
+    "edit": "edit.svg", "play": "play-circle.svg", "pause": "pause-circle.svg", 
+    "stop": "stop-circle.svg"
+}
 
-# A. PERCORSO ASSETS (Icone, MP3) -> Sola lettura
-# Se è EXE, usa la cartella temporanea interna (_MEIPASS). Se è Script, usa la cartella corrente.
-if getattr(sys, 'frozen', False):
-    BASE_DIR = sys._MEIPASS
-else:
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-ASSETS_DIR = os.path.join(BASE_DIR, "assets")
-
-# B. PERCORSO DATI (Salvataggi) -> Scrittura persistente
-# Se è EXE, usa APPDATA (così i dati non si cancellano alla chiusura).
-if getattr(sys, 'frozen', False):
-    app_data_path = os.getenv('APPDATA')
-    DATA_DIR = os.path.join(app_data_path, "M2G_App")
-    # Crea la cartella in AppData se è la prima volta che apri l'app
-    if not os.path.exists(DATA_DIR):
-        try:
-            os.makedirs(DATA_DIR)
-        except:
-            DATA_DIR = os.getcwd() # Fallback disperato
-else:
-    # Se stiamo sviluppando, salva qui vicino al file py
-    DATA_DIR = BASE_DIR
-
-# File di salvataggio puntati sulla cartella SICURA (DATA_DIR)
-DATA_FILE = os.path.join(DATA_DIR, "user_data.txt")       
-NOTES_FILE = os.path.join(DATA_DIR, "user_notes.txt")     
-SETTINGS_FILE = os.path.join(DATA_DIR, "settings.txt")    
-PROFILE_PIC_FILE = os.path.join(DATA_DIR, "saved_profile.jpg") 
-
-def get_path(filename):
-    # Recupera risorse grafiche/audio
-    return os.path.join(ASSETS_DIR, filename)
-
-# --- FUNZIONI UTILITY ---
-def load_file(filepath, default=""):
-    if os.path.exists(filepath):
-        try:
-            with open(filepath, "r", encoding="utf-8") as f:
-                return f.read().strip()
-        except: pass
-    return default
-
-def save_file(filepath, content):
-    try:
-        with open(filepath, "w", encoding="utf-8") as f:
-            f.write(str(content))
-    except: pass
-
-def load_settings():
-    settings = {"font_size": "16", "dark_mode": "False"}
-    if os.path.exists(SETTINGS_FILE):
-        try:
-            with open(SETTINGS_FILE, "r") as f:
-                for line in f:
-                    if "=" in line:
-                        k, v = line.strip().split("=", 1)
-                        settings[k] = v.strip()
-        except: pass
-    return settings
-
-def save_settings_to_disk(font_size, dark_mode):
-    try:
-        with open(SETTINGS_FILE, "w") as f:
-            f.write(f"font_size={font_size}\n")
-            f.write(f"dark_mode={dark_mode}\n")
-    except: pass
-
-def get_current_profile_pic():
-    if os.path.exists(PROFILE_PIC_FILE):
-        return PROFILE_PIC_FILE
-    return get_path("user.svg")
-
-def main(page: ft.Page):
-    try: pygame.mixer.init()
-    except: pass
-
-    # --- 2. STATO INIZIALE ---
-    user_name_value = load_file(DATA_FILE, "Utente")
-    user_notes_value = load_file(NOTES_FILE, "")
-    current_settings = load_settings()
-    
-    current_font_size = float(current_settings["font_size"])
-    is_dark_mode = (current_settings["dark_mode"] == "True")
-    current_profile_src = get_current_profile_pic()
-    audio_state = 0 
-
-    # --- 3. COLORI DINAMICI ---
-    COLORS = {
-        "light": {
-            "bg": "#f3f0e9", "primary": "#6a8a73", "text": "#1a1a1a", "text_sub": "#888888", 
-            "card": "white", "icon_bg": "#dbe4de", "nav_bg": "white", "input_bg": "white",
-            "paper_bg": "#fcfbf9", "paper_line": "#e0e6e3"
-        },
-        "dark": {
-            "bg": "#1e1e1e", "primary": "#6a8a73", "text": "#ffffff", "text_sub": "#aaaaaa", 
-            "card": "#2c2c2c", "icon_bg": "#3a3a3a", "nav_bg": "#2c2c2c", "input_bg": "#333333",
-            "paper_bg": "#252525", "paper_line": "#3a3a3a"
-        }
-    }
-
-    def get_c(key):
-        return COLORS["dark" if is_dark_mode else "light"][key]
-
-    page.title = "M2G App"
-    page.bgcolor = "#333333" 
-    page.window_width = 400
-    page.window_height = 850
-    page.scroll = "adaptive"
-
-    # --- 4. MAPPA ICONE ---
-    feather_map = {
-        "sunrise": "sunrise.svg", "book-open": "book-open.svg", "music": "music.svg", 
-        "camera": "camera.svg", "chevron-right": "chevron-right.svg", "home": "home.svg", 
-        "user": "user.svg", "arrow-left": "arrow-left.svg", "save": "save.svg", 
-        "edit": "edit.svg", "play": "play-circle.svg", "pause": "pause-circle.svg", 
-        "stop": "stop-circle.svg"
-    }
-
-    BOOKS_DATA = {
-        "Lodi Mattutine": ["lodi1.jpg", "lodi2.jpg", "lodi3.jpg", "lodi4.jpg", "lodi5.jpg"],
-        "Libretto": ["lib1.jpg", "lib2.jpg", "lib3.jpg", "lib4.jpg", "lib5.jpg"],
-        "Foto ricordo": [] 
-    }
-
-    LYRICS_TEXT = """
+LYRICS_TEXT = """
 Lo sai che ti amo
 Ma a volte è difficile sai?
 Io mi perdo, mi strappo
@@ -212,303 +87,116 @@ Mentre riposi
 E non importa se non me la dai
 Ti distruggo il culo mentre dormirai
 E non importa
-    """
+"""
 
-    # --- 5. COMPONENTI UI BASE ---
+COLORS = {
+    "light": {
+        "bg": "#f3f0e9", "primary": "#6a8a73", "text": "#1a1a1a", "text_sub": "#888888", 
+        "card": "white", "icon_bg": "#dbe4de", "nav_bg": "white", "input_bg": "white",
+        "paper_bg": "#fcfbf9", "paper_line": "#e0e6e3"
+    },
+    "dark": {
+        "bg": "#1e1e1e", "primary": "#6a8a73", "text": "#ffffff", "text_sub": "#aaaaaa", 
+        "card": "#2c2c2c", "icon_bg": "#3a3a3a", "nav_bg": "#2c2c2c", "input_bg": "#333333",
+        "paper_bg": "#252525", "paper_line": "#3a3a3a"
+    }
+}
+
+def main(page: ft.Page):
+    # Configurazione iniziale minima
+    page.title = "M2G App"
+    page.bgcolor = "white"
+    page.padding = 0
+    page.spacing = 0
+    page.safe_area = ft.SafeArea(content=None)
+    
+    # --- AUDIO (Safe Load) ---
+    audio_player = None
+    try:
+        # Percorso senza slash iniziale
+        audio_player = ft.Audio(src="inno.mp3", autoplay=False, release_mode="stop")
+        page.overlay.append(audio_player)
+    except: pass
+
+    # --- DATI ---
+    def get_stored_data():
+        try:
+            saved_pic = page.client_storage.get("profile_pic") or "user.svg"
+            # Pulizia percorsi Windows
+            if "C:" in saved_pic or "\\" in saved_pic or saved_pic.startswith("/"): 
+                saved_pic = "user.svg"
+            
+            return {
+                "name": page.client_storage.get("user_name") or "Utente",
+                "notes": page.client_storage.get("user_notes") or "",
+                "font": float(page.client_storage.get("font_size") or 16.0),
+                "dark": page.client_storage.get("dark_mode") or False,
+                "pic": saved_pic
+            }
+        except:
+             return {"name": "Utente", "notes": "", "font": 16.0, "dark": False, "pic": "user.svg"}
+    
+    data = get_stored_data()
+    
+    state = {
+        "font_size": data["font"],
+        "is_dark": data["dark"],
+        "audio_playing": False
+    }
+
+    def get_c(key):
+        return COLORS["dark" if state["is_dark"] else "light"][key]
+
+    # --- FILE PICKER ---
+    def on_file_picked(e):
+        if e.files:
+            path = e.files[0].path
+            page.client_storage.set("profile_pic", path)
+            img_profile_view.src = path
+            img_profile_view.color = None
+            nav_user_img.src = path
+            nav_user_img.color = None
+            nav_user_img.border_radius = 50
+            page.update()
+            
+    file_picker = ft.FilePicker(on_result=on_file_picked)
+    page.overlay.append(file_picker)
+
+    # --- UI COMPONENTS ---
     
     # Header
-    txt_welcome_name = ft.Text(f"Bentornato, {user_name_value}", size=24, color=get_c("text"), weight="w400")
-    header_container = ft.Container(
-        width=float("inf"), padding=ft.padding.only(top=20, bottom=20),
-        content=ft.Column(horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=15, controls=[
-            ft.Container(width=65, height=65, bgcolor=get_c("primary"), border_radius=18, alignment=ft.Alignment(0, 0), content=ft.Text("M2G", color="white", size=22, weight="w300")),
-            txt_welcome_name
-        ])
-    )
+    txt_welcome_name = ft.Text(f"Bentornato, {data['name']}", size=24, weight="w400")
+    header_logo = ft.Container(width=65, height=65, border_radius=18, alignment=ft.Alignment(0, 0), content=ft.Text("M2G", color="white", size=22, weight="w300"))
+    header_container = ft.Container(padding=ft.padding.only(top=20, bottom=20, left=20, right=20), content=ft.Column(horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=15, controls=[header_logo, txt_welcome_name]))
 
-    # --- 6. DEFINIZIONE CONTENITORI (PRIMA DELL'USO) ---
+    # User Page
+    is_svg_start = "user.svg" in data["pic"]
+    img_profile_view = ft.Image(src=data["pic"], width=150, height=150, border_radius=75, fit="cover", color=get_c("primary") if is_svg_start else None)
+    container_profile_border = ft.Container(content=img_profile_view, border_radius=100, padding=5, border=ft.border.all(3, "transparent"))
     
-    # -- 6A. NOTES CONTAINER --
-    lines_background = ft.Column(spacing=0, controls=[])
-    def build_paper_lines(line_color):
-        lines_background.controls.clear()
-        for _ in range(30): 
-            lines_background.controls.append(ft.Container(height=32, border=ft.border.only(bottom=ft.border.BorderSide(1, line_color)), width=float("inf")))
-    build_paper_lines(get_c("paper_line"))
-
-    notes_input_full = ft.TextField(
-        value=user_notes_value, multiline=True, min_lines=30, max_length=10000,
-        border=ft.InputBorder.NONE, text_size=current_font_size, color=get_c("text"), bgcolor="transparent", content_padding=ft.padding.only(top=5, left=5)
-    )
+    txt_name_input = ft.TextField(value=data["name"], label="Il tuo nome", max_length=14)
+    btn_upload_photo = ft.ElevatedButton("CARICA DALLA GALLERIA", color="white", on_click=lambda _: file_picker.pick_files(allow_multiple=False, file_type=ft.FilePickerFileType.IMAGE))
     
-    icon_save_notes = ft.Image(src=get_path(feather_map["save"]), width=24, height=24, color=get_c("primary"))
-    
-    def save_notes_action(e):
-        save_file(NOTES_FILE, notes_input_full.value)
-        icon_save_notes.color = "green" 
-        icon_save_notes.update()
-
-    def close_notes(e):
-        notes_container.offset = ft.Offset(1, 0)
-        notes_container.opacity = 0
-        notes_container.update()
-        nonlocal user_notes_value
-        user_notes_value = notes_input_full.value
-        save_file(NOTES_FILE, user_notes_value)
-
-    notes_header = ft.Row(
-        alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
-        controls=[
-            ft.Container(padding=10, on_click=close_notes, content=ft.Image(src=get_path(feather_map["arrow-left"]), width=24, height=24, color=get_c("text"))),
-            ft.Text("Le tue Note", size=20, weight="bold", color=get_c("text")),
-            ft.Container(padding=10, on_click=save_notes_action, content=icon_save_notes)
-        ]
-    )
-
-    paper_stack = ft.Stack(controls=[lines_background, notes_input_full])
-
-    # DEFINIZIONE NOTES CONTAINER
-    notes_container = ft.Container(
-        width=375, height=812, bgcolor=get_c("bg"), padding=20,
-        offset=ft.Offset(1, 0), animate_offset=ft.Animation(400, ft.AnimationCurve.EASE_OUT_CUBIC),
-        opacity=0, animate_opacity=300,
-        content=ft.Column(controls=[
-            notes_header,
-            ft.Divider(color="transparent", height=10),
-            ft.Container(
-                expand=True,
-                bgcolor=get_c("paper_bg"),
-                border_radius=5,
-                padding=ft.padding.symmetric(horizontal=15, vertical=10),
-                shadow=ft.BoxShadow(blur_radius=5, color="#22000000", offset=ft.Offset(2,2)),
-                content=ft.Column(scroll="auto", controls=[paper_stack])
-            )
-        ])
-    )
-
-    def open_notes_page(e):
-        notes_container.bgcolor = get_c("bg")
-        notes_container.content.controls[2].bgcolor = get_c("paper_bg")
-        build_paper_lines(get_c("paper_line"))
-        notes_input_full.color = get_c("text")
-        icon_save_notes.color = get_c("primary")
-        notes_container.offset = ft.Offset(0, 0)
-        notes_container.opacity = 1
-        notes_container.update()
-
-    # -- 6B. READER CONTAINER --
-    reader_title = ft.Text("Titolo", size=20, weight="bold", color=get_c("text"))
-    pages_column = ft.Column(spacing=10, horizontal_alignment=ft.CrossAxisAlignment.CENTER)
-    scroll_container = ft.Column(scroll="auto", expand=True, controls=[pages_column], horizontal_alignment=ft.CrossAxisAlignment.CENTER)
-
-    def close_reader(e):
-        try: pygame.mixer.music.stop()
-        except: pass
-        nonlocal audio_state
-        audio_state = 0
-        reader_container.offset = ft.Offset(1, 0)
-        reader_container.opacity = 0
-        reader_container.update()
-
-    # DEFINIZIONE READER CONTAINER
-    reader_container = ft.Container(
-        width=375, height=812, bgcolor=get_c("bg"), padding=0,
-        offset=ft.Offset(1, 0), animate_offset=ft.Animation(400, ft.AnimationCurve.EASE_OUT_CUBIC),
-        opacity=0, animate_opacity=300,
-        content=ft.Column(controls=[
-            ft.Container(padding=20, content=ft.Row(controls=[
-                ft.Container(padding=10, on_click=close_reader, content=ft.Image(src=get_path(feather_map["arrow-left"]), width=24, height=24, color=get_c("text"))),
-                ft.Container(width=10), reader_title
-            ])),
-            ft.Divider(height=1, color="#e0e0e0"),
-            ft.Container(expand=True, content=scroll_container)
-        ])
-    )
-
-    def open_reader(e, title):
-        nonlocal audio_state
-        reader_title.value = title
-        reader_title.color = get_c("text")
-        pages_column.controls.clear()
-        reader_container.bgcolor = get_c("bg")
-        reader_container.offset = ft.Offset(0, 0)
-        reader_container.opacity = 1
-        reader_container.update()
-        
-        if title == "Inno":
-            text_element = ft.Container(padding=20, content=ft.Text(LYRICS_TEXT, size=current_font_size, color=get_c("text"), text_align="center"))
-            audio_path = get_path("inno.mp3")
-            if os.path.exists(audio_path):
-                try:
-                    pygame.mixer.music.load(audio_path)
-                    if not pygame.mixer.music.get_busy(): audio_state = 0
-                except: pass
-                
-                icon_play = ft.Image(src=get_path(feather_map["play"]), width=30, height=30, color="white")
-                label_play = ft.Text("RIPRODUCI", color="white", weight="bold")
-                btn_play = ft.Container(bgcolor=get_c("primary"), border_radius=15, padding=15, width=250, content=ft.Row([icon_play, label_play], alignment=ft.MainAxisAlignment.CENTER), on_click=lambda e: toggle_audio(e))
-                btn_stop = ft.Container(padding=10, content=ft.Column([ft.Image(src=get_path(feather_map["stop"]), width=24, height=24, color="red"), ft.Text("STOP", size=10, color="red")], spacing=2, alignment=ft.MainAxisAlignment.CENTER), on_click=lambda e: stop_audio(e))
-
-                def toggle_audio(e):
-                    nonlocal audio_state
-                    if audio_state == 0:
-                        pygame.mixer.music.play()
-                        audio_state = 1
-                        icon_play.src = get_path(feather_map["pause"])
-                        label_play.value = "PAUSA"
-                        btn_play.bgcolor = "#d9534f"
-                    elif audio_state == 1:
-                        pygame.mixer.music.pause()
-                        audio_state = 2
-                        icon_play.src = get_path(feather_map["play"])
-                        label_play.value = "RIPRENDI"
-                        btn_play.bgcolor = get_c("primary")
-                    elif audio_state == 2:
-                        pygame.mixer.music.unpause()
-                        audio_state = 1
-                        icon_play.src = get_path(feather_map["pause"])
-                        label_play.value = "PAUSA"
-                        btn_play.bgcolor = "#d9534f"
-                    btn_play.update()
-
-                def stop_audio(e):
-                    nonlocal audio_state
-                    pygame.mixer.music.stop()
-                    audio_state = 0
-                    icon_play.src = get_path(feather_map["play"])
-                    label_play.value = "RIPRODUCI"
-                    btn_play.bgcolor = get_c("primary")
-                    btn_play.update()
-
-                pages_column.controls.extend([ft.Container(height=20), ft.Row([btn_play, btn_stop], alignment=ft.MainAxisAlignment.CENTER, vertical_alignment=ft.CrossAxisAlignment.CENTER)])
-            pages_column.controls.append(ft.Container(height=10))
-            pages_column.controls.append(text_element)
-            pages_column.controls.append(ft.Container(height=50))
-        else:
-            images_names = BOOKS_DATA.get(title, [])
-            if not images_names:
-                pages_column.controls.append(ft.Container(padding=20, content=ft.Text("Nessuna pagina qui.", color=get_c("text_sub"))))
-            else:
-                for img_name in images_names:
-                    full_path = get_path(img_name)
-                    if os.path.exists(full_path):
-                        pages_column.controls.append(ft.Image(src=full_path, width=350, border_radius=5))
-                        pages_column.controls.append(ft.Container(height=10))
-        pages_column.update()
-
-    # --- 7. HOME & USER UI ---
-    
-    # DEFINIZIONE dynamic_content
-    cards_column = ft.Column(scroll="auto", spacing=20)
-    dynamic_content = ft.Container(content=cards_column, expand=True, padding=ft.padding.symmetric(horizontal=25))
-
-    def create_card(icon_filename, title):
-        action = (lambda e: webbrowser.open("https://biografieonline.it/img/bio/gallery/r/Robert_Oppenheimer_1.jpg")) if title == "Foto ricordo" else (lambda e: open_reader(e, title))
-        return ft.Container(
-            bgcolor=get_c("card"), border_radius=22, padding=15, height=80, on_click=action,
-            shadow=ft.BoxShadow(spread_radius=0, blur_radius=15, color="#0D000000", offset=ft.Offset(0, 5)),
-            content=ft.Row(alignment=ft.MainAxisAlignment.SPACE_BETWEEN, controls=[
-                ft.Row(controls=[
-                    ft.Container(width=50, height=50, bgcolor=get_c("icon_bg"), border_radius=14, alignment=ft.Alignment(0, 0), content=ft.Image(src=get_path(icon_filename), width=24, height=24, color=get_c("primary"))),
-                    ft.Container(width=10),
-                    ft.Column(alignment=ft.MainAxisAlignment.CENTER, spacing=0, controls=[ft.Text(title, size=16, weight="bold", color=get_c("text"))])
-                ]),
-                ft.Image(src=get_path(feather_map["chevron-right"]), width=24, color="#dddddd")
-            ])
-        )
-
-    def build_home_cards():
-        cards_column.controls.clear()
-        cards_column.controls.extend([
-            create_card(feather_map["sunrise"], "Lodi Mattutine"),
-            create_card(feather_map["book-open"], "Libretto"),
-            create_card(feather_map["music"], "Inno"),
-            create_card(feather_map["camera"], "Foto ricordo"),
-            ft.Container(height=50) 
-        ])
-    build_home_cards()
-
-    # USER PROFILE LOGIC
-    is_custom_pic = (current_profile_src == PROFILE_PIC_FILE)
-    img_profile_view = ft.Image(src=current_profile_src, width=150, height=150, border_radius=75, fit="cover", color=None if is_custom_pic else get_c("primary"))
-    
-    txt_name_input = ft.TextField(value=user_name_value, label="Il tuo nome", max_length=14, border_color=get_c("primary"))
-    txt_path_input = ft.TextField(label="Incolla percorso foto JPG", text_size=12, border_color=get_c("primary"))
-    
-    lbl_font_size = ft.Text(f"Grandezza Testo: {int(current_font_size)}", color=get_c("text"))
-    slider_font = ft.Slider(min=12, max=30, divisions=18, value=current_font_size, active_color=get_c("primary"))
-    lbl_dark = ft.Text("Modalità Notte", color=get_c("text"))
-    switch_theme = ft.Switch(value=is_dark_mode, active_color=get_c("primary"))
-
-    def on_name_change(e):
-        txt_welcome_name.value = f"Bentornato, {e.control.value}"
-        txt_welcome_name.update()
-        save_file(DATA_FILE, e.control.value)
-    txt_name_input.on_change = on_name_change
-
-    def on_font_change(e):
-        nonlocal current_font_size
-        current_font_size = e.control.value
-        lbl_font_size.value = f"Grandezza Testo: {int(current_font_size)}"
-        lbl_font_size.update()
-        notes_input_full.text_size = current_font_size
-        notes_input_full.update()
-        save_settings_to_disk(current_font_size, is_dark_mode)
-    slider_font.on_change = on_font_change
-
-    txt_status_upload = ft.Text("", size=12)
-    def upload_photo_manual(e):
-        path_org = txt_path_input.value.strip().replace('"', '')
-        if os.path.exists(path_org) and os.path.isfile(path_org):
-            try:
-                shutil.copy(path_org, PROFILE_PIC_FILE)
-                nonlocal current_profile_src
-                current_profile_src = PROFILE_PIC_FILE
-                img_profile_view.src = current_profile_src
-                img_profile_view.color = None
-                img_profile_view.update()
-                nav_user_img.src = current_profile_src
-                nav_user_img.color = None
-                nav_user_img.border_radius = 50
-                nav_user_img.update()
-                txt_status_upload.value = "✅ Foto caricata!"
-                txt_status_upload.color = "green"
-            except:
-                txt_status_upload.value = "❌ Errore file."
-                txt_status_upload.color = "red"
-        else:
-            txt_status_upload.value = "⚠️ File non trovato."
-            txt_status_upload.color = "red"
-        txt_status_upload.update()
-    btn_manual_upload = ft.ElevatedButton("CARICA FOTO", bgcolor=get_c("primary"), color="white", on_click=upload_photo_manual)
-
-    btn_open_notes = ft.Container(
-        bgcolor=get_c("primary"), border_radius=10, padding=15, width=300,
-        content=ft.Row(alignment=ft.MainAxisAlignment.CENTER, controls=[
-            ft.Image(src=get_path(feather_map["edit"]), width=20, height=20, color="white"),
-            ft.Text("APRI LE TUE NOTE", color="white", weight="bold")
-        ]),
-        on_click=open_notes_page
-    )
+    btn_open_notes_user = ft.Container(border_radius=10, padding=15, width=300) 
+    lbl_font_size = ft.Text(f"Grandezza Testo: {int(state['font_size'])}")
+    slider_font = ft.Slider(min=12, max=30, divisions=18, value=state["font_size"])
+    switch_theme = ft.Switch(value=state["is_dark"])
 
     user_view_content = ft.Column(
         scroll="auto", horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=15,
         controls=[
             ft.Container(height=10),
-            ft.Text("Il tuo Profilo", size=20, weight="bold", color=get_c("text")),
-            ft.Container(content=img_profile_view, border=ft.border.all(3, get_c("primary")), border_radius=100, padding=5),
+            ft.Text("Il tuo Profilo", size=20, weight="bold"),
+            container_profile_border,
             ft.Container(width=280, content=txt_name_input),
             ft.Divider(),
-            btn_open_notes, 
+            btn_open_notes_user,
             ft.Divider(),
-            ft.Text("Cambia Foto (Incolla percorso)", size=12, color="grey"),
-            ft.Container(width=300, content=txt_path_input),
-            btn_manual_upload,
-            txt_status_upload,
+            btn_upload_photo,
             ft.Divider(),
-            ft.Text("Impostazioni", size=18, weight="bold", color=get_c("text")),
+            ft.Text("Impostazioni", size=18, weight="bold"),
             ft.Container(padding=10, content=ft.Column(controls=[
-                ft.Row([lbl_dark, switch_theme], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+                ft.Row([ft.Text("Modalità Notte"), switch_theme], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                 ft.Container(height=10),
                 lbl_font_size,
                 slider_font
@@ -517,90 +205,272 @@ E non importa
         ]
     )
 
-    # NAVBAR
-    nav_home_img = ft.Image(src=get_path(feather_map["home"]), width=20, height=20, color="white")
-    nav_user_img = ft.Image(src=current_profile_src, width=20, height=20, fit="cover", border_radius=50 if is_custom_pic else 0, color=None if is_custom_pic else get_c("text"))
-    btn_home_container = ft.Container(bgcolor=get_c("primary"), border_radius=10, padding=10, width=140, content=ft.Row(alignment=ft.MainAxisAlignment.CENTER, controls=[nav_home_img, ft.Text("HOME", color="white", weight="bold")]))
-    btn_user_container = ft.Container(bgcolor=get_c("nav_bg"), border_radius=10, padding=10, width=140, content=ft.Row(alignment=ft.MainAxisAlignment.CENTER, controls=[nav_user_img, ft.Text("PROFILO", color=get_c("text"), weight="bold")]))
-    custom_navbar = ft.Container(bgcolor=get_c("nav_bg"), padding=15, border_radius=ft.border_radius.only(top_left=20, top_right=20), shadow=ft.BoxShadow(blur_radius=10, color="#11000000"), content=ft.Row(alignment=ft.MainAxisAlignment.SPACE_AROUND, controls=[btn_home_container, btn_user_container]))
+    # Note Page
+    notes_input_full = ft.TextField(
+        value=data["notes"], multiline=True, min_lines=30, max_length=10000,
+        border=ft.InputBorder.NONE, text_size=state["font_size"], bgcolor="transparent", content_padding=ft.padding.only(top=5, left=5)
+    )
+    lines_background = ft.Column(spacing=0)
+    btn_close_notes = ft.Container(padding=10, content=ft.Image(src=FEATHER_MAP["arrow-left"], width=24, height=24))
+    btn_save_notes = ft.Container(padding=10, content=ft.Image(src=FEATHER_MAP["save"], width=24, height=24))
+    
+    notes_container = ft.Container(
+        expand=True, padding=20,
+        offset=ft.Offset(1, 0), animate_offset=ft.Animation(400, ft.AnimationCurve.EASE_OUT_CUBIC),
+        opacity=0, animate_opacity=300,
+        content=ft.Column(controls=[
+            ft.Row(alignment=ft.MainAxisAlignment.SPACE_BETWEEN, controls=[
+                btn_close_notes,
+                ft.Text("Le tue Note", size=20, weight="bold"),
+                btn_save_notes
+            ]),
+            ft.Divider(color="transparent", height=10),
+            ft.Container(
+                expand=True, border_radius=5, padding=ft.padding.symmetric(horizontal=15, vertical=10),
+                shadow=ft.BoxShadow(blur_radius=5, color="#22000000", offset=ft.Offset(2,2)),
+                content=ft.Column(scroll="auto", controls=[ft.Stack(controls=[lines_background, notes_input_full])])
+            )
+        ])
+    )
 
-    def go_home(e):
-        dynamic_content.content = cards_column
-        dynamic_content.update()
-        btn_home_container.bgcolor = get_c("primary")
-        nav_home_img.color = "white"
-        btn_home_container.content.controls[1].color = "white"
-        btn_user_container.bgcolor = get_c("nav_bg")
-        if not (current_profile_src == PROFILE_PIC_FILE): nav_user_img.color = get_c("text")
-        btn_user_container.content.controls[1].color = get_c("text")
-        btn_home_container.update()
-        btn_user_container.update()
+    # Reader Page
+    reader_title = ft.Text("Titolo", size=20, weight="bold")
+    reader_col = ft.Column(spacing=10, horizontal_alignment=ft.CrossAxisAlignment.CENTER)
+    reader_scroll = ft.Column(scroll="auto", expand=True, controls=[reader_col], horizontal_alignment=ft.CrossAxisAlignment.CENTER)
+    btn_close_reader = ft.Container(padding=10, content=ft.Image(src=FEATHER_MAP["arrow-left"], width=24, height=24))
+    
+    reader_container = ft.Container(
+        expand=True, padding=0,
+        offset=ft.Offset(1, 0), animate_offset=ft.Animation(400, ft.AnimationCurve.EASE_OUT_CUBIC),
+        opacity=0, animate_opacity=300,
+        content=ft.Column(controls=[
+            ft.Container(padding=20, content=ft.Row(controls=[btn_close_reader, ft.Container(width=10), reader_title])),
+            ft.Divider(height=1, color="#e0e0e0"),
+            ft.Container(expand=True, content=reader_scroll)
+        ])
+    )
 
-    def go_user(e):
-        dynamic_content.content = user_view_content
-        dynamic_content.update()
-        btn_home_container.bgcolor = get_c("nav_bg")
-        nav_home_img.color = get_c("text")
-        btn_home_container.content.controls[1].color = get_c("text")
-        btn_user_container.bgcolor = get_c("primary")
-        if not (current_profile_src == PROFILE_PIC_FILE): nav_user_img.color = "white"
-        btn_user_container.content.controls[1].color = "white"
-        btn_home_container.update()
-        btn_user_container.update()
+    # Home & Nav
+    cards_column = ft.Column(scroll="auto", spacing=20)
+    dynamic_content = ft.Container(content=cards_column, expand=True, padding=ft.padding.symmetric(horizontal=25))
+    btn_home_container = ft.Container(border_radius=10, padding=10, width=140)
+    btn_user_container = ft.Container(border_radius=10, padding=10, width=140)
+    
+    nav_home_img = ft.Image(src=FEATHER_MAP["home"], width=20, height=20)
+    nav_user_img = ft.Image(src=data["pic"], width=20, height=20, fit="cover", border_radius=50 if not is_svg_start else 0)
 
-    btn_home_container.on_click = go_home
-    btn_user_container.on_click = go_user
+    custom_navbar = ft.Container(
+        padding=15, border_radius=ft.border_radius.only(top_left=20, top_right=20),
+        shadow=ft.BoxShadow(blur_radius=10, color="#11000000"),
+        content=ft.Row(alignment=ft.MainAxisAlignment.SPACE_AROUND, controls=[btn_home_container, btn_user_container])
+    )
 
-    # --- 8. LOGICA THEME FINALE ---
+    # --- LOGICA ---
     def update_interface_colors():
-        mobile_screen.bgcolor = get_c("bg")
-        header_container.content.controls[0].bgcolor = get_c("primary")
-        txt_welcome_name.color = get_c("text")
-        reader_container.bgcolor = get_c("bg")
-        reader_title.color = get_c("text")
-        notes_container.bgcolor = get_c("bg")
-        custom_navbar.bgcolor = get_c("nav_bg")
-        build_home_cards()
+        c = get_c
+        bg, fg, primary = c("bg"), c("text"), c("primary")
+        page.bgcolor = bg
+        header_logo.bgcolor = primary
+        txt_welcome_name.color = fg
         
-        img_profile_view.color = None if (current_profile_src == PROFILE_PIC_FILE) else get_c("primary")
-        txt_name_input.border_color = get_c("primary")
-        txt_path_input.border_color = get_c("primary")
-        lbl_font_size.color = get_c("text")
-        slider_font.active_color = get_c("primary")
-        lbl_dark.color = get_c("text")
-        switch_theme.active_color = get_c("primary")
-        if dynamic_content.content == cards_column: go_home(None)
-        else: go_user(None)
+        # User colors
+        txt_name_input.color = fg
+        txt_name_input.border_color = primary
+        btn_upload_photo.bgcolor = primary
+        container_profile_border.border = ft.border.all(3, primary)
         
-        notes_header.controls[0].content.color = get_c("text")
-        icon_save_notes.color = get_c("primary")
-        btn_open_notes.bgcolor = get_c("primary")
-        btn_open_notes.content.controls[1].color = "white"
+        is_svg = "user.svg" in img_profile_view.src
+        img_profile_view.color = primary if is_svg else None
+        
+        btn_open_notes_user.bgcolor = primary
+        btn_open_notes_user.content = ft.Row(alignment=ft.MainAxisAlignment.CENTER, controls=[
+            ft.Image(src=FEATHER_MAP["edit"], width=20, height=20, color="white"),
+            ft.Text("APRI LE TUE NOTE", color="white", weight="bold")
+        ])
+        
+        user_view_content.controls[1].color = fg
+        user_view_content.controls[9].color = fg
+        user_view_content.controls[10].content.controls[0].controls[0].color = fg
+        lbl_font_size.color = fg
+        slider_font.active_color = primary
+        switch_theme.active_color = primary
 
-        for ctrl in user_view_content.controls:
-             if isinstance(ctrl, ft.Text) and ctrl.weight == "bold": ctrl.color = get_c("text")
+        # Note colors
+        notes_container.bgcolor = bg
+        notes_container.content.controls[0].controls[1].color = fg
+        btn_close_notes.content.color = fg
+        btn_save_notes.content.color = primary
+        notes_container.content.controls[2].bgcolor = c("paper_bg")
+        notes_input_full.color = fg
+        lines_background.controls.clear()
+        for _ in range(30): lines_background.controls.append(ft.Container(height=32, border=ft.border.only(bottom=ft.border.BorderSide(1, c("paper_line"))), width=float("inf")))
+
+        # Reader colors
+        reader_container.bgcolor = bg
+        reader_title.color = fg
+        btn_close_reader.content.color = fg
+
+        # Navbar
+        custom_navbar.bgcolor = c("nav_bg")
+        is_home = dynamic_content.content == cards_column
+        btn_home_container.bgcolor = primary if is_home else c("nav_bg")
+        btn_home_container.content = ft.Row(alignment=ft.MainAxisAlignment.CENTER, controls=[ft.Image(src=FEATHER_MAP["home"], width=20, height=20, color="white" if is_home else fg), ft.Text("HOME", color="white" if is_home else fg, weight="bold")])
+        
+        is_svg_nav = "user.svg" in img_profile_view.src
+        btn_user_container.bgcolor = primary if not is_home else c("nav_bg")
+        user_icon_color = "white" if not is_home else fg
+        if not is_svg_nav: user_icon_color = None
+        btn_user_container.content = ft.Row(alignment=ft.MainAxisAlignment.CENTER, controls=[ft.Image(src=img_profile_view.src, width=20, height=20, fit="cover", border_radius=50 if not is_svg_nav else 0, color=user_icon_color), ft.Text("PROFILO", color="white" if not is_home else fg, weight="bold")])
+
+        # Cards
+        cards_column.controls.clear()
+        for item in [("Lodi Mattutine", "sunrise"), ("Libretto", "book-open"), ("Inno", "music"), ("Foto ricordo", "camera")]:
+            title, icon = item
+            action = (lambda e, t=title: page.launch_url("https://biografieonline.it/img/bio/gallery/r/Robert_Oppenheimer_1.jpg")) if title == "Foto ricordo" else (lambda e, t=title: open_reader(t))
+            cards_column.controls.append(ft.Container(
+                bgcolor=c("card"), border_radius=22, padding=15, height=80, on_click=action,
+                shadow=ft.BoxShadow(spread_radius=0, blur_radius=15, color="#0D000000", offset=ft.Offset(0, 5)),
+                content=ft.Row(alignment=ft.MainAxisAlignment.SPACE_BETWEEN, controls=[
+                    ft.Row(controls=[
+                        ft.Container(width=50, height=50, bgcolor=c("icon_bg"), border_radius=14, alignment=ft.Alignment(0, 0), content=ft.Image(src=FEATHER_MAP[icon], width=24, height=24, color=primary)),
+                        ft.Container(width=10),
+                        ft.Text(title, size=16, weight="bold", color=fg)
+                    ]),
+                    ft.Image(src=FEATHER_MAP["chevron-right"], width=24, color="#dddddd")
+                ])
+            ))
+        cards_column.controls.append(ft.Container(height=50))
         page.update()
 
-    def on_theme_change(e):
-        nonlocal is_dark_mode
-        is_dark_mode = e.control.value
-        save_settings_to_disk(current_font_size, is_dark_mode)
+    def navigate(index):
+        if index == 0: dynamic_content.content = cards_column
+        else: dynamic_content.content = user_view_content
         update_interface_colors()
-    switch_theme.on_change = on_theme_change
 
-    # --- 9. ASSEMBLAGGIO ---
+    def open_reader(title):
+        reader_title.value = title
+        reader_col.controls.clear()
+        c = get_c
+        reader_container.bgcolor = c("bg")
+        reader_title.color = c("text")
+        btn_close_reader.content.color = c("text")
+        if title == "Inno":
+            text_el = ft.Container(padding=20, content=ft.Text(LYRICS_TEXT, size=state["font_size"], color=c("text"), text_align="center"))
+            
+            icon_play = ft.Image(src=FEATHER_MAP["play"], width=30, height=30, color="white")
+            label_play = ft.Text("RIPRODUCI", color="white", weight="bold")
+            btn_play = ft.Container(bgcolor=c("primary"), border_radius=15, padding=15, width=250, content=ft.Row([icon_play, label_play], alignment=ft.MainAxisAlignment.CENTER))
+            btn_stop = ft.Container(padding=10, content=ft.Column([ft.Image(src=FEATHER_MAP["stop"], width=24, height=24, color="red"), ft.Text("STOP", size=10, color="red")], spacing=2, alignment=ft.MainAxisAlignment.CENTER))
+            
+            def toggle_audio(e):
+                if state["audio_playing"]:
+                    if audio_player: audio_player.pause()
+                    state["audio_playing"] = False
+                    icon_play.src = FEATHER_MAP["play"]
+                    label_play.value = "RIPRENDI"
+                    btn_play.bgcolor = c("primary")
+                else:
+                    if audio_player: audio_player.play()
+                    state["audio_playing"] = True
+                    icon_play.src = FEATHER_MAP["pause"]
+                    label_play.value = "PAUSA"
+                    btn_play.bgcolor = "#d9534f"
+                btn_play.update()
+            
+            def stop_audio(e):
+                if audio_player:
+                    audio_player.pause()
+                    audio_player.seek(0)
+                state["audio_playing"] = False
+                icon_play.src = FEATHER_MAP["play"]
+                label_play.value = "RIPRODUCI"
+                btn_play.bgcolor = c("primary")
+                btn_play.update()
+            
+            btn_play.on_click = toggle_audio
+            btn_stop.on_click = stop_audio
+            reader_col.controls.extend([ft.Container(height=20), ft.Row([btn_play, btn_stop], alignment=ft.MainAxisAlignment.CENTER), ft.Container(height=10), text_el, ft.Container(height=50)])
+        else:
+            if not BOOKS_DATA[title]: reader_col.controls.append(ft.Container(padding=20, content=ft.Text("Nessuna pagina qui.", color=c("text_sub"))))
+            else:
+                for img in BOOKS_DATA[title]: reader_col.controls.append(ft.Image(src=img, width=350, border_radius=5)); reader_col.controls.append(ft.Container(height=10))
+        reader_container.offset = ft.Offset(0, 0)
+        reader_container.opacity = 1
+        reader_container.update()
+
+    def close_reader(e):
+        if state["audio_playing"]: 
+            if audio_player: audio_player.pause()
+            state["audio_playing"] = False
+        reader_container.offset = ft.Offset(1, 0)
+        reader_container.opacity = 0
+        reader_container.update()
+
+    def open_notes(e):
+        notes_container.bgcolor = get_c("bg")
+        lines_background.controls.clear()
+        for _ in range(30): lines_background.controls.append(ft.Container(height=32, border=ft.border.only(bottom=ft.border.BorderSide(1, get_c("paper_line"))), width=float("inf")))
+        notes_container.content.controls[2].bgcolor = get_c("paper_bg")
+        notes_input_full.color = get_c("text")
+        notes_container.offset = ft.Offset(0, 0)
+        notes_container.opacity = 1
+        notes_container.update()
+
+    def close_notes(e):
+        notes_container.offset = ft.Offset(1, 0)
+        notes_container.opacity = 0
+        notes_container.update()
+        page.client_storage.set("user_notes", notes_input_full.value)
+
+    def save_notes(e):
+        page.client_storage.set("user_notes", notes_input_full.value)
+        btn_save_notes.content.color = "green"
+        btn_save_notes.update()
+
+    def on_name_change(e):
+        txt_welcome_name.value = f"Bentornato, {e.control.value}"
+        page.client_storage.set("user_name", e.control.value)
+        txt_welcome_name.update()
+
+    def on_font_change(e):
+        new_size = e.control.value
+        state["font_size"] = new_size
+        notes_input_full.text_size = new_size
+        lbl_font_size.value = f"Grandezza Testo: {int(new_size)}"
+        page.client_storage.set("font_size", new_size)
+        lbl_font_size.update()
+        notes_input_full.update()
+
+    def on_theme_change(e):
+        state["is_dark"] = e.control.value
+        page.client_storage.set("dark_mode", state["is_dark"])
+        update_interface_colors()
+
+    # Bindings
+    txt_name_input.on_change = on_name_change
+    slider_font.on_change = on_font_change
+    switch_theme.on_change = on_theme_change
+    btn_open_notes_user.on_click = open_notes
+    btn_close_notes.on_click = close_notes
+    btn_save_notes.on_click = save_notes
+    btn_close_reader.on_click = close_reader
+    btn_home_container.on_click = lambda e: navigate(0)
+    btn_user_container.on_click = lambda e: navigate(1)
+
+    # Start
     mobile_screen = ft.Container(
-        width=375, height=812, bgcolor=get_c("bg"), border_radius=35,
-        clip_behavior=ft.ClipBehavior.HARD_EDGE, shadow=ft.BoxShadow(blur_radius=50, color="#33000000"),
+        expand=True, 
+        bgcolor="white", 
         content=ft.Stack(controls=[
             ft.Column(alignment=ft.MainAxisAlignment.SPACE_BETWEEN, controls=[header_container, dynamic_content, custom_navbar]),
             reader_container,
             notes_container
         ])
-    ) 
-
+    )
+    
     page.add(mobile_screen)
-    if is_dark_mode: update_interface_colors()
+    update_interface_colors()
 
+# IMPORTANTE: assets_dir="assets" (senza slash)
 if __name__ == "__main__":
-    ft.app(target=main, view=ft.AppView.FLET_APP)
+    ft.app(target=main, assets_dir="assets")
