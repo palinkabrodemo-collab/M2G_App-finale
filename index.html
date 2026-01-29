@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>M2G App</title>
     
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/m2g_logo.png"> <link rel="icon" type="image/png" sizes="32x32" href="assets/m2g_logo.png"> <link rel="icon" type="image/png" sizes="16x16" href="assets/m2g_logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/m2g_logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/m2g_logo.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/m2g_logo.png">
+    
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" rel="stylesheet">
     
@@ -26,90 +29,76 @@
             background-color: var(--bg-color); color: var(--text-color);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0; padding: 0;
-            transition: background-color 2.0s ease-in-out, color 2.0s ease-in-out; /* Transizione Lenta */
+            transition: background-color 2.0s ease-in-out, color 2.0s ease-in-out;
             -webkit-tap-highlight-color: transparent; font-size: var(--base-size);
             overflow-x: hidden;
+            padding-bottom: 140px; /* Spazio extra per navbar + miniplayer */
         }
 
-        /* =========================================
-           --- ANIMAZIONI ELASTICHE (HOME) ---
-           ========================================= */
+        /* --- STILI MINIPLAYER (NUOVO) --- */
+        #miniplayer {
+            position: fixed; bottom: 90px; left: 20px; right: 20px;
+            background-color: var(--accent); color: white;
+            border-radius: 16px; padding: 10px 15px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 200; /* Sopra tutto */
+            transform: translateY(150px); /* Nascosto sotto */
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #miniplayer.visible { transform: translateY(0); }
         
-        /* Definizione del "Rimbalzo" */
-        @keyframes elasticSlide {
-            0% { opacity: 0; transform: translateY(50px) scale(0.8); }
-            60% { opacity: 1; transform: translateY(-10px) scale(1.02); } /* Sale un po' troppo */
-            80% { transform: translateY(5px) scale(0.98); } /* Scende un po' */
-            100% { opacity: 1; transform: translateY(0) scale(1); } /* Si ferma */
-        }
+        .mp-info { display: flex; align-items: center; flex: 1; overflow: hidden; }
+        .mp-icon { width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px; }
+        .mp-text { display: flex; flex-direction: column; overflow: hidden; }
+        .mp-title { font-weight: bold; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .mp-subtitle { font-size: 0.7rem; opacity: 0.8; }
+        
+        .mp-controls { display: flex; align-items: center; gap: 15px; }
+        .mp-btn { background: none; border: none; color: white; cursor: pointer; padding: 0; display: flex; align-items: center; }
+        .mp-playhead { font-size: 32px; }
+        .mp-close { opacity: 0.7; font-size: 24px; }
 
-        /* =========================================
-           --- TEATRO CELESTE (Sole/Luna) ---
-           ========================================= */
-        #celestial-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 9999; opacity: 0;
-            transition: opacity 0.5s ease;
-            display: flex; justify-content: center; align-items: flex-end; overflow: hidden;
-        }
+
+        /* --- ANIMAZIONI ELASTICHE E TEATRO CELESTE --- */
+        @keyframes elasticSlide { 0% { opacity: 0; transform: translateY(50px) scale(0.8); } 60% { opacity: 1; transform: translateY(-10px) scale(1.02); } 80% { transform: translateY(5px) scale(0.98); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+        
+        #celestial-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; opacity: 0; transition: opacity 0.5s ease; display: flex; justify-content: center; align-items: flex-end; overflow: hidden; }
         #celestial-container.active { opacity: 1; }
         .celestial-body { position: absolute; bottom: -150px; font-size: 120px; }
         #sun-icon { color: #FFD700; filter: drop-shadow(0 0 20px orange); z-index: 2; }
         #moon-group { z-index: 1; display: flex; align-items: center; justify-content: center; }
         #moon-icon { color: #F4F6F0; filter: drop-shadow(0 0 15px #87CEEB); font-size: 100px; }
-        
         .stars { position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; transition: opacity 2s ease; }
         body.dark-mode .stars { opacity: 1; }
         .star { position: absolute; color: white; font-size: 10px; animation: twinkle 1.5s infinite alternate; }
         @keyframes twinkle { from { opacity: 0.3; } to { opacity: 1; } }
-
         @keyframes sunriseMoveUp { 0% { transform: translate(0, 0) scale(0.8); } 100% { transform: translate(0, -40vh) scale(1); } }
         @keyframes moonsetMoveDown { 0% { transform: translate(0, -40vh) scale(1); } 100% { transform: translate(0, 100px) scale(0.8); } }
         @keyframes sunsetMoveDown { 0% { transform: translate(0, -40vh) scale(1); } 100% { transform: translate(0, 100px) scale(0.8); } }
         @keyframes moonriseMoveUp { 0% { transform: translate(0, 0) scale(0.8); } 100% { transform: translate(0, -40vh) scale(1); } }
-
         .animate-sunrise #sun-icon { animation: sunriseMoveUp 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
         .animate-sunrise #moon-group { animation: moonsetMoveDown 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
         .animate-sunset #sun-icon { animation: sunsetMoveDown 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
         .animate-sunset #moon-group { animation: moonriseMoveUp 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
 
-
-        /* =========================================
-           --- STILI APP ---
-           ========================================= */
-        .page-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--bg-color); z-index: 100; padding: 20px; overflow-y: auto; opacity: 0; transform: translateY(30px); transition: opacity 0.3s ease-out, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        /* --- STILI APP --- */
+        .page-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--bg-color); z-index: 100; padding: 20px; overflow-y: auto; opacity: 0; transform: translateY(30px); transition: opacity 0.3s ease-out, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); padding-bottom: 150px; /* Spazio per scroll */ }
         .page-overlay.visible { opacity: 1; transform: translateY(0); }
         .header { padding: 40px 20px 20px 20px; }
         .logo-box { width: 60px; height: 60px; background-color: var(--accent); border-radius: 18px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.2rem; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
-        .logo-box:active { transform: scale(0.9) rotate(-10deg); } /* Effetto simpatico logo */
+        .logo-box:active { transform: scale(0.9) rotate(-10deg); }
         .welcome-text { font-size: 1.5rem; font-weight: 800; }
-        
         .container { padding: 0 20px; padding-bottom: 100px; }
-        
-        /* CARD: Qui applichiamo l'animazione ELASTICA */
-        .card { 
-            background-color: var(--card-bg); border-radius: 22px; padding: 18px; margin-bottom: 15px; 
-            display: flex; align-items: center; justify-content: space-between; 
-            box-shadow: 0 4px 15px var(--shadow); border: 1px solid var(--border); cursor: pointer; 
-            opacity: 0; /* Parte invisibile */
-            /* Usa l'animazione elasticSlide */
-            animation: elasticSlide 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-        /* Ritardi per effetto cascata */
-        .card:nth-child(1) { animation-delay: 0.05s; } 
-        .card:nth-child(2) { animation-delay: 0.15s; } 
-        .card:nth-child(3) { animation-delay: 0.25s; } 
-        .card:nth-child(4) { animation-delay: 0.35s; }
-        
+        .card { background-color: var(--card-bg); border-radius: 22px; padding: 18px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px var(--shadow); border: 1px solid var(--border); cursor: pointer; opacity: 0; animation: elasticSlide 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+        .card:nth-child(1) { animation-delay: 0.05s; } .card:nth-child(2) { animation-delay: 0.15s; } .card:nth-child(3) { animation-delay: 0.25s; } .card:nth-child(4) { animation-delay: 0.35s; }
         .card:active { transform: scale(0.95) !important; background-color: var(--border); transition: 0.1s; }
         .card-left { display: flex; align-items: center; }
         .icon-box { width: 52px; height: 52px; background-color: var(--icon-bg); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-right: 18px; overflow: hidden; flex-shrink: 0; }
         .asset-img { width: 60%; height: 60%; object-fit: contain; }
         .fallback-icon { display: none; color: var(--accent); font-size: 1.5rem; }
         .card-title { font-weight: 700; font-size: 1rem; color: var(--text-color); }
-        
         .reader-image { width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 4px 10px var(--shadow); display: block; animation: elasticSlide 0.6s ease-out forwards; opacity: 0; }
-        
         .profile-pic-container { width: 100px; height: 100px; margin: 0 auto; position: relative; }
         .profile-pic { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 4px solid var(--accent); background-color: white; transition: border-color 0.3s; }
         .settings-box { background-color: var(--card-bg); border-radius: 20px; padding: 20px; margin-top: 20px; border: 1px solid var(--border); }
@@ -122,7 +111,6 @@
         .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: var(--accent); }
         input:checked + .slider:before { transform: translateX(22px); }
-
         input[type="text"], textarea { width: 100%; padding: 18px; border-radius: 16px; border: 2px solid var(--border); margin-bottom: 15px; background: var(--card-bg); color: var(--text-color); font-size: 1rem; box-sizing: border-box; transition: border-color 0.3s; }
         input[type="text"]:focus, textarea:focus { border-color: var(--accent); outline: none; }
         .navbar { position: fixed; bottom: 25px; left: 25px; right: 25px; background-color: var(--card-bg); border-radius: 25px; padding: 12px 0; display: flex; justify-content: space-around; box-shadow: 0 10px 25px var(--shadow); z-index: 50; transition: transform 0.3s; }
@@ -132,6 +120,10 @@
     </style>
 </head>
 <body>
+
+    <audio id="global-audio" preload="auto">
+        <source src="assets/inno.mp3" type="audio/mpeg">
+    </audio>
 
     <div id="celestial-container">
         <div class="stars">
@@ -143,6 +135,23 @@
         </div>
         <span id="sun-icon" class="material-symbols-rounded celestial-body">wb_sunny</span>
         <div id="moon-group" class="celestial-body"><span id="moon-icon" class="material-symbols-rounded">dark_mode</span></div>
+    </div>
+
+    <div id="miniplayer">
+        <div class="mp-info" onclick="openReader('Inno')"> <div class="mp-icon"><span class="material-icons" style="font-size:20px">music_note</span></div>
+            <div class="mp-text">
+                <span class="mp-title">Inno M2G</span>
+                <span class="mp-subtitle">In Riproduzione...</span>
+            </div>
+        </div>
+        <div class="mp-controls">
+            <button class="mp-btn" onclick="toggleGlobalAudio(event)">
+                <span id="mp-play-icon" class="material-icons mp-playhead">play_arrow</span>
+            </button>
+            <button class="mp-btn" onclick="closeMiniplayer(event)">
+                <span class="material-icons mp-close">close</span>
+            </button>
+        </div>
     </div>
 
     <div id="page-home">
@@ -221,7 +230,6 @@
     <script>
         const LINK_FOTO_RICORDO = "https://photos.app.goo.gl/TUO_LINK_QUI"; 
         
-        // --- NUOVO TESTO INNO MULTILINGUE ---
         const LYRICS = `From far and wide to gather in this place
 We spread our wings and here we are, 
 And with Mary proclaiming our Yes 
@@ -261,7 +269,6 @@ Salutation, communion.
 Le fruit est béni, c'est mon Seigneur! 
 And I want to hear: You trusted in my word and happiness 
 Is yours`;
-        // ------------------------------------
 
         // INIT
         const savedName = localStorage.getItem('m2g_name') || 'Utente';
@@ -280,6 +287,61 @@ Is yours`;
         if (savedDark) document.body.classList.add('dark-mode');
         document.getElementById('dark-mode-toggle').checked = savedDark;
 
+        // --- GESTIONE AUDIO GLOBALE ---
+        const audio = document.getElementById('global-audio');
+        const miniplayer = document.getElementById('miniplayer');
+        const playIcon = document.getElementById('mp-play-icon');
+
+        // Aggiorna l'icona quando l'audio finisce
+        audio.onended = function() {
+            playIcon.textContent = 'play_arrow';
+        };
+
+        // Funzione Play/Pause dal Miniplayer o dal Tasto Grande
+        function toggleGlobalAudio(e) {
+            if(e) e.stopPropagation(); // Evita click indesiderati
+            
+            if (audio.paused) {
+                audio.play();
+                playIcon.textContent = 'pause';
+                miniplayer.classList.add('visible'); // Mostra miniplayer
+                
+                // Aggiorna anche il bottone grande se siamo nella pagina inno
+                const bigBtn = document.getElementById('big-play-btn');
+                if(bigBtn) {
+                    bigBtn.innerHTML = '<span class="material-icons" style="margin-right:10px">pause</span> PAUSA';
+                    bigBtn.style.backgroundColor = "#d9534f";
+                }
+            } else {
+                audio.pause();
+                playIcon.textContent = 'play_arrow';
+                
+                const bigBtn = document.getElementById('big-play-btn');
+                if(bigBtn) {
+                    bigBtn.innerHTML = '<span class="material-icons" style="margin-right:10px">play_arrow</span> RIPRODUCI';
+                    bigBtn.style.backgroundColor = "var(--accent)";
+                }
+            }
+        }
+
+        // Funzione per chiudere il miniplayer (Stop totale)
+        function closeMiniplayer(e) {
+            if(e) e.stopPropagation();
+            audio.pause();
+            audio.currentTime = 0; // Riavvolgi
+            playIcon.textContent = 'play_arrow';
+            miniplayer.classList.remove('visible'); // Nascondi
+            
+            // Resetta bottone grande se visibile
+            const bigBtn = document.getElementById('big-play-btn');
+            if(bigBtn) {
+                bigBtn.innerHTML = '<span class="material-icons" style="margin-right:10px">play_arrow</span> RIPRODUCI';
+                bigBtn.style.backgroundColor = "var(--accent)";
+            }
+        }
+
+        // ------------------------------
+
         function handleThemeToggle(isDark) {
             triggerCelestialAnimation(isDark);
             if (isDark) document.body.classList.add('dark-mode');
@@ -297,7 +359,6 @@ Is yours`;
             setTimeout(() => { container.classList.remove('active'); }, 2000);
         }
 
-        // NAVIGAZIONE
         function animatePageEntry(pageId) {
             const page = document.getElementById(pageId);
             page.style.display = 'block';
@@ -318,9 +379,17 @@ Is yours`;
             const content = document.getElementById('reader-content');
             content.innerHTML = "";
             if (title === 'Inno') {
+                // Pagina Inno: Mostra bottone grande sincronizzato
+                const isPlaying = !audio.paused;
+                const btnText = isPlaying ? 'PAUSA' : 'RIPRODUCI';
+                const btnIcon = isPlaying ? 'pause' : 'play_arrow';
+                const btnColor = isPlaying ? '#d9534f' : 'var(--accent)';
+                
                 content.innerHTML = `
                     <div style="animation: elasticSlide 0.6s ease">
-                        <audio controls style="width:100%; margin:20px 0;"><source src="assets/inno.mp3" type="audio/mpeg"></audio>
+                        <div id="big-play-btn" onclick="toggleGlobalAudio()" style="background-color: ${btnColor}; color: white; padding: 15px; border-radius: 30px; display: flex; align-items: center; justify-content: center; font-weight: bold; margin: 20px auto; width: 200px; cursor: pointer; transition: background-color 0.3s;">
+                            <span class="material-icons" style="margin-right:10px">${btnIcon}</span> ${btnText}
+                        </div>
                         <div style="background:var(--card-bg); padding:20px; border-radius:20px; white-space:pre-line; text-align:center; line-height:1.8; box-shadow: 0 4px 15px var(--shadow);">
 ${LYRICS}
                         </div>
