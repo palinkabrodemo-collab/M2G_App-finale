@@ -8,18 +8,17 @@
     <style>
         /* --- VARIABILI COLORI --- */
         :root {
-            --bg-color: #f3f0e9;      /* Beige */
-            --card-bg: #ffffff;       /* Bianco */
-            --text-color: #1a1a1a;    /* Nero */
-            --text-sec: #666666;      /* Grigio */
-            --accent: #6a8a73;        /* Verde M2G */
-            --icon-bg: #dbe4de;       /* Verdino chiaro */
+            --bg-color: #f3f0e9;      
+            --card-bg: #ffffff;       
+            --text-color: #1a1a1a;    
+            --text-sec: #666666;      
+            --accent: #6a8a73;        
+            --icon-bg: #dbe4de;       
             --border: #eeeeee;
             --shadow: rgba(0,0,0,0.05);
             --base-size: 16px;
         }
 
-        /* MODALITÀ NOTTE */
         body.dark-mode {
             --bg-color: #121212;
             --card-bg: #1e1e1e;
@@ -31,19 +30,39 @@
             --shadow: rgba(0,0,0,0.5);
         }
 
-        /* STILI GENERALI */
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0; padding: 0;
-            transition: background-color 0.3s, color 0.3s;
+            transition: background-color 0.4s ease, color 0.4s ease; /* Transizione morbida tema */
             -webkit-tap-highlight-color: transparent;
             font-size: var(--base-size);
+            overflow-x: hidden;
+        }
+
+        /* --- ANIMAZIONI KEYFRAMES --- */
+        
+        /* Entrata dal basso (per le pagine) */
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cascata Cards (per la home) */
+        @keyframes cardEntrance {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Dissolvenza immagini */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         /* HEADER */
-        .header { padding: 40px 20px 20px 20px; }
+        .header { padding: 40px 20px 20px 20px; animation: fadeIn 0.8s ease-out; }
         .logo-box {
             width: 60px; height: 60px;
             background-color: var(--accent);
@@ -52,7 +71,10 @@
             color: white; font-weight: bold; font-size: 1.2rem;
             margin-bottom: 15px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        .logo-box:active { transform: scale(0.9) rotate(-5deg); } /* Effetto simpatico al click */
+        
         .welcome-text { font-size: 1.5rem; font-weight: 800; }
 
         /* CARDS */
@@ -66,10 +88,25 @@
             box-shadow: 0 4px 15px var(--shadow);
             border: 1px solid var(--border);
             cursor: pointer;
+            
+            /* Animazione base */
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s, background-color 0.2s;
+            
+            /* Preparazione per l'entrata a cascata */
+            opacity: 0; 
+            animation: cardEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
-        .card:active { transform: scale(0.98); opacity: 0.8; }
-        .card-left { display: flex; align-items: center; }
         
+        /* Ritardi a cascata per le card (Staggered Animation) */
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+
+        /* Effetto click elastico */
+        .card:active { transform: scale(0.94); background-color: var(--border); }
+        
+        .card-left { display: flex; align-items: center; }
         .icon-box {
             width: 52px; height: 52px;
             background-color: var(--icon-bg);
@@ -77,64 +114,84 @@
             display: flex; align-items: center; justify-content: center;
             margin-right: 18px;
             overflow: hidden; flex-shrink: 0;
+            transition: transform 0.3s ease;
         }
+        .card:hover .icon-box { transform: rotate(5deg); }
+
         .asset-img { width: 60%; height: 60%; object-fit: contain; }
         .fallback-icon { display: none; color: var(--accent); font-size: 1.5rem; }
         .card-title { font-weight: 700; font-size: 1rem; color: var(--text-color); }
 
-        /* PAGINE INTERNE */
+        /* PAGINE INTERNE (Con animazione slideUp) */
         .page-overlay {
             display: none; position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background-color: var(--bg-color); z-index: 100;
             padding: 20px; overflow-y: auto;
         }
+        /* Classe per attivare l'animazione all'apertura */
+        .animate-enter {
+            display: block;
+            animation: slideUpFade 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
         .top-bar {
             display: flex; align-items: center; justify-content: space-between;
             margin-bottom: 20px; padding-top: 20px;
         }
-        .back-btn { background: none; border: none; font-size: 1.8rem; color: var(--text-color); cursor: pointer; padding: 0; }
+        .back-btn { 
+            background: none; border: none; font-size: 1.8rem; color: var(--text-color); 
+            cursor: pointer; padding: 0; 
+            transition: transform 0.2s;
+        }
+        .back-btn:active { transform: translateX(-5px); } /* Freccia si muove indietro */
 
-        /* IMMAGINI READER (Lodi/Libretto) */
+        /* IMMAGINI READER */
         .reader-image {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin-bottom: 15px; /* Spazio tra una pagina e l'altra */
+            width: 100%; height: auto;
+            border-radius: 8px; margin-bottom: 15px;
             box-shadow: 0 4px 10px var(--shadow);
             display: block;
+            opacity: 0; animation: fadeIn 0.8s ease forwards; /* Fade in immagini */
         }
 
-        /* PROFILO E SETTINGS */
+        /* PROFILO */
         .profile-pic-container {
             width: 100px; height: 100px; margin: 0 auto; position: relative;
+            transition: transform 0.3s;
         }
+        .profile-pic-container:active { transform: scale(0.9); }
         .profile-pic {
             width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
             border: 4px solid var(--accent); background-color: white;
+            transition: border-color 0.3s;
         }
+
+        /* SETTINGS BOX */
         .settings-box {
             background-color: var(--card-bg);
             border-radius: 20px; padding: 20px;
             margin-top: 20px; border: 1px solid var(--border);
+            animation: slideUpFade 0.5s ease-out 0.2s backwards; /* Appare con ritardo */
         }
-        .setting-row {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 15px;
-        }
+        .setting-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .setting-label { font-weight: bold; font-size: 1rem; }
         
-        input[type="range"] { width: 100px; accent-color: var(--accent); }
-        input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--accent); }
+        input[type="range"] { width: 100px; accent-color: var(--accent); cursor: pointer; }
+        input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--accent); cursor: pointer; }
 
-        /* INPUT */
         input[type="text"], textarea {
             width: 100%; padding: 18px; border-radius: 16px;
             border: 2px solid var(--border); margin-bottom: 15px;
             background: var(--card-bg); color: var(--text-color);
             font-size: 1rem; box-sizing: border-box;
+            transition: all 0.3s;
         }
-        input[type="text"]:focus, textarea:focus { border-color: var(--accent); outline: none; }
+        input[type="text"]:focus, textarea:focus { 
+            border-color: var(--accent); outline: none; 
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
 
         /* NAVBAR */
         .navbar {
@@ -142,9 +199,17 @@
             background-color: var(--card-bg); border-radius: 25px; padding: 12px 0;
             display: flex; justify-content: space-around;
             box-shadow: 0 10px 25px var(--shadow); z-index: 50;
+            transition: background-color 0.3s;
         }
-        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 0.7rem; font-weight: 700; color: #bbbbbb; }
-        .nav-item.active { color: var(--accent); }
+        .nav-item { 
+            display: flex; flex-direction: column; align-items: center; 
+            font-size: 0.7rem; font-weight: 700; color: #bbbbbb; 
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .nav-item.active { 
+            color: var(--accent); 
+            transform: translateY(-5px); /* Salto icona attiva */
+        }
         .nav-item .material-icons { font-size: 1.6rem; margin-bottom: 4px; }
     </style>
 </head>
@@ -231,7 +296,7 @@
         <div style="text-align: center; margin-top: 10px;">
             <div class="profile-pic-container" onclick="document.getElementById('file-input').click()">
                 <img id="profile-img" src="assets/user.png" class="profile-pic" onerror="this.src='assets/user.png'">
-                <div style="position:absolute; bottom:0; right:0; background:var(--accent); color:white; border-radius:50%; padding:5px;"><span class="material-icons" style="font-size:16px">edit</span></div>
+                <div style="position:absolute; bottom:0; right:0; background:var(--accent); color:white; border-radius:50%; padding:5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"><span class="material-icons" style="font-size:16px">edit</span></div>
             </div>
             <input type="file" id="file-input" accept="image/*" onchange="uploadImage(this)" style="display:none">
             
@@ -255,7 +320,7 @@
             </div>
 
             <br>
-            <div class="card" onclick="openNotes()" style="background-color: var(--accent); color: white; justify-content: center; border:none;">
+            <div class="card" onclick="openNotes()" style="background-color: var(--accent); color: white; justify-content: center; border:none; box-shadow: 0 10px 20px rgba(0,0,0,0.15);">
                 <span class="material-icons" style="margin-right: 10px;">edit_note</span>
                 APRI NOTE
             </div>
@@ -272,11 +337,8 @@
     </div>
 
     <script>
-        // --- 1. CONFIGURAZIONE LINK ---
+        // --- CONFIGURAZIONE ---
         const LINK_FOTO_RICORDO = "https://photos.app.goo.gl/TUO_LINK_QUI"; 
-
-        const LYRICS = `Lo sai che ti amo... (testo completo nell'app)`; 
-        // Nota: Ho abbreviato qui per leggibilità, ma nel codice tuo incolla il testo completo!
 
         // --- INIT ---
         const savedName = localStorage.getItem('m2g_name') || 'Utente';
@@ -295,30 +357,50 @@
         toggleDarkMode(savedDark);
         document.getElementById('dark-mode-toggle').checked = savedDark;
 
-        // --- FUNZIONI NAVIGAZIONE ---
+        // --- NAVIGAZIONE ANIMATA ---
         function hideAll() {
-            document.querySelectorAll('.page-overlay').forEach(p => p.style.display = 'none');
+            // Rimuove la classe di animazione per poterla riattivare dopo
+            document.querySelectorAll('.page-overlay').forEach(p => {
+                p.classList.remove('animate-enter');
+                p.style.display = 'none';
+            });
             document.getElementById('page-home').style.display = 'none';
         }
-        function goHome() { hideAll(); document.getElementById('page-home').style.display = 'block'; }
-        function goUser() { hideAll(); document.getElementById('page-user').style.display = 'block'; }
-        function openNotes() { hideAll(); document.getElementById('page-notes').style.display = 'block'; }
+
+        function goHome() { 
+            hideAll(); 
+            // La home non ha bisogno di animazione slideUp, basta mostrarla
+            document.getElementById('page-home').style.display = 'block'; 
+        }
+
+        function goUser() { 
+            hideAll(); 
+            const p = document.getElementById('page-user');
+            p.classList.add('animate-enter'); // Attiva animazione slide
+        }
+
+        function openNotes() { 
+            hideAll(); 
+            const p = document.getElementById('page-notes');
+            p.classList.add('animate-enter');
+        }
+        
         function openLinkFoto() { window.open(LINK_FOTO_RICORDO, '_blank'); }
 
-        // --- LOGICA MULTI-PAGINA PER LODI E LIBRETTO ---
         function openReader(title) {
             hideAll();
-            document.getElementById('page-reader').style.display = 'block';
+            const p = document.getElementById('page-reader');
+            p.classList.add('animate-enter'); // Attiva animazione
+            
             document.getElementById('reader-title').textContent = title;
             const content = document.getElementById('reader-content');
-            
-            // Pulisce contenuto precedente
             content.innerHTML = "";
 
             if (title === 'Inno') {
                 content.innerHTML = `
-                    <audio controls style="width:100%; margin:20px 0;"><source src="assets/inno.mp3" type="audio/mpeg"></audio>
-                    <div style="background:var(--card-bg); padding:20px; border-radius:20px; white-space:pre-line; text-align:center; line-height:1.8;">
+                    <div style="animation: fadeIn 0.5s ease">
+                        <audio controls style="width:100%; margin:20px 0;"><source src="assets/inno.mp3" type="audio/mpeg"></audio>
+                        <div style="background:var(--card-bg); padding:20px; border-radius:20px; white-space:pre-line; text-align:center; line-height:1.8; box-shadow: 0 4px 15px var(--shadow);">
 Lo sai che ti amo
 Ma a volte è difficile sai?
 Io mi perdo, mi strappo
@@ -388,21 +470,20 @@ Mentre riposi
 E non importa se non me la dai
 Ti distruggo il culo mentre dormirai
 E non importa
+                        </div>
                     </div>`;
             } else if (title === 'Lodi Mattutine') {
-                // Genera 5 immagini per le Lodi (lodi1.jpg -> lodi5.jpg)
                 let htmlImages = '<div style="text-align:center">';
                 for (let i = 1; i <= 5; i++) {
-                    htmlImages += `<img src="assets/lodi${i}.jpg" class="reader-image" loading="lazy" onerror="this.style.display='none'">`;
+                    // Aggiunto animation-delay per effetto cascata sulle immagini
+                    htmlImages += `<img src="assets/lodi${i}.jpg" class="reader-image" style="animation-delay: ${i*0.1}s" loading="lazy" onerror="this.style.display='none'">`;
                 }
                 htmlImages += '</div>';
                 content.innerHTML = htmlImages;
-
             } else if (title === 'Libretto') {
-                // Genera 5 immagini per il Libretto (lib1.jpg -> lib5.jpg)
                 let htmlImages = '<div style="text-align:center">';
                 for (let i = 1; i <= 5; i++) {
-                    htmlImages += `<img src="assets/lib${i}.jpg" class="reader-image" loading="lazy" onerror="this.style.display='none'">`;
+                    htmlImages += `<img src="assets/lib${i}.jpg" class="reader-image" style="animation-delay: ${i*0.1}s" loading="lazy" onerror="this.style.display='none'">`;
                 }
                 htmlImages += '</div>';
                 content.innerHTML = htmlImages;
