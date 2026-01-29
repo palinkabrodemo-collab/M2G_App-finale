@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>M2G App</title>
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/m2g_logo.png"> <link rel="icon" type="image/png" sizes="32x32" href="assets/m2g_logo.png"> <link rel="icon" type="image/png" sizes="16x16" href="assets/m2g_logo.png">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" rel="stylesheet">
     
@@ -219,6 +221,48 @@
     <script>
         const LINK_FOTO_RICORDO = "https://photos.app.goo.gl/TUO_LINK_QUI"; 
         
+        // --- NUOVO TESTO INNO MULTILINGUE ---
+        const LYRICS = `From far and wide to gather in this place
+We spread our wings and here we are, 
+And with Mary proclaiming our Yes 
+We seek to serve and follow the will 
+Of the Lord, our Father 
+Chiamati ad essere come Cristo Gesù, 
+Vogliamo dare, diventare, 
+Docili al sì, essere come Maria.
+Ritornello: 
+Todos vão ouvir a nossa voz, 
+Levantemos braços, há pressa no ar. 
+Jesus vive e não nos deixa sós: 
+Não mais deixaremos de amar.
+Tú que te buscas saber quién eres 
+parte a descubrir, ven a ver lo que vi. 
+Ven con nosotros a mirar más allá, 
+de lo que haces y que no te deja 
+reír y amar. 
+Oublie le passé, ne dis pas non. 
+Écoute donc ton coeur, 
+Et pars sans peur sur cette mission.
+[Ritornello]
+È stata Maria ad accogliere per prima 
+La grande sorpresa della vita per sempre. 
+Fiduciosa e semplice, volle ricevere 
+il grande mistero di un Dio che è 
+Per te e per me 
+No puedo callar, no puedo dejar 
+de cantar: “Mi Señor, 
+cuenta conmigo, ¡no más callaré!”
+[Ritornello]
+Sans aucun doute sur sa mission, 
+Si jeune, Marie quitte promptement 
+Sa maison et part dans les montagnes 
+Voir Elisabeth et trouve immédiatement 
+Salutation, communion. 
+Le fruit est béni, c'est mon Seigneur! 
+And I want to hear: You trusted in my word and happiness 
+Is yours`;
+        // ------------------------------------
+
         // INIT
         const savedName = localStorage.getItem('m2g_name') || 'Utente';
         const savedNotes = localStorage.getItem('m2g_notes') || '';
@@ -278,75 +322,7 @@
                     <div style="animation: elasticSlide 0.6s ease">
                         <audio controls style="width:100%; margin:20px 0;"><source src="assets/inno.mp3" type="audio/mpeg"></audio>
                         <div style="background:var(--card-bg); padding:20px; border-radius:20px; white-space:pre-line; text-align:center; line-height:1.8; box-shadow: 0 4px 15px var(--shadow);">
-Lo sai che ti amo
-Ma a volte è difficile sai?
-Io mi perdo, mi strappo
-E arriviamo sempre allo stesso punto
-
-Sono le nove e fuori piove
-Il cielo è pieno di te
-I tuoi capelli scintillano sotto la Luna
-E la tua bianca pelle mi ricorda la radura
-
-Il mio amore per te
-È lapalissiano
-Io so chi siamo
-Solo quando sto con te
-Ti respiro cosi forte
-Da rimanerne asfissiato
-E solo se ti metti di lato
-Posso mostrarti con le mani
-Quanto ti amo perché
-
-Sono l'eroe
-Che ucciderà i mostri
-Sotto al tuo letto
-Mentre riposi
-E non importa se non dormirò
-Li distruggo tutti e poi ripartirò (oooh)
-(Dammi il tuo cuore baby)
-
-"Hey pronto amore mio perché non vieni qui a casa mia?
-Sono da sola... c'è la mia coperta calda che ti piace tanto, 
-i pop corn... e poi guardiamo un film... dai che ho il ciclo 
-e non mi sento tanto bene... allora ciao, a dopo amore..."
-
-Sono le nove e fuori piove
-Anche stasera un segone
-Te l'ho detto
-Se hai le mestruazioni non mi cercare
-Se poi arrivo
-E non possiamo più nemmeno scopare
-Eppure sai che c'è
-Sperimentiamo
-Analizziamo
-Di orifizi tu ne hai tre
-Quando sto con te mi diventa duro
-Mi devi dare il culo
-Non lo diciamo a nessuno
-Sborro come Nettuno
-
-Sono l'eroe
-Che ucciderà i mostri
-Sotto al tuo letto
-Mentre riposi
-E non importa se non me la dai
-Ti distruggo il culo mentre dormirai
-
-Sono l'eroe
-Che ucciderà i mostri
-Sotto al tuo letto
-Mentre riposi
-E non importa se non me la dai
-Ti distruggo il culo mentre dormirai
-
-Sono l'eroe
-Che ucciderà i mostri
-Sotto al tuo letto
-Mentre riposi
-E non importa se non me la dai
-Ti distruggo il culo mentre dormirai
-E non importa
+${LYRICS}
                         </div>
                     </div>`;
             } else if (title === 'Lodi Mattutine') {
