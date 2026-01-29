@@ -35,99 +35,90 @@
             padding-bottom: 150px; 
         }
 
-        /* --- STILI MINIPLAYER (EDGE-TO-EDGE) --- */
+        /* --- HEADER CENTRATO --- */
+        .header { 
+            padding: 40px 20px 20px 20px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; /* Centra orizzontalmente */
+            text-align: center;  /* Centra il testo */
+        }
+        .logo-box { 
+            width: 60px; height: 60px; background-color: var(--accent); 
+            border-radius: 18px; display: flex; align-items: center; justify-content: center; 
+            color: white; font-weight: bold; font-size: 1.2rem; margin-bottom: 15px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); 
+        }
+        .logo-box:active { transform: scale(0.9) rotate(-10deg); }
+        .welcome-text { font-size: 1.5rem; font-weight: 800; }
+
+        /* --- STILI MINIPLAYER LIQUIDO --- */
         #miniplayer {
             position: fixed; bottom: 90px; left: 15px; right: 15px;
             background-color: var(--accent); color: white;
             border-radius: 16px; 
-            /* Rimuoviamo il padding inferiore e laterale globale */
-            padding: 12px 0 0 0; 
-            display: flex; flex-direction: column;
+            /* Flex layout per il contenuto */
+            display: flex; align-items: center; justify-content: space-between;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             z-index: 200; transform: translateY(150px);
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            overflow: hidden; /* Taglia tutto ciò che esce dai bordi */
+            overflow: hidden; /* IMPORTANTE: Taglia il liquido ai bordi */
+            height: 70px; /* Altezza fissa per l'effetto */
         }
         #miniplayer.visible { transform: translateY(0); }
         
-        /* Contenitore info e tasti (con padding laterale) */
-        .mp-row-top { 
-            display: flex; align-items: center; justify-content: space-between; 
-            width: 100%; margin-bottom: 8px; 
-            padding: 0 15px; /* Padding solo qui */
-            box-sizing: border-box;
+        /* Livello "Acqua" che riempie */
+        .mp-fill-layer {
+            position: absolute;
+            top: 0; left: 0; bottom: 0;
+            width: 0%; /* JS lo cambierà */
+            background-color: rgba(255, 255, 255, 0.25); /* Effetto riempimento bianco semitrasparente */
+            z-index: 1; /* Sopra lo sfondo verde, sotto il testo */
+            transition: width 0.1s linear; /* Movimento fluido */
         }
-        
-        .mp-info { display: flex; align-items: center; flex: 1; overflow: hidden; }
-        .mp-icon { width: 36px; height: 36px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px; }
-        .mp-text { display: flex; flex-direction: column; overflow: hidden; }
+
+        /* Contenuto (Testo e bottoni) sopra il liquido */
+        .mp-content-layer {
+            position: relative;
+            z-index: 2; /* DEVE stare sopra il liquido */
+            width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 15px;
+        }
+
+        .mp-info { display: flex; align-items: center; flex: 1; overflow: hidden; cursor: pointer; }
+        .mp-icon { width: 40px; height: 40px; background: rgba(0,0,0,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px; }
+        .mp-text { display: flex; flex-direction: column; overflow: hidden; text-align: left; }
         .mp-title { font-weight: bold; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .mp-subtitle { font-size: 0.7rem; opacity: 0.8; }
+        .mp-subtitle { font-size: 0.7rem; opacity: 0.9; }
         
         .mp-controls { display: flex; align-items: center; gap: 15px; }
         .mp-btn { background: none; border: none; color: white; cursor: pointer; padding: 0; display: flex; align-items: center; }
-        .mp-playhead { font-size: 32px; }
+        .mp-playhead { font-size: 32px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
         .mp-close { opacity: 0.7; font-size: 24px; }
 
-        /* Barra Miniplayer (FULL WIDTH REALE) */
-        .mp-progress-container { 
-            width: 100%; 
-            height: 8px; /* Altezza della zona barra */
-            background: rgba(0,0,0,0.2); /* Sfondo scuro della traccia */
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-        .mp-slider {
-            -webkit-appearance: none; 
-            width: 100%; 
-            height: 100%; 
-            background: transparent; /* Trasparente perché usiamo il container sotto */
-            outline: none; 
-            padding: 0; 
-            margin: 0; 
-            display: block;
-            cursor: pointer;
-        }
-        /* Pallino dello slider (Thumb) */
-        .mp-slider::-webkit-slider-thumb { 
-            -webkit-appearance: none; 
-            appearance: none; 
-            width: 0; /* Nascondiamo il pallino per stile "Flat" o lo mettiamo piccolo */
-            height: 100%; 
-            background: rgba(255,255,255,0.8); /* Colore avanzamento simulato */
-            box-shadow: -100vw 0 0 100vw rgba(255,255,255,0.8); /* TRUCCO: Colora la parte sinistra */
-        }
-        /* Fix per Firefox/altri browser */
-        .mp-slider::-moz-range-thumb { width: 0; box-shadow: -100vw 0 0 100vw rgba(255,255,255,0.8); }
 
-        /* --- STILI MAIN PLAYER (PAGINA INNO) --- */
-        .main-player-ui {
-            background-color: var(--card-bg);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px var(--shadow);
-            border: 1px solid var(--border);
-            text-align: center;
+        /* --- NOTE "QUADERNO" --- */
+        #notes-input {
+            width: 100%; 
+            padding: 8px 18px; /* Padding aggiustato per allineare alla prima riga */
+            border-radius: 16px; 
+            border: 1px solid var(--border); 
+            margin-bottom: 15px;
+            background-color: var(--card-bg); 
+            color: var(--text-color);
+            font-size: 1rem; 
+            box-sizing: border-box; 
+            transition: border-color 0.3s;
+            
+            /* EFFETTO RIGHE DI QUADERNO */
+            background-image: linear-gradient(var(--border) 1px, transparent 1px);
+            background-size: 100% 32px; /* Distanza tra le righe */
+            line-height: 32px; /* Altezza riga testo identica alle righe grafiche */
+            resize: none; /* Impedisce di rompere il layout */
         }
-        .main-controls { display: flex; justify-content: center; align-items: center; margin-bottom: 15px; }
-        .main-play-btn {
-            background-color: var(--accent); color: white;
-            width: 60px; height: 60px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 30px; cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            transition: transform 0.2s;
-        }
-        .main-play-btn:active { transform: scale(0.9); }
-        
-        .main-slider-container { display: flex; align-items: center; gap: 10px; font-size: 0.8rem; color: var(--text-sec); font-variant-numeric: tabular-nums; }
-        .main-slider {
-            flex: 1; -webkit-appearance: none; height: 6px; border-radius: 3px;
-            background: #e0e0e0; outline: none; accent-color: var(--accent);
-        }
-        .main-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); cursor: pointer; }
+        #notes-input:focus { border-color: var(--accent); outline: none; }
 
 
         /* --- ANIMAZIONI --- */
@@ -154,10 +145,6 @@
         /* --- STILI APP STANDARD --- */
         .page-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--bg-color); z-index: 100; padding: 20px; overflow-y: auto; opacity: 0; transform: translateY(30px); transition: opacity 0.3s ease-out, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); padding-bottom: 150px; }
         .page-overlay.visible { opacity: 1; transform: translateY(0); }
-        .header { padding: 40px 20px 20px 20px; }
-        .logo-box { width: 60px; height: 60px; background-color: var(--accent); border-radius: 18px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.2rem; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
-        .logo-box:active { transform: scale(0.9) rotate(-10deg); }
-        .welcome-text { font-size: 1.5rem; font-weight: 800; }
         .container { padding: 0 20px; padding-bottom: 100px; }
         .card { background-color: var(--card-bg); border-radius: 22px; padding: 18px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px var(--shadow); border: 1px solid var(--border); cursor: pointer; opacity: 0; animation: elasticSlide 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
         .card:nth-child(1) { animation-delay: 0.05s; } .card:nth-child(2) { animation-delay: 0.15s; } .card:nth-child(3) { animation-delay: 0.25s; } .card:nth-child(4) { animation-delay: 0.35s; }
@@ -180,8 +167,19 @@
         .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: var(--accent); }
         input:checked + .slider:before { transform: translateX(22px); }
-        input[type="text"], textarea { width: 100%; padding: 18px; border-radius: 16px; border: 2px solid var(--border); margin-bottom: 15px; background: var(--card-bg); color: var(--text-color); font-size: 1rem; box-sizing: border-box; transition: border-color 0.3s; }
-        input[type="text"]:focus, textarea:focus { border-color: var(--accent); outline: none; }
+        /* input[type="text"] rimosso per usare stile specifico note */
+        input[type="text"] { width: 100%; padding: 18px; border-radius: 16px; border: 2px solid var(--border); margin-bottom: 15px; background: var(--card-bg); color: var(--text-color); font-size: 1rem; box-sizing: border-box; transition: border-color 0.3s; }
+        input[type="text"]:focus { border-color: var(--accent); outline: none; }
+        
+        /* Main Slider Stile */
+        .main-player-ui { background-color: var(--card-bg); border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 15px var(--shadow); border: 1px solid var(--border); text-align: center; }
+        .main-controls { display: flex; justify-content: center; align-items: center; margin-bottom: 15px; }
+        .main-play-btn { background-color: var(--accent); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: transform 0.2s; }
+        .main-play-btn:active { transform: scale(0.9); }
+        .main-slider-container { display: flex; align-items: center; gap: 10px; font-size: 0.8rem; color: var(--text-sec); font-variant-numeric: tabular-nums; }
+        .main-slider { flex: 1; -webkit-appearance: none; height: 6px; border-radius: 3px; background: #e0e0e0; outline: none; accent-color: var(--accent); }
+        .main-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); cursor: pointer; }
+
         .navbar { position: fixed; bottom: 25px; left: 25px; right: 25px; background-color: var(--card-bg); border-radius: 25px; padding: 12px 0; display: flex; justify-content: space-around; box-shadow: 0 10px 25px var(--shadow); z-index: 50; transition: transform 0.3s; }
         .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 0.7rem; font-weight: 700; color: #bbbbbb; transition: color 0.3s, transform 0.3s; }
         .nav-item.active { color: var(--accent); transform: translateY(-4px); }
@@ -207,7 +205,9 @@
     </div>
 
     <div id="miniplayer">
-        <div class="mp-row-top">
+        <div class="mp-fill-layer" id="mp-fill"></div>
+        
+        <div class="mp-content-layer">
             <div class="mp-info" onclick="openReader('Inno')">
                 <div class="mp-icon"><span class="material-icons" style="font-size:20px">music_note</span></div>
                 <div class="mp-text">
@@ -223,9 +223,6 @@
                     <span class="material-icons mp-close">close</span>
                 </button>
             </div>
-        </div>
-        <div class="mp-progress-container">
-            <input type="range" id="mp-seek" class="mp-slider" value="0" min="0" step="1" oninput="seekAudio(this.value)">
         </div>
     </div>
 
@@ -284,7 +281,7 @@
                 <div style="position:absolute; bottom:0; right:0; background:var(--accent); color:white; border-radius:50%; padding:5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"><span class="material-icons" style="font-size:16px">edit</span></div>
             </div>
             <input type="file" id="file-input" accept="image/*" onchange="uploadImage(this)" style="display:none">
-            <br><input type="text" id="name-input" placeholder="Il tuo nome" oninput="saveName()">
+            <br><input type="text" id="name-input" placeholder="Il tuo nome" oninput="saveName()" style="text-align:center;">
             <div class="settings-box">
                 <div class="setting-row"><span class="setting-label">Grandezza Testo</span><div style="display:flex; align-items:center;"><span style="font-size:12px; margin-right:5px">A</span><input type="range" id="font-slider" min="14" max="24" value="16" oninput="changeFontSize(this.value)"><span style="font-size:20px; margin-left:5px">A</span></div></div>
                 <hr style="border:0; border-top:1px solid var(--border); margin:10px 0;">
@@ -363,7 +360,7 @@ Is yours`;
         const audio = document.getElementById('global-audio');
         const miniplayer = document.getElementById('miniplayer');
         const mpPlayIcon = document.getElementById('mp-play-icon');
-        const mpSeek = document.getElementById('mp-seek');
+        const mpFill = document.getElementById('mp-fill'); // IL RIEMPIMENTO LIQUIDO
 
         function formatTime(seconds) {
             const m = Math.floor(seconds / 60);
@@ -374,18 +371,20 @@ Is yours`;
         audio.ontimeupdate = function() {
             const curr = audio.currentTime;
             const dur = audio.duration || 0;
+            const pct = (curr / dur) * 100;
             
-            if (!Number.isNaN(dur)) {
-                mpSeek.max = Math.floor(dur);
-                mpSeek.value = Math.floor(curr);
+            // AGGIORNA IL LIQUIDO DEL MINIPLAYER
+            if (!Number.isNaN(pct)) {
+                mpFill.style.width = pct + "%";
             }
 
+            // Aggiorna Main Player (se presente)
             const mainSeek = document.getElementById('main-seek');
             const currTimeText = document.getElementById('curr-time-text');
             const totalTimeText = document.getElementById('total-time-text');
             
             if (mainSeek) {
-                mainSeek.max = Math.floor(dur);
+                if (!Number.isNaN(dur)) mainSeek.max = Math.floor(dur);
                 mainSeek.value = Math.floor(curr);
                 currTimeText.innerText = formatTime(curr);
                 totalTimeText.innerText = formatTime(dur);
@@ -418,6 +417,7 @@ Is yours`;
             audio.pause();
             audio.currentTime = 0;
             mpPlayIcon.textContent = 'play_arrow';
+            mpFill.style.width = "0%"; // Resetta liquido
             miniplayer.classList.remove('visible');
             updateMainPlayIcon(false);
         }
