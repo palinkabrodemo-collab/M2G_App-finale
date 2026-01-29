@@ -5,190 +5,154 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>M2G App</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" rel="stylesheet">
+    
     <style>
         /* --- VARIABILI COLORI --- */
         :root {
-            --bg-color: #f3f0e9;      
-            --card-bg: #ffffff;       
-            --text-color: #1a1a1a;    
-            --text-sec: #666666;      
-            --accent: #6a8a73;        
-            --icon-bg: #dbe4de;       
-            --border: #eeeeee;
-            --shadow: rgba(0,0,0,0.05);
-            --base-size: 16px;
+            --bg-color: #f3f0e9; --card-bg: #ffffff; --text-color: #1a1a1a;
+            --text-sec: #666666; --accent: #6a8a73; --icon-bg: #dbe4de;
+            --border: #eeeeee; --shadow: rgba(0,0,0,0.05); --base-size: 16px;
+            /* Colori specifici per il cielo durante l'animazione */
+            --sky-day: #87CEEB; --sky-night: #1a1a2e;
         }
-
         body.dark-mode {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --text-color: #ffffff;
-            --text-sec: #bbbbbb;
-            --accent: #8ab696;
-            --icon-bg: #2c2c2c;
-            --border: #333333;
-            --shadow: rgba(0,0,0,0.5);
+            --bg-color: #121212; --card-bg: #1e1e1e; --text-color: #ffffff;
+            --text-sec: #bbbbbb; --accent: #8ab696; --icon-bg: #2c2c2c;
+            --border: #333333; --shadow: rgba(0,0,0,0.5);
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: var(--bg-color); color: var(--text-color);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0; padding: 0;
-            transition: background-color 0.4s ease, color 0.4s ease;
-            -webkit-tap-highlight-color: transparent;
-            font-size: var(--base-size);
-            overflow-x: hidden; /* Evita scroll orizzontale */
+            /* MODIFICA FONDAMENTALE: Transizione colori LENTA (2 secondi) */
+            transition: background-color 2.0s ease-in-out, color 2.0s ease-in-out;
+            -webkit-tap-highlight-color: transparent; font-size: var(--base-size);
+            overflow-x: hidden;
         }
 
-        /* --- ANIMAZIONI --- */
+        /* =========================================
+           --- IL TEATRO CELESTE (Animazioni) ---
+           ========================================= */
         
-        /* 1. Entrata a Cascata per la Home (Funzionava bene, la teniamo) */
-        @keyframes cardEntrance {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Contenitore che copre tutto lo schermo durante il cambio */
+        #celestial-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; /* Permette di cliccare sotto */
+            z-index: 9999; /* Sopra tutto */
+            opacity: 0; /* Invisibile di base */
+            transition: opacity 0.5s ease; /* Appare/scompare morbidamente */
+            display: flex; justify-content: center; align-items: flex-end;
+            overflow: hidden;
+        }
+        /* Quando attivo, diventa visibile */
+        #celestial-container.active { opacity: 1; }
+
+        /* Gli astri (Sole e Luna) */
+        .celestial-body {
+            position: absolute; bottom: -150px; /* Partono nascosti sotto */
+            font-size: 120px; /* Icone giganti */
+        }
+        #sun-icon { color: #FFD700; filter: drop-shadow(0 0 20px orange); z-index: 2; }
+        #moon-group { z-index: 1; display: flex; align-items: center; justify-content: center; }
+        #moon-icon { color: #F4F6F0; filter: drop-shadow(0 0 15px #87CEEB); font-size: 100px; }
+        
+        /* Stelle (visibili solo con la luna) */
+        .stars {
+            position: absolute; width: 100%; height: 100%; top: 0; left: 0;
+            opacity: 0; transition: opacity 2s ease;
+        }
+        body.dark-mode .stars { opacity: 1; } /* Stelle visibili solo al buio */
+        .star { position: absolute; color: white; font-size: 10px; animation: twinkle 1.5s infinite alternate; }
+        @keyframes twinkle { from { opacity: 0.3; } to { opacity: 1; } }
+
+        /* --- MOVIMENTI ORBITALI (Curve di Bezier per l'effetto arco) --- */
+        /* Alba: Sole su, Luna giù */
+        @keyframes sunriseMoveUp {
+            0% { transform: translate(0, 0) scale(0.8); }
+            100% { transform: translate(0, -40vh) scale(1); } /* Sale al 40% dell'altezza schermo */
+        }
+        @keyframes moonsetMoveDown {
+            0% { transform: translate(0, -40vh) scale(1); }
+            100% { transform: translate(0, 100px) scale(0.8); }
         }
 
-        /* 2. Nuova animazione "Sicura" per le pagine interne via CSS Transitions */
-        .page-overlay {
-            display: none; /* Di base nascosto */
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: var(--bg-color); 
-            z-index: 100;
-            padding: 20px; 
-            overflow-y: auto;
-            
-            /* STATO INIZIALE DELL'ANIMAZIONE (Invisibile e spostato giù) */
-            opacity: 0;
-            transform: translateY(30px);
-            
-            /* DEFINIZIONE TRANSIZIONE (Fluidità) */
-            transition: opacity 0.3s ease-out, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        /* Tramonto: Sole giù, Luna su */
+        @keyframes sunsetMoveDown {
+            0% { transform: translate(0, -40vh) scale(1); }
+            100% { transform: translate(0, 100px) scale(0.8); }
+        }
+        @keyframes moonriseMoveUp {
+            0% { transform: translate(0, 0) scale(0.8); }
+            100% { transform: translate(0, -40vh) scale(1); }
         }
 
-        /* STATO FINALE (Quando aggiungiamo questa classe via JS, si anima) */
-        .page-overlay.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        /* Classi attivate via JS */
+        .animate-sunrise #sun-icon { animation: sunriseMoveUp 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
+        .animate-sunrise #moon-group { animation: moonsetMoveDown 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
+        
+        .animate-sunset #sun-icon { animation: sunsetMoveDown 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
+        .animate-sunset #moon-group { animation: moonriseMoveUp 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
 
-        /* HEADER */
+
+        /* =========================================
+           --- STILI STANDARD DELL'APP ---
+           ========================================= */
+        /* (Questi sono gli stili che già avevamo, invariati) */
+        @keyframes cardEntrance { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .page-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--bg-color); z-index: 100; padding: 20px; overflow-y: auto; opacity: 0; transform: translateY(30px); transition: opacity 0.3s ease-out, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .page-overlay.visible { opacity: 1; transform: translateY(0); }
         .header { padding: 40px 20px 20px 20px; }
-        .logo-box {
-            width: 60px; height: 60px;
-            background-color: var(--accent);
-            border-radius: 18px;
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-weight: bold; font-size: 1.2rem;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
+        .logo-box { width: 60px; height: 60px; background-color: var(--accent); border-radius: 18px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.2rem; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .welcome-text { font-size: 1.5rem; font-weight: 800; }
-
-        /* CARDS */
         .container { padding: 0 20px; padding-bottom: 100px; }
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 22px;
-            padding: 18px;
-            margin-bottom: 15px;
-            display: flex; align-items: center; justify-content: space-between;
-            box-shadow: 0 4px 15px var(--shadow);
-            border: 1px solid var(--border);
-            cursor: pointer;
-            
-            /* Animazione Cascata Home */
-            opacity: 0; 
-            animation: cardEntrance 0.5s ease-out forwards;
-        }
-        
-        /* Ritardi cascata */
-        .card:nth-child(1) { animation-delay: 0.05s; }
-        .card:nth-child(2) { animation-delay: 0.1s; }
-        .card:nth-child(3) { animation-delay: 0.15s; }
-        .card:nth-child(4) { animation-delay: 0.2s; }
-
+        .card { background-color: var(--card-bg); border-radius: 22px; padding: 18px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px var(--shadow); border: 1px solid var(--border); cursor: pointer; opacity: 0; animation: cardEntrance 0.5s ease-out forwards; }
+        .card:nth-child(1) { animation-delay: 0.05s; } .card:nth-child(2) { animation-delay: 0.1s; } .card:nth-child(3) { animation-delay: 0.15s; } .card:nth-child(4) { animation-delay: 0.2s; }
         .card:active { transform: scale(0.96); background-color: var(--border); transition: 0.1s; }
-        
         .card-left { display: flex; align-items: center; }
-        .icon-box {
-            width: 52px; height: 52px;
-            background-color: var(--icon-bg);
-            border-radius: 16px;
-            display: flex; align-items: center; justify-content: center;
-            margin-right: 18px;
-            overflow: hidden; flex-shrink: 0;
-        }
-
+        .icon-box { width: 52px; height: 52px; background-color: var(--icon-bg); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-right: 18px; overflow: hidden; flex-shrink: 0; }
         .asset-img { width: 60%; height: 60%; object-fit: contain; }
         .fallback-icon { display: none; color: var(--accent); font-size: 1.5rem; }
         .card-title { font-weight: 700; font-size: 1rem; color: var(--text-color); }
-
-        /* IMMAGINI READER */
-        .reader-image {
-            width: 100%; height: auto;
-            border-radius: 8px; margin-bottom: 15px;
-            box-shadow: 0 4px 10px var(--shadow);
-            display: block;
-            /* Fade in leggero per le immagini */
-            animation: cardEntrance 0.6s ease-out forwards;
-            opacity: 0;
-        }
-
-        /* PROFILO */
-        .profile-pic-container {
-            width: 100px; height: 100px; margin: 0 auto; position: relative;
-        }
-        .profile-pic {
-            width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
-            border: 4px solid var(--accent); background-color: white;
-            transition: border-color 0.3s;
-        }
-
-        /* SETTINGS BOX */
-        .settings-box {
-            background-color: var(--card-bg);
-            border-radius: 20px; padding: 20px;
-            margin-top: 20px; border: 1px solid var(--border);
-        }
+        .reader-image { width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 4px 10px var(--shadow); display: block; animation: cardEntrance 0.6s ease-out forwards; opacity: 0; }
+        .profile-pic-container { width: 100px; height: 100px; margin: 0 auto; position: relative; }
+        .profile-pic { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 4px solid var(--accent); background-color: white; transition: border-color 0.3s; }
+        .settings-box { background-color: var(--card-bg); border-radius: 20px; padding: 20px; margin-top: 20px; border: 1px solid var(--border); }
         .setting-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .setting-label { font-weight: bold; font-size: 1rem; }
-        
         input[type="range"] { width: 100px; accent-color: var(--accent); }
-        input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--accent); }
+        /* Switch personalizzato per l'interruttore */
+        .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--accent); }
+        input:checked + .slider:before { transform: translateX(22px); }
 
-        input[type="text"], textarea {
-            width: 100%; padding: 18px; border-radius: 16px;
-            border: 2px solid var(--border); margin-bottom: 15px;
-            background: var(--card-bg); color: var(--text-color);
-            font-size: 1rem; box-sizing: border-box;
-            transition: border-color 0.3s;
-        }
+        input[type="text"], textarea { width: 100%; padding: 18px; border-radius: 16px; border: 2px solid var(--border); margin-bottom: 15px; background: var(--card-bg); color: var(--text-color); font-size: 1rem; box-sizing: border-box; transition: border-color 0.3s; }
         input[type="text"]:focus, textarea:focus { border-color: var(--accent); outline: none; }
-
-        /* NAVBAR */
-        .navbar {
-            position: fixed; bottom: 25px; left: 25px; right: 25px;
-            background-color: var(--card-bg); border-radius: 25px; padding: 12px 0;
-            display: flex; justify-content: space-around;
-            box-shadow: 0 10px 25px var(--shadow); z-index: 50;
-            transition: transform 0.3s;
-        }
-        .nav-item { 
-            display: flex; flex-direction: column; align-items: center; 
-            font-size: 0.7rem; font-weight: 700; color: #bbbbbb; 
-            transition: color 0.3s, transform 0.3s;
-        }
-        .nav-item.active { 
-            color: var(--accent); 
-            transform: translateY(-4px); /* Saltino icona attiva */
-        }
+        .navbar { position: fixed; bottom: 25px; left: 25px; right: 25px; background-color: var(--card-bg); border-radius: 25px; padding: 12px 0; display: flex; justify-content: space-around; box-shadow: 0 10px 25px var(--shadow); z-index: 50; transition: transform 0.3s; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 0.7rem; font-weight: 700; color: #bbbbbb; transition: color 0.3s, transform 0.3s; }
+        .nav-item.active { color: var(--accent); transform: translateY(-4px); }
         .nav-item .material-icons { font-size: 1.6rem; margin-bottom: 4px; }
     </style>
 </head>
 <body>
 
+    <div id="celestial-container">
+        <div class="stars">
+             <span class="material-symbols-rounded star" style="top:10%; left:20%; animation-delay:0.2s">star</span>
+            <span class="material-symbols-rounded star" style="top:30%; left:80%; animation-delay:0.5s">star</span>
+            <span class="material-symbols-rounded star" style="top:15%; left:60%; font-size:8px;">star</span>
+            <span class="material-symbols-rounded star" style="top:40%; left:10%; font-size:12px;">star</span>
+            <span class="material-symbols-rounded star" style="top:70%; left:85%; animation-delay:1s">star</span>
+        </div>
+        <span id="sun-icon" class="material-symbols-rounded celestial-body">wb_sunny</span>
+        <div id="moon-group" class="celestial-body">
+             <span id="moon-icon" class="material-symbols-rounded">dark_mode</span>
+        </div>
+    </div>
     <div id="page-home">
         <div class="header">
             <div class="logo-box">M2G</div>
@@ -198,123 +162,77 @@
         <div class="container">
             <div class="card" onclick="openReader('Lodi Mattutine')">
                 <div class="card-left">
-                    <div class="icon-box">
-                        <img src="assets/sunrise.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
-                        <span class="material-icons fallback-icon">wb_sunny</span>
-                    </div>
+                    <div class="icon-box"><img src="assets/sunrise.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"><span class="material-icons fallback-icon">wb_sunny</span></div>
                     <div class="card-title">Lodi Mattutine</div>
                 </div>
                 <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
             </div>
-
             <div class="card" onclick="openReader('Libretto')">
                 <div class="card-left">
-                    <div class="icon-box">
-                        <img src="assets/book-open.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
-                        <span class="material-icons fallback-icon">menu_book</span>
-                    </div>
+                    <div class="icon-box"><img src="assets/book-open.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"><span class="material-icons fallback-icon">menu_book</span></div>
                     <div class="card-title">Libretto</div>
                 </div>
                 <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
             </div>
-
             <div class="card" onclick="openReader('Inno')">
                 <div class="card-left">
-                    <div class="icon-box">
-                        <img src="assets/music.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
-                        <span class="material-icons fallback-icon">music_note</span>
-                    </div>
+                    <div class="icon-box"><img src="assets/music.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"><span class="material-icons fallback-icon">music_note</span></div>
                     <div class="card-title">Inno</div>
                 </div>
                 <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
             </div>
-
             <div class="card" onclick="openLinkFoto()">
                 <div class="card-left">
-                    <div class="icon-box">
-                        <img src="assets/camera.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
-                        <span class="material-icons fallback-icon">photo_camera</span>
-                    </div>
+                    <div class="icon-box"><img src="assets/camera.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"><span class="material-icons fallback-icon">photo_camera</span></div>
                     <div class="card-title">Foto ricordo</div>
                 </div>
                 <span class="material-icons" style="color:var(--text-sec)">open_in_new</span>
             </div>
         </div>
-
         <div class="navbar">
-            <div class="nav-item active" onclick="goHome()">
-                <span class="material-icons">home</span><span>HOME</span>
-            </div>
-            <div class="nav-item" onclick="goUser()">
-                <span class="material-icons">person</span><span>PROFILO</span>
-            </div>
+            <div class="nav-item active" onclick="goHome()"><span class="material-icons">home</span><span>HOME</span></div>
+            <div class="nav-item" onclick="goUser()"><span class="material-icons">person</span><span>PROFILO</span></div>
         </div>
     </div>
 
     <div id="page-reader" class="page-overlay">
-        <div class="top-bar">
-            <button class="back-btn" onclick="goHome()"><span class="material-icons">arrow_back</span></button>
-            <h2 id="reader-title" style="margin:0; font-size: 1.2rem;">Titolo</h2>
-            <div style="width: 28px;"></div>
-        </div>
+        <div class="top-bar"><button class="back-btn" onclick="goHome()"><span class="material-icons">arrow_back</span></button><h2 id="reader-title" style="margin:0; font-size: 1.2rem;">Titolo</h2><div style="width: 28px;"></div></div>
         <div id="reader-content"></div>
     </div>
 
     <div id="page-user" class="page-overlay">
-        <div class="top-bar">
-            <button class="back-btn" onclick="goHome()"><span class="material-icons">arrow_back</span></button>
-            <h2 style="margin:0; font-size: 1.2rem;">Profilo</h2>
-            <div style="width: 28px;"></div>
-        </div>
-
+        <div class="top-bar"><button class="back-btn" onclick="goHome()"><span class="material-icons">arrow_back</span></button><h2 style="margin:0; font-size: 1.2rem;">Profilo</h2><div style="width: 28px;"></div></div>
         <div style="text-align: center; margin-top: 10px;">
             <div class="profile-pic-container" onclick="document.getElementById('file-input').click()">
                 <img id="profile-img" src="assets/user.png" class="profile-pic" onerror="this.src='assets/user.png'">
                 <div style="position:absolute; bottom:0; right:0; background:var(--accent); color:white; border-radius:50%; padding:5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"><span class="material-icons" style="font-size:16px">edit</span></div>
             </div>
             <input type="file" id="file-input" accept="image/*" onchange="uploadImage(this)" style="display:none">
-            
-            <br>
-            <input type="text" id="name-input" placeholder="Il tuo nome" oninput="saveName()">
-
+            <br><input type="text" id="name-input" placeholder="Il tuo nome" oninput="saveName()">
             <div class="settings-box">
-                <div class="setting-row">
-                    <span class="setting-label">Grandezza Testo</span>
-                    <div style="display:flex; align-items:center;">
-                        <span style="font-size:12px; margin-right:5px">A</span>
-                        <input type="range" id="font-slider" min="14" max="24" value="16" oninput="changeFontSize(this.value)">
-                        <span style="font-size:20px; margin-left:5px">A</span>
-                    </div>
-                </div>
+                <div class="setting-row"><span class="setting-label">Grandezza Testo</span><div style="display:flex; align-items:center;"><span style="font-size:12px; margin-right:5px">A</span><input type="range" id="font-slider" min="14" max="24" value="16" oninput="changeFontSize(this.value)"><span style="font-size:20px; margin-left:5px">A</span></div></div>
                 <hr style="border:0; border-top:1px solid var(--border); margin:10px 0;">
                 <div class="setting-row">
                     <span class="setting-label">Modalità Notte</span>
-                    <input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode(this.checked)">
+                    <label class="switch">
+                        <input type="checkbox" id="dark-mode-toggle" onchange="handleThemeToggle(this.checked)">
+                        <span class="slider"></span>
+                    </label>
                 </div>
             </div>
-
-            <br>
-            <div class="card" onclick="openNotes()" style="background-color: var(--accent); color: white; justify-content: center; border:none; box-shadow: 0 10px 20px rgba(0,0,0,0.15);">
-                <span class="material-icons" style="margin-right: 10px;">edit_note</span>
-                APRI NOTE
-            </div>
+            <br><div class="card" onclick="openNotes()" style="background-color: var(--accent); color: white; justify-content: center; border:none; box-shadow: 0 10px 20px rgba(0,0,0,0.15);"><span class="material-icons" style="margin-right: 10px;">edit_note</span>APRI NOTE</div>
         </div>
     </div>
 
     <div id="page-notes" class="page-overlay">
-        <div class="top-bar">
-            <button class="back-btn" onclick="goUser()"><span class="material-icons">arrow_back</span></button>
-            <h2 style="margin:0; font-size: 1.2rem;">Note</h2>
-            <span class="material-icons" style="color:var(--accent)">save</span>
-        </div>
+        <div class="top-bar"><button class="back-btn" onclick="goUser()"><span class="material-icons">arrow_back</span></button><h2 style="margin:0; font-size: 1.2rem;">Note</h2><span class="material-icons" style="color:var(--accent)">save</span></div>
         <textarea id="notes-input" rows="20" placeholder="Scrivi qui..." oninput="saveNotes()"></textarea>
     </div>
 
     <script>
-        // --- CONFIGURAZIONE ---
         const LINK_FOTO_RICORDO = "https://photos.app.goo.gl/TUO_LINK_QUI"; 
-
-        // --- INIT ---
+        
+        // INIT
         const savedName = localStorage.getItem('m2g_name') || 'Utente';
         const savedNotes = localStorage.getItem('m2g_notes') || '';
         const savedPic = localStorage.getItem('m2g_pic');
@@ -328,58 +246,74 @@
         
         changeFontSize(savedFont);
         document.getElementById('font-slider').value = savedFont;
-        toggleDarkMode(savedDark);
+        // Imposta il tema iniziale SENZA animazione
+        if (savedDark) document.body.classList.add('dark-mode');
         document.getElementById('dark-mode-toggle').checked = savedDark;
 
-        // --- SISTEMA DI ANIMAZIONE "SAFE" (IL CUORE DEL FIX) ---
-        // Funzione helper per aprire le pagine con animazione
-        function animatePageEntry(pageId) {
-            const page = document.getElementById(pageId);
+        // --- NUOVA FUNZIONE GESTIONE TEMA & ANIMAZIONE CELESTE ---
+        function handleThemeToggle(isDark) {
+            // 1. Fai partire l'animazione del sole/luna
+            triggerCelestialAnimation(isDark);
             
-            // 1. Rendi visibile il blocco (ma è ancora trasparente per via del CSS)
-            page.style.display = 'block';
+            // 2. Cambia effettivamente il tema (il CSS farà la transizione lenta di 2s)
+            if (isDark) document.body.classList.add('dark-mode');
+            else document.body.classList.remove('dark-mode');
             
-            // 2. Aspetta un istante (10ms) per essere sicuri che il telefono lo abbia "disegnato"
-            setTimeout(() => {
-                // 3. Aggiungi la classe che attiva l'animazione (Opacity 0 -> 1)
-                page.classList.add('visible');
-            }, 10);
+            // 3. Salva
+            localStorage.setItem('m2g_dark', isDark);
         }
 
+        // Funzione che gestisce il teatro celeste
+        function triggerCelestialAnimation(isGoingToDark) {
+            const container = document.getElementById('celestial-container');
+            
+            // Rendi visibile il teatro
+            container.classList.add('active');
+            
+            // Rimuovi classi precedenti per resettare
+            container.classList.remove('animate-sunrise', 'animate-sunset');
+            
+            // Forza il browser a ricalcolare (trucco per riavviare l'animazione)
+            void container.offsetWidth; 
+
+            // Applica la classe giusta
+            if (isGoingToDark) {
+                // Sta arrivando il buio: Tramonto (Sole giù, Luna su)
+                container.classList.add('animate-sunset');
+            } else {
+                // Sta arrivando la luce: Alba (Luna giù, Sole su)
+                container.classList.add('animate-sunrise');
+            }
+
+            // Dopo 2 secondi (durata dell'animazione), nascondi il teatro
+            setTimeout(() => {
+                container.classList.remove('active');
+            }, 2000);
+        }
+        // ---------------------------------------------------------
+
+        // NAVIGAZIONE SAFE
+        function animatePageEntry(pageId) {
+            const page = document.getElementById(pageId);
+            page.style.display = 'block';
+            setTimeout(() => { page.classList.add('visible'); }, 10);
+        }
         function hideAll() {
-            // Nascondi tutto e resetta l'animazione
             document.querySelectorAll('.page-overlay').forEach(p => {
-                p.classList.remove('visible'); // Toglie l'animazione
-                p.style.display = 'none';      // Nasconde fisicamente
+                p.classList.remove('visible'); p.style.display = 'none';
             });
             document.getElementById('page-home').style.display = 'none';
         }
-
-        function goHome() { 
-            hideAll(); 
-            // La home non si anima in entrata (è la base), appare subito
-            document.getElementById('page-home').style.display = 'block'; 
-        }
-
-        function goUser() { 
-            hideAll(); 
-            animatePageEntry('page-user'); // Usa la nuova funzione sicura
-        }
-
-        function openNotes() { 
-            hideAll(); 
-            animatePageEntry('page-notes'); // Usa la nuova funzione sicura
-        }
-        
+        function goHome() { hideAll(); document.getElementById('page-home').style.display = 'block'; }
+        function goUser() { hideAll(); animatePageEntry('page-user'); }
+        function openNotes() { hideAll(); animatePageEntry('page-notes'); }
         function openLinkFoto() { window.open(LINK_FOTO_RICORDO, '_blank'); }
 
         function openReader(title) {
             hideAll();
-            // Setup contenuto
             document.getElementById('reader-title').textContent = title;
             const content = document.getElementById('reader-content');
             content.innerHTML = "";
-
             if (title === 'Inno') {
                 content.innerHTML = `
                     <div style="animation: cardEntrance 0.5s ease">
@@ -458,55 +392,21 @@ E non importa
                     </div>`;
             } else if (title === 'Lodi Mattutine') {
                 let htmlImages = '<div style="text-align:center">';
-                for (let i = 1; i <= 5; i++) {
-                    // Animazione sicura anche per le immagini
-                    htmlImages += `<img src="assets/lodi${i}.jpg" class="reader-image" style="animation-delay: ${i*0.1}s" loading="lazy" onerror="this.style.display='none'">`;
-                }
-                htmlImages += '</div>';
-                content.innerHTML = htmlImages;
+                for (let i = 1; i <= 5; i++) { htmlImages += `<img src="assets/lodi${i}.jpg" class="reader-image" loading="lazy" onerror="this.style.display='none'">`; }
+                htmlImages += '</div>'; content.innerHTML = htmlImages;
             } else if (title === 'Libretto') {
                 let htmlImages = '<div style="text-align:center">';
-                for (let i = 1; i <= 5; i++) {
-                    htmlImages += `<img src="assets/lib${i}.jpg" class="reader-image" style="animation-delay: ${i*0.1}s" loading="lazy" onerror="this.style.display='none'">`;
-                }
-                htmlImages += '</div>';
-                content.innerHTML = htmlImages;
+                for (let i = 1; i <= 5; i++) { htmlImages += `<img src="assets/lib${i}.jpg" class="reader-image" loading="lazy" onerror="this.style.display='none'">`; }
+                htmlImages += '</div>'; content.innerHTML = htmlImages;
             }
-
-            // APRI LA PAGINA READER CON ANIMAZIONE
             animatePageEntry('page-reader');
         }
 
-        // --- SALVATAGGIO ---
-        function saveName() {
-            const val = document.getElementById('name-input').value;
-            localStorage.setItem('m2g_name', val);
-            document.getElementById('user-name-display').textContent = val;
-        }
+        function saveName() { const val = document.getElementById('name-input').value; localStorage.setItem('m2g_name', val); document.getElementById('user-name-display').textContent = val; }
         function saveNotes() { localStorage.setItem('m2g_notes', document.getElementById('notes-input').value); }
-        
-        function uploadImage(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('profile-img').src = e.target.result;
-                    try { localStorage.setItem('m2g_pic', e.target.result); } catch(e) { alert("Immagine troppo pesante!"); }
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        // --- SETTINGS ---
-        function changeFontSize(size) {
-            document.documentElement.style.setProperty('--base-size', size + 'px');
-            localStorage.setItem('m2g_fontsize', size);
-        }
-        
-        function toggleDarkMode(isDark) {
-            if (isDark) document.body.classList.add('dark-mode');
-            else document.body.classList.remove('dark-mode');
-            localStorage.setItem('m2g_dark', isDark);
-        }
+        function uploadImage(input) { if (input.files && input.files[0]) { const reader = new FileReader(); reader.onload = function(e) { document.getElementById('profile-img').src = e.target.result; try { localStorage.setItem('m2g_pic', e.target.result); } catch(e) { alert("Immagine troppo pesante!"); } }; reader.readAsDataURL(input.files[0]); } }
+        function changeFontSize(size) { document.documentElement.style.setProperty('--base-size', size + 'px'); localStorage.setItem('m2g_fontsize', size); }
+        // toggleDarkMode rimosso perché ora usiamo handleThemeToggle
     </script>
 </body>
 </html>
