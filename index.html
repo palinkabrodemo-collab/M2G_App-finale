@@ -13,8 +13,6 @@
             --bg-color: #f3f0e9; --card-bg: #ffffff; --text-color: #1a1a1a;
             --text-sec: #666666; --accent: #6a8a73; --icon-bg: #dbe4de;
             --border: #eeeeee; --shadow: rgba(0,0,0,0.05); --base-size: 16px;
-            /* Colori specifici per il cielo durante l'animazione */
-            --sky-day: #87CEEB; --sky-night: #1a1a2e;
         }
         body.dark-mode {
             --bg-color: #121212; --card-bg: #1e1e1e; --text-color: #ffffff;
@@ -26,103 +24,96 @@
             background-color: var(--bg-color); color: var(--text-color);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0; padding: 0;
-            /* MODIFICA FONDAMENTALE: Transizione colori LENTA (2 secondi) */
-            transition: background-color 2.0s ease-in-out, color 2.0s ease-in-out;
+            transition: background-color 2.0s ease-in-out, color 2.0s ease-in-out; /* Transizione Lenta */
             -webkit-tap-highlight-color: transparent; font-size: var(--base-size);
             overflow-x: hidden;
         }
 
         /* =========================================
-           --- IL TEATRO CELESTE (Animazioni) ---
+           --- ANIMAZIONI ELASTICHE (HOME) ---
            ========================================= */
         
-        /* Contenitore che copre tutto lo schermo durante il cambio */
+        /* Definizione del "Rimbalzo" */
+        @keyframes elasticSlide {
+            0% { opacity: 0; transform: translateY(50px) scale(0.8); }
+            60% { opacity: 1; transform: translateY(-10px) scale(1.02); } /* Sale un po' troppo */
+            80% { transform: translateY(5px) scale(0.98); } /* Scende un po' */
+            100% { opacity: 1; transform: translateY(0) scale(1); } /* Si ferma */
+        }
+
+        /* =========================================
+           --- TEATRO CELESTE (Sole/Luna) ---
+           ========================================= */
         #celestial-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; /* Permette di cliccare sotto */
-            z-index: 9999; /* Sopra tutto */
-            opacity: 0; /* Invisibile di base */
-            transition: opacity 0.5s ease; /* Appare/scompare morbidamente */
-            display: flex; justify-content: center; align-items: flex-end;
-            overflow: hidden;
+            pointer-events: none; z-index: 9999; opacity: 0;
+            transition: opacity 0.5s ease;
+            display: flex; justify-content: center; align-items: flex-end; overflow: hidden;
         }
-        /* Quando attivo, diventa visibile */
         #celestial-container.active { opacity: 1; }
-
-        /* Gli astri (Sole e Luna) */
-        .celestial-body {
-            position: absolute; bottom: -150px; /* Partono nascosti sotto */
-            font-size: 120px; /* Icone giganti */
-        }
+        .celestial-body { position: absolute; bottom: -150px; font-size: 120px; }
         #sun-icon { color: #FFD700; filter: drop-shadow(0 0 20px orange); z-index: 2; }
         #moon-group { z-index: 1; display: flex; align-items: center; justify-content: center; }
         #moon-icon { color: #F4F6F0; filter: drop-shadow(0 0 15px #87CEEB); font-size: 100px; }
         
-        /* Stelle (visibili solo con la luna) */
-        .stars {
-            position: absolute; width: 100%; height: 100%; top: 0; left: 0;
-            opacity: 0; transition: opacity 2s ease;
-        }
-        body.dark-mode .stars { opacity: 1; } /* Stelle visibili solo al buio */
+        .stars { position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; transition: opacity 2s ease; }
+        body.dark-mode .stars { opacity: 1; }
         .star { position: absolute; color: white; font-size: 10px; animation: twinkle 1.5s infinite alternate; }
         @keyframes twinkle { from { opacity: 0.3; } to { opacity: 1; } }
 
-        /* --- MOVIMENTI ORBITALI (Curve di Bezier per l'effetto arco) --- */
-        /* Alba: Sole su, Luna giù */
-        @keyframes sunriseMoveUp {
-            0% { transform: translate(0, 0) scale(0.8); }
-            100% { transform: translate(0, -40vh) scale(1); } /* Sale al 40% dell'altezza schermo */
-        }
-        @keyframes moonsetMoveDown {
-            0% { transform: translate(0, -40vh) scale(1); }
-            100% { transform: translate(0, 100px) scale(0.8); }
-        }
+        @keyframes sunriseMoveUp { 0% { transform: translate(0, 0) scale(0.8); } 100% { transform: translate(0, -40vh) scale(1); } }
+        @keyframes moonsetMoveDown { 0% { transform: translate(0, -40vh) scale(1); } 100% { transform: translate(0, 100px) scale(0.8); } }
+        @keyframes sunsetMoveDown { 0% { transform: translate(0, -40vh) scale(1); } 100% { transform: translate(0, 100px) scale(0.8); } }
+        @keyframes moonriseMoveUp { 0% { transform: translate(0, 0) scale(0.8); } 100% { transform: translate(0, -40vh) scale(1); } }
 
-        /* Tramonto: Sole giù, Luna su */
-        @keyframes sunsetMoveDown {
-            0% { transform: translate(0, -40vh) scale(1); }
-            100% { transform: translate(0, 100px) scale(0.8); }
-        }
-        @keyframes moonriseMoveUp {
-            0% { transform: translate(0, 0) scale(0.8); }
-            100% { transform: translate(0, -40vh) scale(1); }
-        }
-
-        /* Classi attivate via JS */
         .animate-sunrise #sun-icon { animation: sunriseMoveUp 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
         .animate-sunrise #moon-group { animation: moonsetMoveDown 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
-        
         .animate-sunset #sun-icon { animation: sunsetMoveDown 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
         .animate-sunset #moon-group { animation: moonriseMoveUp 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
 
 
         /* =========================================
-           --- STILI STANDARD DELL'APP ---
+           --- STILI APP ---
            ========================================= */
-        /* (Questi sono gli stili che già avevamo, invariati) */
-        @keyframes cardEntrance { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .page-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--bg-color); z-index: 100; padding: 20px; overflow-y: auto; opacity: 0; transform: translateY(30px); transition: opacity 0.3s ease-out, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .page-overlay.visible { opacity: 1; transform: translateY(0); }
         .header { padding: 40px 20px 20px 20px; }
-        .logo-box { width: 60px; height: 60px; background-color: var(--accent); border-radius: 18px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.2rem; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .logo-box { width: 60px; height: 60px; background-color: var(--accent); border-radius: 18px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.2rem; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .logo-box:active { transform: scale(0.9) rotate(-10deg); } /* Effetto simpatico logo */
         .welcome-text { font-size: 1.5rem; font-weight: 800; }
+        
         .container { padding: 0 20px; padding-bottom: 100px; }
-        .card { background-color: var(--card-bg); border-radius: 22px; padding: 18px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px var(--shadow); border: 1px solid var(--border); cursor: pointer; opacity: 0; animation: cardEntrance 0.5s ease-out forwards; }
-        .card:nth-child(1) { animation-delay: 0.05s; } .card:nth-child(2) { animation-delay: 0.1s; } .card:nth-child(3) { animation-delay: 0.15s; } .card:nth-child(4) { animation-delay: 0.2s; }
-        .card:active { transform: scale(0.96); background-color: var(--border); transition: 0.1s; }
+        
+        /* CARD: Qui applichiamo l'animazione ELASTICA */
+        .card { 
+            background-color: var(--card-bg); border-radius: 22px; padding: 18px; margin-bottom: 15px; 
+            display: flex; align-items: center; justify-content: space-between; 
+            box-shadow: 0 4px 15px var(--shadow); border: 1px solid var(--border); cursor: pointer; 
+            opacity: 0; /* Parte invisibile */
+            /* Usa l'animazione elasticSlide */
+            animation: elasticSlide 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        /* Ritardi per effetto cascata */
+        .card:nth-child(1) { animation-delay: 0.05s; } 
+        .card:nth-child(2) { animation-delay: 0.15s; } 
+        .card:nth-child(3) { animation-delay: 0.25s; } 
+        .card:nth-child(4) { animation-delay: 0.35s; }
+        
+        .card:active { transform: scale(0.95) !important; background-color: var(--border); transition: 0.1s; }
         .card-left { display: flex; align-items: center; }
         .icon-box { width: 52px; height: 52px; background-color: var(--icon-bg); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-right: 18px; overflow: hidden; flex-shrink: 0; }
         .asset-img { width: 60%; height: 60%; object-fit: contain; }
         .fallback-icon { display: none; color: var(--accent); font-size: 1.5rem; }
         .card-title { font-weight: 700; font-size: 1rem; color: var(--text-color); }
-        .reader-image { width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 4px 10px var(--shadow); display: block; animation: cardEntrance 0.6s ease-out forwards; opacity: 0; }
+        
+        .reader-image { width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 4px 10px var(--shadow); display: block; animation: elasticSlide 0.6s ease-out forwards; opacity: 0; }
+        
         .profile-pic-container { width: 100px; height: 100px; margin: 0 auto; position: relative; }
         .profile-pic { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 4px solid var(--accent); background-color: white; transition: border-color 0.3s; }
         .settings-box { background-color: var(--card-bg); border-radius: 20px; padding: 20px; margin-top: 20px; border: 1px solid var(--border); }
         .setting-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .setting-label { font-weight: bold; font-size: 1rem; }
         input[type="range"] { width: 100px; accent-color: var(--accent); }
-        /* Switch personalizzato per l'interruttore */
         .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
@@ -142,17 +133,16 @@
 
     <div id="celestial-container">
         <div class="stars">
-             <span class="material-symbols-rounded star" style="top:10%; left:20%; animation-delay:0.2s">star</span>
+            <span class="material-symbols-rounded star" style="top:10%; left:20%; animation-delay:0.2s">star</span>
             <span class="material-symbols-rounded star" style="top:30%; left:80%; animation-delay:0.5s">star</span>
             <span class="material-symbols-rounded star" style="top:15%; left:60%; font-size:8px;">star</span>
             <span class="material-symbols-rounded star" style="top:40%; left:10%; font-size:12px;">star</span>
             <span class="material-symbols-rounded star" style="top:70%; left:85%; animation-delay:1s">star</span>
         </div>
         <span id="sun-icon" class="material-symbols-rounded celestial-body">wb_sunny</span>
-        <div id="moon-group" class="celestial-body">
-             <span id="moon-icon" class="material-symbols-rounded">dark_mode</span>
-        </div>
+        <div id="moon-group" class="celestial-body"><span id="moon-icon" class="material-symbols-rounded">dark_mode</span></div>
     </div>
+
     <div id="page-home">
         <div class="header">
             <div class="logo-box">M2G</div>
@@ -214,10 +204,7 @@
                 <hr style="border:0; border-top:1px solid var(--border); margin:10px 0;">
                 <div class="setting-row">
                     <span class="setting-label">Modalità Notte</span>
-                    <label class="switch">
-                        <input type="checkbox" id="dark-mode-toggle" onchange="handleThemeToggle(this.checked)">
-                        <span class="slider"></span>
-                    </label>
+                    <label class="switch"><input type="checkbox" id="dark-mode-toggle" onchange="handleThemeToggle(this.checked)"><span class="slider"></span></label>
                 </div>
             </div>
             <br><div class="card" onclick="openNotes()" style="background-color: var(--accent); color: white; justify-content: center; border:none; box-shadow: 0 10px 20px rgba(0,0,0,0.15);"><span class="material-icons" style="margin-right: 10px;">edit_note</span>APRI NOTE</div>
@@ -246,62 +233,34 @@
         
         changeFontSize(savedFont);
         document.getElementById('font-slider').value = savedFont;
-        // Imposta il tema iniziale SENZA animazione
         if (savedDark) document.body.classList.add('dark-mode');
         document.getElementById('dark-mode-toggle').checked = savedDark;
 
-        // --- NUOVA FUNZIONE GESTIONE TEMA & ANIMAZIONE CELESTE ---
         function handleThemeToggle(isDark) {
-            // 1. Fai partire l'animazione del sole/luna
             triggerCelestialAnimation(isDark);
-            
-            // 2. Cambia effettivamente il tema (il CSS farà la transizione lenta di 2s)
             if (isDark) document.body.classList.add('dark-mode');
             else document.body.classList.remove('dark-mode');
-            
-            // 3. Salva
             localStorage.setItem('m2g_dark', isDark);
         }
 
-        // Funzione che gestisce il teatro celeste
         function triggerCelestialAnimation(isGoingToDark) {
             const container = document.getElementById('celestial-container');
-            
-            // Rendi visibile il teatro
             container.classList.add('active');
-            
-            // Rimuovi classi precedenti per resettare
             container.classList.remove('animate-sunrise', 'animate-sunset');
-            
-            // Forza il browser a ricalcolare (trucco per riavviare l'animazione)
             void container.offsetWidth; 
-
-            // Applica la classe giusta
-            if (isGoingToDark) {
-                // Sta arrivando il buio: Tramonto (Sole giù, Luna su)
-                container.classList.add('animate-sunset');
-            } else {
-                // Sta arrivando la luce: Alba (Luna giù, Sole su)
-                container.classList.add('animate-sunrise');
-            }
-
-            // Dopo 2 secondi (durata dell'animazione), nascondi il teatro
-            setTimeout(() => {
-                container.classList.remove('active');
-            }, 2000);
+            if (isGoingToDark) container.classList.add('animate-sunset');
+            else container.classList.add('animate-sunrise');
+            setTimeout(() => { container.classList.remove('active'); }, 2000);
         }
-        // ---------------------------------------------------------
 
-        // NAVIGAZIONE SAFE
+        // NAVIGAZIONE
         function animatePageEntry(pageId) {
             const page = document.getElementById(pageId);
             page.style.display = 'block';
             setTimeout(() => { page.classList.add('visible'); }, 10);
         }
         function hideAll() {
-            document.querySelectorAll('.page-overlay').forEach(p => {
-                p.classList.remove('visible'); p.style.display = 'none';
-            });
+            document.querySelectorAll('.page-overlay').forEach(p => { p.classList.remove('visible'); p.style.display = 'none'; });
             document.getElementById('page-home').style.display = 'none';
         }
         function goHome() { hideAll(); document.getElementById('page-home').style.display = 'block'; }
@@ -316,7 +275,7 @@
             content.innerHTML = "";
             if (title === 'Inno') {
                 content.innerHTML = `
-                    <div style="animation: cardEntrance 0.5s ease">
+                    <div style="animation: elasticSlide 0.6s ease">
                         <audio controls style="width:100%; margin:20px 0;"><source src="assets/inno.mp3" type="audio/mpeg"></audio>
                         <div style="background:var(--card-bg); padding:20px; border-radius:20px; white-space:pre-line; text-align:center; line-height:1.8; box-shadow: 0 4px 15px var(--shadow);">
 Lo sai che ti amo
@@ -406,7 +365,6 @@ E non importa
         function saveNotes() { localStorage.setItem('m2g_notes', document.getElementById('notes-input').value); }
         function uploadImage(input) { if (input.files && input.files[0]) { const reader = new FileReader(); reader.onload = function(e) { document.getElementById('profile-img').src = e.target.result; try { localStorage.setItem('m2g_pic', e.target.result); } catch(e) { alert("Immagine troppo pesante!"); } }; reader.readAsDataURL(input.files[0]); } }
         function changeFontSize(size) { document.documentElement.style.setProperty('--base-size', size + 'px'); localStorage.setItem('m2g_fontsize', size); }
-        // toggleDarkMode rimosso perché ora usiamo handleThemeToggle
     </script>
 </body>
 </html>
