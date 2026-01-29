@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>M2G App</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        /* --- STILE M2G ORIGINALE --- */
+        body {
+            background-color: #f3f0e9; /* Beige M2G */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0; padding: 0;
+            color: #1a1a1a;
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden; /* No scroll orizzontale */
+        }
+
+        /* HEADER */
+        .header { padding: 40px 20px 20px 20px; }
+        .logo-box {
+            width: 60px; height: 60px;
+            background-color: #6a8a73; /* Verde M2G */
+            border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: bold; font-size: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(106, 138, 115, 0.3);
+        }
+        .welcome-text { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+
+        /* CARDS */
+        .container { padding: 0 20px; padding-bottom: 100px; }
+        .card {
+            background-color: white;
+            border-radius: 22px;
+            padding: 18px;
+            margin-bottom: 15px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.02);
+            transition: transform 0.1s;
+            cursor: pointer;
+        }
+        .card:active { transform: scale(0.98); background-color: #fafafa; }
+        .card-left { display: flex; align-items: center; }
+        
+        /* ICONE PERSONALIZZATE */
+        .icon-box {
+            width: 52px; height: 52px;
+            background-color: #dbe4de; /* Verdino chiaro */
+            border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            margin-right: 18px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .asset-img {
+            width: 60%; height: 60%; /* Dimensione icona interna */
+            object-fit: contain;
+        }
+        /* Icona di fallback se manca l'immagine */
+        .fallback-icon { display: none; color: #6a8a73; font-size: 28px; }
+
+        .card-title { font-weight: 700; font-size: 17px; color: #333; }
+
+        /* PAGINE INTERNE (Overlay a tutto schermo) */
+        .page-overlay {
+            display: none; position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #f3f0e9; z-index: 100;
+            padding: 20px; overflow-y: auto;
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+        .top-bar {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 20px; padding-top: 20px;
+        }
+        .back-btn { background: none; border: none; font-size: 28px; color: #1a1a1a; cursor: pointer; padding: 0; }
+        
+        /* AUDIO PLAYER PRO */
+        audio {
+            width: 100%;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-radius: 30px;
+        }
+        /* Stile personalizzato per il testo canzone */
+        .lyrics-box {
+            background-color: white;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            white-space: pre-line; /* Mantiene gli a capo */
+            line-height: 1.8;
+            font-size: 16px;
+            color: #444;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            margin-bottom: 50px;
+        }
+
+        /* PROFILO UTENTE */
+        .profile-pic-container {
+            width: 100px; height: 100px;
+            margin: 0 auto;
+            position: relative;
+            cursor: pointer;
+        }
+        .profile-pic {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #6a8a73;
+            background-color: white;
+        }
+        .edit-badge {
+            position: absolute; bottom: 0; right: 0;
+            background-color: #6a8a73; color: white;
+            border-radius: 50%; padding: 6px;
+            font-size: 16px; pointer-events: none;
+        }
+
+        /* INPUT E NOTE */
+        input[type="text"], textarea {
+            width: 100%; padding: 18px; border-radius: 16px;
+            border: 2px solid #e0e0e0; margin-bottom: 15px;
+            font-family: inherit; font-size: 16px;
+            box-sizing: border-box; background: white;
+            transition: border-color 0.2s;
+        }
+        input[type="text"]:focus, textarea:focus { border-color: #6a8a73; outline: none; }
+
+        /* NAVBAR FISSA */
+        .navbar {
+            position: fixed; bottom: 25px; left: 25px; right: 25px;
+            background-color: white; border-radius: 25px; padding: 12px 0;
+            display: flex; justify-content: space-around;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            z-index: 50;
+        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; font-weight: 700; color: #bbbbbb; cursor: pointer; }
+        .nav-item.active { color: #6a8a73; }
+        .nav-item .material-icons { font-size: 26px; margin-bottom: 4px; }
+        
+        /* Input file nascosto */
+        #file-input { display: none; }
+    </style>
+</head>
+<body>
+
+    <div id="page-home">
+        <div class="header">
+            <div class="logo-box">M2G</div>
+            <div class="welcome-text">Bentornato, <br><span id="user-name-display" style="color:#6a8a73">Utente</span></div>
+        </div>
+
+        <div class="container">
+            <div class="card" onclick="openReader('Lodi Mattutine')">
+                <div class="card-left">
+                    <div class="icon-box">
+                        <img src="assets/sunrise.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                        <span class="material-icons fallback-icon">wb_sunny</span>
+                    </div>
+                    <div class="card-title">Lodi Mattutine</div>
+                </div>
+                <span class="material-icons" style="color:#ddd">chevron_right</span>
+            </div>
+
+            <div class="card" onclick="openReader('Libretto')">
+                <div class="card-left">
+                    <div class="icon-box">
+                        <img src="assets/book-open.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                        <span class="material-icons fallback-icon">menu_book</span>
+                    </div>
+                    <div class="card-title">Libretto</div>
+                </div>
+                <span class="material-icons" style="color:#ddd">chevron_right</span>
+            </div>
+
+            <div class="card" onclick="openReader('Inno')">
+                <div class="card-left">
+                    <div class="icon-box">
+                        <img src="assets/music.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                        <span class="material-icons fallback-icon">music_note</span>
+                    </div>
+                    <div class="card-title">Inno</div>
+                </div>
+                <span class="material-icons" style="color:#ddd">chevron_right</span>
+            </div>
+
+            <div class="card" onclick="openLinkFoto()">
+                <div class="card-left">
+                    <div class="icon-box">
+                        <img src="assets/camera.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                        <span class="material-icons fallback-icon">photo_camera</span>
+                    </div>
+                    <div class="card-title">Foto ricordo</div>
+                </div>
+                <span class="material-icons" style="color:#ddd">open_in_new</span>
+            </div>
+        </div>
+
+        <div class="navbar">
+            <div class="nav-item active" onclick="goHome()">
+                <span class="material-icons">home</span><span>HOME</span>
+            </div>
+            <div class="nav-item" onclick="goUser()">
+                <span class="material-icons">person</span><span>PROFILO</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="page-reader" class="page-overlay">
+        <div class="top-bar">
+            <button class="back-btn" onclick="goHome()"><span class="material-icons">arrow_back</span></button>
+            <h2 id="reader-title" style="margin:0; font-size: 20px;">Titolo</h2>
+            <div style="width: 28px;"></div>
+        </div>
+        <div id="reader-content"></div>
+    </div>
+
+    <div id="page-user" class="page-overlay">
+        <div class="top-bar">
+            <button class="back-btn" onclick="goHome()"><span class="material-icons">arrow_back</span></button>
+            <h2 style="margin:0; font-size: 20px;">Profilo</h2>
+            <div style="width: 28px;"></div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <div class="profile-pic-container" onclick="document.getElementById('file-input').click()">
+                <img id="profile-img" src="assets/user.png" class="profile-pic" onerror="this.src='https://via.placeholder.com/100/dbe4de/6a8a73?text=User'">
+                <span class="material-icons edit-badge">edit</span>
+            </div>
+            <input type="file" id="file-input" accept="image/*" onchange="uploadImage(this)">
+            
+            <br><br>
+            <label style="display:block; text-align:left; font-weight:bold; margin-bottom:10px; margin-left:5px;">Il tuo nome</label>
+            <input type="text" id="name-input" placeholder="Scrivi il tuo nome..." oninput="saveName()">
+
+            <div style="height: 20px;"></div>
+
+            <div class="card" onclick="openNotes()" style="background-color: #6a8a73; color: white; justify-content: center; border:none; box-shadow: 0 10px 20px rgba(106, 138, 115, 0.4);">
+                <span class="material-icons" style="margin-right: 10px;">edit_note</span>
+                APRI LE TUE NOTE
+            </div>
+            
+            <p style="font-size: 12px; color: #999; margin-top: 20px;">
+                Tutti i dati (foto, nome, note) sono salvati solo su questo dispositivo.
+            </p>
+        </div>
+    </div>
+
+    <div id="page-notes" class="page-overlay">
+        <div class="top-bar">
+            <button class="back-btn" onclick="goUser()"><span class="material-icons">arrow_back</span></button>
+            <h2 style="margin:0; font-size: 20px;">Le tue Note</h2>
+            <span class="material-icons" style="color:#6a8a73">save</span>
+        </div>
+        <textarea id="notes-input" rows="20" placeholder="Scrivi qui i tuoi pensieri..." oninput="saveNotes()"></textarea>
+    </div>
+
+    <script>
+        // --- 1. CONFIGURAZIONE ---
+        // Link per Foto Ricordo (SOSTITUISCI CON IL TUO LINK VERO SE NE HAI UNO)
+        const LINK_FOTO = "https://photos.google.com"; 
+
+        // Testo Canzone
+        const LYRICS = `Lo sai che ti amo
+Ma a volte è difficile sai?
+Io mi perdo, mi strappo
+E arriviamo sempre allo stesso punto
+
+Sono le nove e fuori piove
+Il cielo è pieno di te
+I tuoi capelli scintillano sotto la Luna
+E la tua bianca pelle mi ricorda la radura
+
+Il mio amore per te
+È lapalissiano
+Io so chi siamo
+Solo quando sto con te
+Ti respiro cosi forte
+Da rimanerne asfissiato
+E solo se ti metti di lato
+Posso mostrarti con le mani
+Quanto ti amo perché
+
+Sono l'eroe
+Che ucciderà i mostri
+Sotto al tuo letto
+Mentre riposi
+E non importa se non dormirò
+Li distruggo tutti e poi ripartirò (oooh)
+(Dammi il tuo cuore baby)
+
+"Hey pronto amore mio perché non vieni qui a casa mia?
+Sono da sola... c'è la mia coperta calda che ti piace tanto, 
+i pop corn... e poi guardiamo un film... dai che ho il ciclo 
+e non mi sento tanto bene... allora ciao, a dopo amore..."
+
+Sono le nove e fuori piove
+Anche stasera un segone
+Te l'ho detto
+Se hai le mestruazioni non mi cercare
+Se poi arrivo
+E non possiamo più nemmeno scopare
+Eppure sai che c'è
+Sperimentiamo
+Analizziamo
+Di orifizi tu ne hai tre
+Quando sto con te mi diventa duro
+Mi devi dare il culo
+Non lo diciamo a nessuno
+Sborro come Nettuno
+
+Sono l'eroe
+Che ucciderà i mostri
+Sotto al tuo letto
+Mentre riposi
+E non importa se non me la dai
+Ti distruggo il culo mentre dormirai
+
+Sono l'eroe
+Che ucciderà i mostri
+Sotto al tuo letto
+Mentre riposi
+E non importa se non me la dai
+Ti distruggo il culo mentre dormirai
+
+Sono l'eroe
+Che ucciderà i mostri
+Sotto al tuo letto
+Mentre riposi
+E non importa se non me la dai
+Ti distruggo il culo mentre dormirai
+E non importa`;
+
+        // --- 2. GESTIONE MEMORIA (Salvataggio automatico) ---
+        // Carica dati all'avvio
+        const savedName = localStorage.getItem('m2g_name') || 'Utente';
+        const savedNotes = localStorage.getItem('m2g_notes') || '';
+        const savedPic = localStorage.getItem('m2g_pic');
+
+        // Applica dati
+        document.getElementById('user-name-display').textContent = savedName;
+        document.getElementById('name-input').value = savedName;
+        document.getElementById('notes-input').value = savedNotes;
+        if (savedPic) {
+            document.getElementById('profile-img').src = savedPic;
+        }
+
+        // --- 3. NAVIGAZIONE ---
+        function hideAll() {
+            const pages = document.querySelectorAll('.page-overlay');
+            pages.forEach(p => p.style.display = 'none');
+            document.getElementById('page-home').style.display = 'none';
+        }
+
+        function goHome() {
+            hideAll();
+            document.getElementById('page-home').style.display = 'block';
+            // Se c'è un audio che suona, lo fermiamo? 
+            // Meglio di no, di solito le app musicali continuano a suonare.
+            // Ma se vuoi fermarlo, scommenta la riga sotto:
+            // stopAudio(); 
+        }
+
+        function goUser() {
+            hideAll();
+            document.getElementById('page-user').style.display = 'block';
+        }
+
+        function openNotes() {
+            hideAll();
+            document.getElementById('page-notes').style.display = 'block';
+        }
+
+        // Funzione Link Foto
+        function openLinkFoto() {
+            // Apre il link in una nuova scheda
+            window.open(LINK_FOTO, '_blank');
+        }
+
+        function openReader(title) {
+            hideAll();
+            const page = document.getElementById('page-reader');
+            page.style.display = 'block';
+            document.getElementById('reader-title').textContent = title;
+            const contentDiv = document.getElementById('reader-content');
+            
+            if (title === 'Inno') {
+                contentDiv.innerHTML = `
+                    <div style="text-align:center; padding: 10px;">
+                        <audio controls controlsList="nodownload">
+                            <source src="assets/inno.mp3" type="audio/mpeg">
+                            Il tuo browser non supporta l'audio.
+                        </audio>
+                    </div>
+                    <div class="lyrics-box">${LYRICS}</div>
+                `;
+            } else {
+                contentDiv.innerHTML = `<p style="text-align:center; margin-top:50px; color:#999;">Contenuto di ${title} non ancora disponibile.</p>`;
+            }
+        }
+
+        // --- 4. FUNZIONI DI SALVATAGGIO ---
+        function saveName() {
+            const val = document.getElementById('name-input').value;
+            localStorage.setItem('m2g_name', val);
+            document.getElementById('user-name-display').textContent = val || 'Utente';
+        }
+
+        function saveNotes() {
+            const val = document.getElementById('notes-input').value;
+            localStorage.setItem('m2g_notes', val);
+        }
+
+        // Logica cambio immagine profilo (Base64)
+        function uploadImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Mostra l'immagine
+                    document.getElementById('profile-img').src = e.target.result;
+                    // Salva l'immagine nella memoria del telefono
+                    try {
+                        localStorage.setItem('m2g_pic', e.target.result);
+                    } catch (error) {
+                        alert("Immagine troppo grande! Prova con una più piccola.");
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+</body>
+</html>
