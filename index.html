@@ -6,146 +6,146 @@
     <title>M2G App</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
-        /* --- STILE M2G ORIGINALE --- */
+        /* --- VARIABILI COLORI --- */
+        :root {
+            --bg-color: #f3f0e9;      /* Beige */
+            --card-bg: #ffffff;       /* Bianco */
+            --text-color: #1a1a1a;    /* Nero */
+            --text-sec: #666666;      /* Grigio */
+            --accent: #6a8a73;        /* Verde M2G */
+            --icon-bg: #dbe4de;       /* Verdino chiaro */
+            --border: #eeeeee;
+            --shadow: rgba(0,0,0,0.05);
+            --base-size: 16px;
+        }
+
+        /* MODALITÀ NOTTE */
+        body.dark-mode {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #ffffff;
+            --text-sec: #bbbbbb;
+            --accent: #8ab696;
+            --icon-bg: #2c2c2c;
+            --border: #333333;
+            --shadow: rgba(0,0,0,0.5);
+        }
+
+        /* STILI GENERALI */
         body {
-            background-color: #f3f0e9; /* Beige M2G */
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0; padding: 0;
-            color: #1a1a1a;
+            transition: background-color 0.3s, color 0.3s;
             -webkit-tap-highlight-color: transparent;
-            overflow-x: hidden; /* No scroll orizzontale */
+            font-size: var(--base-size);
         }
 
         /* HEADER */
         .header { padding: 40px 20px 20px 20px; }
         .logo-box {
             width: 60px; height: 60px;
-            background-color: #6a8a73; /* Verde M2G */
+            background-color: var(--accent);
             border-radius: 18px;
             display: flex; align-items: center; justify-content: center;
-            color: white; font-weight: bold; font-size: 20px;
+            color: white; font-weight: bold; font-size: 1.2rem;
             margin-bottom: 15px;
-            box-shadow: 0 4px 10px rgba(106, 138, 115, 0.3);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
-        .welcome-text { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+        .welcome-text { font-size: 1.5rem; font-weight: 800; }
 
         /* CARDS */
         .container { padding: 0 20px; padding-bottom: 100px; }
         .card {
-            background-color: white;
+            background-color: var(--card-bg);
             border-radius: 22px;
             padding: 18px;
             margin-bottom: 15px;
             display: flex; align-items: center; justify-content: space-between;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            border: 1px solid rgba(0,0,0,0.02);
-            transition: transform 0.1s;
+            box-shadow: 0 4px 15px var(--shadow);
+            border: 1px solid var(--border);
             cursor: pointer;
         }
-        .card:active { transform: scale(0.98); background-color: #fafafa; }
+        .card:active { transform: scale(0.98); opacity: 0.8; }
         .card-left { display: flex; align-items: center; }
         
-        /* ICONE PERSONALIZZATE */
         .icon-box {
             width: 52px; height: 52px;
-            background-color: #dbe4de; /* Verdino chiaro */
+            background-color: var(--icon-bg);
             border-radius: 16px;
             display: flex; align-items: center; justify-content: center;
             margin-right: 18px;
-            overflow: hidden;
-            flex-shrink: 0;
+            overflow: hidden; flex-shrink: 0;
         }
-        .asset-img {
-            width: 60%; height: 60%; /* Dimensione icona interna */
-            object-fit: contain;
-        }
-        /* Icona di fallback se manca l'immagine */
-        .fallback-icon { display: none; color: #6a8a73; font-size: 28px; }
+        .asset-img { width: 60%; height: 60%; object-fit: contain; }
+        .fallback-icon { display: none; color: var(--accent); font-size: 1.5rem; }
+        .card-title { font-weight: 700; font-size: 1rem; color: var(--text-color); }
 
-        .card-title { font-weight: 700; font-size: 17px; color: #333; }
-
-        /* PAGINE INTERNE (Overlay a tutto schermo) */
+        /* PAGINE INTERNE */
         .page-overlay {
             display: none; position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #f3f0e9; z-index: 100;
+            background-color: var(--bg-color); z-index: 100;
             padding: 20px; overflow-y: auto;
-            animation: slideIn 0.3s ease-out;
         }
-        @keyframes slideIn { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
         .top-bar {
             display: flex; align-items: center; justify-content: space-between;
             margin-bottom: 20px; padding-top: 20px;
         }
-        .back-btn { background: none; border: none; font-size: 28px; color: #1a1a1a; cursor: pointer; padding: 0; }
-        
-        /* AUDIO PLAYER PRO */
-        audio {
+        .back-btn { background: none; border: none; font-size: 1.8rem; color: var(--text-color); cursor: pointer; padding: 0; }
+
+        /* IMMAGINI READER (Lodi/Libretto) */
+        .reader-image {
             width: 100%;
-            margin-top: 20px;
-            margin-bottom: 20px;
-            border-radius: 30px;
-        }
-        /* Stile personalizzato per il testo canzone */
-        .lyrics-box {
-            background-color: white;
-            padding: 25px;
-            border-radius: 20px;
-            text-align: center;
-            white-space: pre-line; /* Mantiene gli a capo */
-            line-height: 1.8;
-            font-size: 16px;
-            color: #444;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            margin-bottom: 50px;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px; /* Spazio tra una pagina e l'altra */
+            box-shadow: 0 4px 10px var(--shadow);
+            display: block;
         }
 
-        /* PROFILO UTENTE */
+        /* PROFILO E SETTINGS */
         .profile-pic-container {
-            width: 100px; height: 100px;
-            margin: 0 auto;
-            position: relative;
-            cursor: pointer;
+            width: 100px; height: 100px; margin: 0 auto; position: relative;
         }
         .profile-pic {
-            width: 100%; height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid #6a8a73;
-            background-color: white;
+            width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+            border: 4px solid var(--accent); background-color: white;
         }
-        .edit-badge {
-            position: absolute; bottom: 0; right: 0;
-            background-color: #6a8a73; color: white;
-            border-radius: 50%; padding: 6px;
-            font-size: 16px; pointer-events: none;
+        .settings-box {
+            background-color: var(--card-bg);
+            border-radius: 20px; padding: 20px;
+            margin-top: 20px; border: 1px solid var(--border);
         }
+        .setting-row {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 15px;
+        }
+        .setting-label { font-weight: bold; font-size: 1rem; }
+        
+        input[type="range"] { width: 100px; accent-color: var(--accent); }
+        input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--accent); }
 
-        /* INPUT E NOTE */
+        /* INPUT */
         input[type="text"], textarea {
             width: 100%; padding: 18px; border-radius: 16px;
-            border: 2px solid #e0e0e0; margin-bottom: 15px;
-            font-family: inherit; font-size: 16px;
-            box-sizing: border-box; background: white;
-            transition: border-color 0.2s;
+            border: 2px solid var(--border); margin-bottom: 15px;
+            background: var(--card-bg); color: var(--text-color);
+            font-size: 1rem; box-sizing: border-box;
         }
-        input[type="text"]:focus, textarea:focus { border-color: #6a8a73; outline: none; }
+        input[type="text"]:focus, textarea:focus { border-color: var(--accent); outline: none; }
 
-        /* NAVBAR FISSA */
+        /* NAVBAR */
         .navbar {
             position: fixed; bottom: 25px; left: 25px; right: 25px;
-            background-color: white; border-radius: 25px; padding: 12px 0;
+            background-color: var(--card-bg); border-radius: 25px; padding: 12px 0;
             display: flex; justify-content: space-around;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            z-index: 50;
+            box-shadow: 0 10px 25px var(--shadow); z-index: 50;
         }
-        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; font-weight: 700; color: #bbbbbb; cursor: pointer; }
-        .nav-item.active { color: #6a8a73; }
-        .nav-item .material-icons { font-size: 26px; margin-bottom: 4px; }
-        
-        /* Input file nascosto */
-        #file-input { display: none; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 0.7rem; font-weight: 700; color: #bbbbbb; }
+        .nav-item.active { color: var(--accent); }
+        .nav-item .material-icons { font-size: 1.6rem; margin-bottom: 4px; }
     </style>
 </head>
 <body>
@@ -153,7 +153,7 @@
     <div id="page-home">
         <div class="header">
             <div class="logo-box">M2G</div>
-            <div class="welcome-text">Bentornato, <br><span id="user-name-display" style="color:#6a8a73">Utente</span></div>
+            <div class="welcome-text">Bentornato, <br><span id="user-name-display" style="color:var(--accent)">Utente</span></div>
         </div>
 
         <div class="container">
@@ -165,7 +165,7 @@
                     </div>
                     <div class="card-title">Lodi Mattutine</div>
                 </div>
-                <span class="material-icons" style="color:#ddd">chevron_right</span>
+                <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
             </div>
 
             <div class="card" onclick="openReader('Libretto')">
@@ -176,7 +176,7 @@
                     </div>
                     <div class="card-title">Libretto</div>
                 </div>
-                <span class="material-icons" style="color:#ddd">chevron_right</span>
+                <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
             </div>
 
             <div class="card" onclick="openReader('Inno')">
@@ -187,7 +187,7 @@
                     </div>
                     <div class="card-title">Inno</div>
                 </div>
-                <span class="material-icons" style="color:#ddd">chevron_right</span>
+                <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
             </div>
 
             <div class="card" onclick="openLinkFoto()">
@@ -198,7 +198,7 @@
                     </div>
                     <div class="card-title">Foto ricordo</div>
                 </div>
-                <span class="material-icons" style="color:#ddd">open_in_new</span>
+                <span class="material-icons" style="color:var(--text-sec)">open_in_new</span>
             </div>
         </div>
 
@@ -215,7 +215,7 @@
     <div id="page-reader" class="page-overlay">
         <div class="top-bar">
             <button class="back-btn" onclick="goHome()"><span class="material-icons">arrow_back</span></button>
-            <h2 id="reader-title" style="margin:0; font-size: 20px;">Titolo</h2>
+            <h2 id="reader-title" style="margin:0; font-size: 1.2rem;">Titolo</h2>
             <div style="width: 28px;"></div>
         </div>
         <div id="reader-content"></div>
@@ -224,50 +224,102 @@
     <div id="page-user" class="page-overlay">
         <div class="top-bar">
             <button class="back-btn" onclick="goHome()"><span class="material-icons">arrow_back</span></button>
-            <h2 style="margin:0; font-size: 20px;">Profilo</h2>
+            <h2 style="margin:0; font-size: 1.2rem;">Profilo</h2>
             <div style="width: 28px;"></div>
         </div>
 
-        <div style="text-align: center; margin-top: 30px;">
+        <div style="text-align: center; margin-top: 10px;">
             <div class="profile-pic-container" onclick="document.getElementById('file-input').click()">
-                <img id="profile-img" src="assets/user.png" class="profile-pic" onerror="this.src='https://via.placeholder.com/100/dbe4de/6a8a73?text=User'">
-                <span class="material-icons edit-badge">edit</span>
+                <img id="profile-img" src="assets/user.png" class="profile-pic" onerror="this.src='assets/user.png'">
+                <div style="position:absolute; bottom:0; right:0; background:var(--accent); color:white; border-radius:50%; padding:5px;"><span class="material-icons" style="font-size:16px">edit</span></div>
             </div>
-            <input type="file" id="file-input" accept="image/*" onchange="uploadImage(this)">
+            <input type="file" id="file-input" accept="image/*" onchange="uploadImage(this)" style="display:none">
             
-            <br><br>
-            <label style="display:block; text-align:left; font-weight:bold; margin-bottom:10px; margin-left:5px;">Il tuo nome</label>
-            <input type="text" id="name-input" placeholder="Scrivi il tuo nome..." oninput="saveName()">
+            <br>
+            <input type="text" id="name-input" placeholder="Il tuo nome" oninput="saveName()">
 
-            <div style="height: 20px;"></div>
+            <div class="settings-box">
+                <div class="setting-row">
+                    <span class="setting-label">Grandezza Testo</span>
+                    <div style="display:flex; align-items:center;">
+                        <span style="font-size:12px; margin-right:5px">A</span>
+                        <input type="range" id="font-slider" min="14" max="24" value="16" oninput="changeFontSize(this.value)">
+                        <span style="font-size:20px; margin-left:5px">A</span>
+                    </div>
+                </div>
+                <hr style="border:0; border-top:1px solid var(--border); margin:10px 0;">
+                <div class="setting-row">
+                    <span class="setting-label">Modalità Notte</span>
+                    <input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode(this.checked)">
+                </div>
+            </div>
 
-            <div class="card" onclick="openNotes()" style="background-color: #6a8a73; color: white; justify-content: center; border:none; box-shadow: 0 10px 20px rgba(106, 138, 115, 0.4);">
+            <br>
+            <div class="card" onclick="openNotes()" style="background-color: var(--accent); color: white; justify-content: center; border:none;">
                 <span class="material-icons" style="margin-right: 10px;">edit_note</span>
-                APRI LE TUE NOTE
+                APRI NOTE
             </div>
-            
-            <p style="font-size: 12px; color: #999; margin-top: 20px;">
-                Tutti i dati (foto, nome, note) sono salvati solo su questo dispositivo.
-            </p>
         </div>
     </div>
 
     <div id="page-notes" class="page-overlay">
         <div class="top-bar">
             <button class="back-btn" onclick="goUser()"><span class="material-icons">arrow_back</span></button>
-            <h2 style="margin:0; font-size: 20px;">Le tue Note</h2>
-            <span class="material-icons" style="color:#6a8a73">save</span>
+            <h2 style="margin:0; font-size: 1.2rem;">Note</h2>
+            <span class="material-icons" style="color:var(--accent)">save</span>
         </div>
-        <textarea id="notes-input" rows="20" placeholder="Scrivi qui i tuoi pensieri..." oninput="saveNotes()"></textarea>
+        <textarea id="notes-input" rows="20" placeholder="Scrivi qui..." oninput="saveNotes()"></textarea>
     </div>
 
     <script>
-        // --- 1. CONFIGURAZIONE ---
-        // Link per Foto Ricordo (SOSTITUISCI CON IL TUO LINK VERO SE NE HAI UNO)
-        const LINK_FOTO = "https://photos.google.com"; 
+        // --- 1. CONFIGURAZIONE LINK ---
+        const LINK_FOTO_RICORDO = "https://photos.app.goo.gl/TUO_LINK_QUI"; 
 
-        // Testo Canzone
-        const LYRICS = `Lo sai che ti amo
+        const LYRICS = `Lo sai che ti amo... (testo completo nell'app)`; 
+        // Nota: Ho abbreviato qui per leggibilità, ma nel codice tuo incolla il testo completo!
+
+        // --- INIT ---
+        const savedName = localStorage.getItem('m2g_name') || 'Utente';
+        const savedNotes = localStorage.getItem('m2g_notes') || '';
+        const savedPic = localStorage.getItem('m2g_pic');
+        const savedFont = localStorage.getItem('m2g_fontsize') || '16';
+        const savedDark = localStorage.getItem('m2g_dark') === 'true';
+
+        document.getElementById('user-name-display').textContent = savedName;
+        document.getElementById('name-input').value = savedName;
+        document.getElementById('notes-input').value = savedNotes;
+        if (savedPic) document.getElementById('profile-img').src = savedPic;
+        
+        changeFontSize(savedFont);
+        document.getElementById('font-slider').value = savedFont;
+        toggleDarkMode(savedDark);
+        document.getElementById('dark-mode-toggle').checked = savedDark;
+
+        // --- FUNZIONI NAVIGAZIONE ---
+        function hideAll() {
+            document.querySelectorAll('.page-overlay').forEach(p => p.style.display = 'none');
+            document.getElementById('page-home').style.display = 'none';
+        }
+        function goHome() { hideAll(); document.getElementById('page-home').style.display = 'block'; }
+        function goUser() { hideAll(); document.getElementById('page-user').style.display = 'block'; }
+        function openNotes() { hideAll(); document.getElementById('page-notes').style.display = 'block'; }
+        function openLinkFoto() { window.open(LINK_FOTO_RICORDO, '_blank'); }
+
+        // --- LOGICA MULTI-PAGINA PER LODI E LIBRETTO ---
+        function openReader(title) {
+            hideAll();
+            document.getElementById('page-reader').style.display = 'block';
+            document.getElementById('reader-title').textContent = title;
+            const content = document.getElementById('reader-content');
+            
+            // Pulisce contenuto precedente
+            content.innerHTML = "";
+
+            if (title === 'Inno') {
+                content.innerHTML = `
+                    <audio controls style="width:100%; margin:20px 0;"><source src="assets/inno.mp3" type="audio/mpeg"></audio>
+                    <div style="background:var(--card-bg); padding:20px; border-radius:20px; white-space:pre-line; text-align:center; line-height:1.8;">
+Lo sai che ti amo
 Ma a volte è difficile sai?
 Io mi perdo, mi strappo
 E arriviamo sempre allo stesso punto
@@ -335,104 +387,57 @@ Sotto al tuo letto
 Mentre riposi
 E non importa se non me la dai
 Ti distruggo il culo mentre dormirai
-E non importa`;
+E non importa
+                    </div>`;
+            } else if (title === 'Lodi Mattutine') {
+                // Genera 5 immagini per le Lodi (lodi1.jpg -> lodi5.jpg)
+                let htmlImages = '<div style="text-align:center">';
+                for (let i = 1; i <= 5; i++) {
+                    htmlImages += `<img src="assets/lodi${i}.jpg" class="reader-image" loading="lazy" onerror="this.style.display='none'">`;
+                }
+                htmlImages += '</div>';
+                content.innerHTML = htmlImages;
 
-        // --- 2. GESTIONE MEMORIA (Salvataggio automatico) ---
-        // Carica dati all'avvio
-        const savedName = localStorage.getItem('m2g_name') || 'Utente';
-        const savedNotes = localStorage.getItem('m2g_notes') || '';
-        const savedPic = localStorage.getItem('m2g_pic');
-
-        // Applica dati
-        document.getElementById('user-name-display').textContent = savedName;
-        document.getElementById('name-input').value = savedName;
-        document.getElementById('notes-input').value = savedNotes;
-        if (savedPic) {
-            document.getElementById('profile-img').src = savedPic;
-        }
-
-        // --- 3. NAVIGAZIONE ---
-        function hideAll() {
-            const pages = document.querySelectorAll('.page-overlay');
-            pages.forEach(p => p.style.display = 'none');
-            document.getElementById('page-home').style.display = 'none';
-        }
-
-        function goHome() {
-            hideAll();
-            document.getElementById('page-home').style.display = 'block';
-            // Se c'è un audio che suona, lo fermiamo? 
-            // Meglio di no, di solito le app musicali continuano a suonare.
-            // Ma se vuoi fermarlo, scommenta la riga sotto:
-            // stopAudio(); 
-        }
-
-        function goUser() {
-            hideAll();
-            document.getElementById('page-user').style.display = 'block';
-        }
-
-        function openNotes() {
-            hideAll();
-            document.getElementById('page-notes').style.display = 'block';
-        }
-
-        // Funzione Link Foto
-        function openLinkFoto() {
-            // Apre il link in una nuova scheda
-            window.open(LINK_FOTO, '_blank');
-        }
-
-        function openReader(title) {
-            hideAll();
-            const page = document.getElementById('page-reader');
-            page.style.display = 'block';
-            document.getElementById('reader-title').textContent = title;
-            const contentDiv = document.getElementById('reader-content');
-            
-            if (title === 'Inno') {
-                contentDiv.innerHTML = `
-                    <div style="text-align:center; padding: 10px;">
-                        <audio controls controlsList="nodownload">
-                            <source src="assets/inno.mp3" type="audio/mpeg">
-                            Il tuo browser non supporta l'audio.
-                        </audio>
-                    </div>
-                    <div class="lyrics-box">${LYRICS}</div>
-                `;
-            } else {
-                contentDiv.innerHTML = `<p style="text-align:center; margin-top:50px; color:#999;">Contenuto di ${title} non ancora disponibile.</p>`;
+            } else if (title === 'Libretto') {
+                // Genera 5 immagini per il Libretto (lib1.jpg -> lib5.jpg)
+                let htmlImages = '<div style="text-align:center">';
+                for (let i = 1; i <= 5; i++) {
+                    htmlImages += `<img src="assets/lib${i}.jpg" class="reader-image" loading="lazy" onerror="this.style.display='none'">`;
+                }
+                htmlImages += '</div>';
+                content.innerHTML = htmlImages;
             }
         }
 
-        // --- 4. FUNZIONI DI SALVATAGGIO ---
+        // --- SALVATAGGIO ---
         function saveName() {
             const val = document.getElementById('name-input').value;
             localStorage.setItem('m2g_name', val);
-            document.getElementById('user-name-display').textContent = val || 'Utente';
+            document.getElementById('user-name-display').textContent = val;
         }
-
-        function saveNotes() {
-            const val = document.getElementById('notes-input').value;
-            localStorage.setItem('m2g_notes', val);
-        }
-
-        // Logica cambio immagine profilo (Base64)
+        function saveNotes() { localStorage.setItem('m2g_notes', document.getElementById('notes-input').value); }
+        
         function uploadImage(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    // Mostra l'immagine
                     document.getElementById('profile-img').src = e.target.result;
-                    // Salva l'immagine nella memoria del telefono
-                    try {
-                        localStorage.setItem('m2g_pic', e.target.result);
-                    } catch (error) {
-                        alert("Immagine troppo grande! Prova con una più piccola.");
-                    }
+                    try { localStorage.setItem('m2g_pic', e.target.result); } catch(e) { alert("Immagine troppo pesante!"); }
                 }
                 reader.readAsDataURL(input.files[0]);
             }
+        }
+
+        // --- SETTINGS ---
+        function changeFontSize(size) {
+            document.documentElement.style.setProperty('--base-size', size + 'px');
+            localStorage.setItem('m2g_fontsize', size);
+        }
+        
+        function toggleDarkMode(isDark) {
+            if (isDark) document.body.classList.add('dark-mode');
+            else document.body.classList.remove('dark-mode');
+            localStorage.setItem('m2g_dark', isDark);
         }
     </script>
 </body>
