@@ -32,22 +32,31 @@
             transition: background-color 2.0s ease-in-out, color 2.0s ease-in-out;
             -webkit-tap-highlight-color: transparent; font-size: var(--base-size);
             overflow-x: hidden;
-            padding-bottom: 140px; 
+            padding-bottom: 150px; /* Spazio extra per evitare che il miniplayer copra l'ultimo elemento */
         }
 
-        /* --- STILI MINIPLAYER AVANZATO --- */
+        /* --- STILI MINIPLAYER (MODIFICATO: FULL WIDTH BAR) --- */
         #miniplayer {
             position: fixed; bottom: 90px; left: 15px; right: 15px;
             background-color: var(--accent); color: white;
-            border-radius: 16px; padding: 12px 15px;
-            display: flex; flex-direction: column; /* Cambiato per ospitare la barra */
+            border-radius: 16px; 
+            padding: 0; /* Rimosso padding globale per gestire meglio gli spazi */
+            display: flex; flex-direction: column;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             z-index: 200; transform: translateY(150px);
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden; /* Assicura che nulla esca dai bordi arrotondati */
         }
         #miniplayer.visible { transform: translateY(0); }
         
-        .mp-row-top { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 8px; }
+        /* Parte superiore (Info + Tasti) con padding */
+        .mp-row-top { 
+            display: flex; align-items: center; justify-content: space-between; 
+            width: 100%; margin-bottom: 0; 
+            padding: 12px 15px 8px 15px; /* Padding solo qui */
+            box-sizing: border-box;
+        }
+        
         .mp-info { display: flex; align-items: center; flex: 1; overflow: hidden; }
         .mp-icon { width: 36px; height: 36px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px; }
         .mp-text { display: flex; flex-direction: column; overflow: hidden; }
@@ -59,13 +68,18 @@
         .mp-playhead { font-size: 32px; }
         .mp-close { opacity: 0.7; font-size: 24px; }
 
-        /* Barra Miniplayer */
-        .mp-progress-container { width: 100%; display: flex; align-items: center; }
-        .mp-slider {
-            -webkit-appearance: none; width: 100%; height: 4px; border-radius: 2px;
-            background: rgba(255,255,255,0.3); outline: none; padding: 0; margin: 0;
+        /* Barra Miniplayer (FULL WIDTH) */
+        .mp-progress-container { 
+            width: 100%; 
+            padding: 0 10px 10px 10px; /* Padding laterale minimo per non tagliare il pallino */
+            box-sizing: border-box;
+            background-color: rgba(0,0,0,0.1); /* Sfondo leggero per evidenziare la zona barra */
         }
-        .mp-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 12px; height: 12px; border-radius: 50%; background: white; cursor: pointer; }
+        .mp-slider {
+            -webkit-appearance: none; width: 100%; height: 6px; border-radius: 3px;
+            background: rgba(255,255,255,0.3); outline: none; padding: 0; margin: 0; display: block;
+        }
+        .mp-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; border-radius: 50%; background: white; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
 
         /* --- STILI MAIN PLAYER (PAGINA INNO) --- */
         .main-player-ui {
@@ -96,7 +110,7 @@
         .main-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); cursor: pointer; }
 
 
-        /* --- ANIMAZIONI ELASTICHE E TEATRO CELESTE (INVARIATI) --- */
+        /* --- ANIMAZIONI ELASTICHE E TEATRO CELESTE --- */
         @keyframes elasticSlide { 0% { opacity: 0; transform: translateY(50px) scale(0.8); } 60% { opacity: 1; transform: translateY(-10px) scale(1.02); } 80% { transform: translateY(5px) scale(0.98); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
         #celestial-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; opacity: 0; transition: opacity 0.5s ease; display: flex; justify-content: center; align-items: flex-end; overflow: hidden; }
         #celestial-container.active { opacity: 1; }
@@ -331,26 +345,21 @@ Is yours`;
         const mpPlayIcon = document.getElementById('mp-play-icon');
         const mpSeek = document.getElementById('mp-seek');
 
-        // Formattazione Tempo (00:00)
         function formatTime(seconds) {
             const m = Math.floor(seconds / 60);
             const s = Math.floor(seconds % 60);
             return `${m}:${s < 10 ? '0' : ''}${s}`;
         }
 
-        // Update Continuo (Barra, Tempo)
         audio.ontimeupdate = function() {
             const curr = audio.currentTime;
             const dur = audio.duration || 0;
-            const pct = (curr / dur) * 100;
             
-            // Aggiorna Miniplayer Seek
             if (!Number.isNaN(dur)) {
                 mpSeek.max = Math.floor(dur);
                 mpSeek.value = Math.floor(curr);
             }
 
-            // Aggiorna Main Player (se esiste nella pagina)
             const mainSeek = document.getElementById('main-seek');
             const currTimeText = document.getElementById('curr-time-text');
             const totalTimeText = document.getElementById('total-time-text');
@@ -362,22 +371,16 @@ Is yours`;
                 totalTimeText.innerText = formatTime(dur);
             }
 
-            // Aggiorna icona Play/Pause se finisce
             if(curr >= dur && dur > 0) {
                 mpPlayIcon.textContent = 'play_arrow';
                 updateMainPlayIcon(false);
             }
         };
 
-        // Funzione Scrubbing (Spostare la barra)
-        function seekAudio(val) {
-            audio.currentTime = val;
-        }
+        function seekAudio(val) { audio.currentTime = val; }
 
-        // Toggle Play/Pause
         function toggleGlobalAudio(e) {
             if(e) e.stopPropagation();
-            
             if (audio.paused) {
                 audio.play();
                 mpPlayIcon.textContent = 'pause';
@@ -390,7 +393,6 @@ Is yours`;
             }
         }
 
-        // Chiudi Miniplayer
         function closeMiniplayer(e) {
             if(e) e.stopPropagation();
             audio.pause();
@@ -400,14 +402,12 @@ Is yours`;
             updateMainPlayIcon(false);
         }
 
-        // Aggiorna icona Main Player se presente
         function updateMainPlayIcon(isPlaying) {
             const btn = document.getElementById('main-play-icon');
             if(btn) btn.textContent = isPlaying ? 'pause' : 'play_arrow';
         }
 
-        // ---------------------------------
-
+        // --- THEMES & NAV ---
         function handleThemeToggle(isDark) {
             triggerCelestialAnimation(isDark);
             if (isDark) document.body.classList.add('dark-mode');
@@ -445,13 +445,10 @@ Is yours`;
             const content = document.getElementById('reader-content');
             content.innerHTML = "";
             if (title === 'Inno') {
-                // Pagina Inno: Mostra PLAYER COMPLETO
                 const isPlaying = !audio.paused;
                 const playIcon = isPlaying ? 'pause' : 'play_arrow';
-                
                 content.innerHTML = `
                     <div style="animation: elasticSlide 0.6s ease">
-                        
                         <div class="main-player-ui">
                             <div class="main-controls">
                                 <div class="main-play-btn" onclick="toggleGlobalAudio()">
@@ -464,7 +461,6 @@ Is yours`;
                                 <span id="total-time-text">0:00</span>
                             </div>
                         </div>
-
                         <div style="background:var(--card-bg); padding:20px; border-radius:20px; white-space:pre-line; text-align:center; line-height:1.8; box-shadow: 0 4px 15px var(--shadow);">
 ${LYRICS}
                         </div>
