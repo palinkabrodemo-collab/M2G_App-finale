@@ -8,14 +8,13 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="M2G App">
+    <meta name="apple-mobile-web-app-title" content="M2G">
     
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/m2g_logo.png?v=5">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/m2g_logo.png?v=5">
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/m2g_logo.png?v=5">
-    <link rel="shortcut icon" href="assets/m2g_logo.png?v=5">
-    
-    <link rel="manifest" href='data:application/manifest+json,{"name":"M2G App","short_name":"M2G","start_url":"./index.html","display":"standalone","background_color":"#6a8a73","theme_color":"#6a8a73","icons":[{"src":"assets/m2g_logo.png","sizes":"192x192","type":"image/png"},{"src":"assets/m2g_logo.png","sizes":"512x512","type":"image/png"}]}'>
+    <link rel="apple-touch-icon" href="assets/m2g_logo.png?v=99">
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/m2g_logo.png?v=99">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/m2g_logo.png?v=99">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/m2g_logo.png?v=99">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/m2g_logo.png?v=99">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" rel="stylesheet">
     
@@ -65,7 +64,7 @@
         .back-btn-circle {
             width: 44px; height: 44px;
             border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(255, 255, 255, 0.8); /* Effetto Vetro */
             backdrop-filter: blur(8px);
             border: 1px solid rgba(0,0,0,0.05);
             display: flex; align-items: center; justify-content: center;
@@ -92,28 +91,24 @@
         }
         #miniplayer.visible { transform: translateY(0); }
         
-        /* Il livello "Acqua" Liscio */
+        /* Livello "Acqua" Liscio */
         .mp-fill-layer {
             position: absolute; top: 0; left: 0; bottom: 0;
             width: 0%; 
-            /* Colore dell'acqua semi-trasparente e liscio */
             background-color: rgba(255, 255, 255, 0.25);
             z-index: 1; 
-            /* Fluidità sincronizzata con l'update dell'audio (0.25s) */
             transition: width 0.25s linear; 
-            /* Bordo luminoso sulla destra (il "pelo dell'acqua") */
-            border-right: 3px solid rgba(255, 255, 255, 0.6);
-            /* Leggero bagliore sulla punta */
-            box-shadow: 2px 0 10px rgba(255, 255, 255, 0.4);
+            border-right: 3px solid rgba(255, 255, 255, 0.6); /* Il pelo dell'acqua */
+            box-shadow: 2px 0 15px rgba(255, 255, 255, 0.5); /* Bagliore */
         }
         
-        /* Aggiunge un leggerissimo riflesso interno che si muove */
+        /* Riflesso interno */
         @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
         .mp-fill-layer::after {
             content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
             background-size: 200% 100%;
-            animation: shimmer 4s linear infinite;
+            animation: shimmer 3s linear infinite;
         }
 
         .mp-content-layer {
@@ -144,22 +139,53 @@
         #notes-input:focus { border-color: var(--accent); outline: none; }
 
 
-        /* --- ANIMAZIONI --- */
-        @keyframes elasticSlide { 0% { opacity: 0; transform: translateY(50px) scale(0.8); } 60% { opacity: 1; transform: translateY(-10px) scale(1.02); } 80% { transform: translateY(5px) scale(0.98); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
-        #celestial-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; opacity: 0; transition: opacity 0.5s ease; display: flex; justify-content: center; align-items: flex-end; overflow: hidden; }
+        /* =========================================
+           --- IL TEATRO CELESTE (Sole/Luna/Stelle) ---
+           (REINSERITO CORRETTAMENTE)
+           ========================================= */
+        #celestial-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; /* Permette i click sotto */
+            z-index: 9999; /* Sopra tutto */
+            opacity: 0; 
+            transition: opacity 0.5s ease;
+            display: flex; justify-content: center; align-items: flex-end;
+            overflow: hidden;
+        }
         #celestial-container.active { opacity: 1; }
-        .celestial-body { position: absolute; bottom: -150px; font-size: 120px; }
+
+        .celestial-body {
+            position: absolute; bottom: -150px; /* Nascosti sotto */
+            font-size: 120px;
+        }
         #sun-icon { color: #FFD700; filter: drop-shadow(0 0 20px orange); z-index: 2; }
         #moon-group { z-index: 1; display: flex; align-items: center; justify-content: center; }
         #moon-icon { color: #F4F6F0; filter: drop-shadow(0 0 15px #87CEEB); font-size: 100px; }
-        .stars { position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; transition: opacity 2s ease; }
+        
+        .stars {
+            position: absolute; width: 100%; height: 100%; top: 0; left: 0;
+            opacity: 0; transition: opacity 2s ease;
+        }
         body.dark-mode .stars { opacity: 1; }
         .star { position: absolute; color: white; font-size: 10px; animation: twinkle 1.5s infinite alternate; }
         @keyframes twinkle { from { opacity: 0.3; } to { opacity: 1; } }
+
+        /* MOVIMENTI ORBITALI */
         @keyframes sunriseMoveUp { 0% { transform: translate(0, 0) scale(0.8); } 100% { transform: translate(0, -40vh) scale(1); } }
         @keyframes moonsetMoveDown { 0% { transform: translate(0, -40vh) scale(1); } 100% { transform: translate(0, 100px) scale(0.8); } }
         @keyframes sunsetMoveDown { 0% { transform: translate(0, -40vh) scale(1); } 100% { transform: translate(0, 100px) scale(0.8); } }
         @keyframes moonriseMoveUp { 0% { transform: translate(0, 0) scale(0.8); } 100% { transform: translate(0, -40vh) scale(1); } }
+
+        /* Classi triggerate da JS */
+        .animate-sunrise #sun-icon { animation: sunriseMoveUp 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
+        .animate-sunrise #moon-group { animation: moonsetMoveDown 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
+        .animate-sunset #sun-icon { animation: sunsetMoveDown 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
+        .animate-sunset #moon-group { animation: moonriseMoveUp 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
+        /* ========================================= */
+
+
+        /* --- ALTRE ANIMAZIONI --- */
+        @keyframes elasticSlide { 0% { opacity: 0; transform: translateY(50px) scale(0.8); } 60% { opacity: 1; transform: translateY(-10px) scale(1.02); } 80% { transform: translateY(5px) scale(0.98); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
 
         /* --- STILI APP STANDARD --- */
         .page-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--bg-color); z-index: 100; padding: 20px; overflow-y: auto; opacity: 0; transform: translateY(30px); transition: opacity 0.3s ease-out, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); padding-bottom: 150px; }
@@ -460,7 +486,7 @@ Is yours`;
             if(btn) btn.textContent = isPlaying ? 'pause' : 'play_arrow';
         }
 
-        // --- THEMES & NAV ---
+        // --- THEMES & ANIMATION CELESTE ---
         function handleThemeToggle(isDark) {
             triggerCelestialAnimation(isDark);
             if (isDark) document.body.classList.add('dark-mode');
@@ -472,12 +498,17 @@ Is yours`;
             const container = document.getElementById('celestial-container');
             container.classList.add('active');
             container.classList.remove('animate-sunrise', 'animate-sunset');
+            
+            // Forza reflow per riavviare animazione
             void container.offsetWidth; 
+            
             if (isGoingToDark) container.classList.add('animate-sunset');
             else container.classList.add('animate-sunrise');
+            
             setTimeout(() => { container.classList.remove('active'); }, 2000);
         }
 
+        // NAVIGAZIONE
         function animatePageEntry(pageId) {
             const page = document.getElementById(pageId);
             page.style.display = 'block';
