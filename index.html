@@ -175,7 +175,8 @@
         .page-overlay.visible { opacity: 1; transform: translateY(0); }
         .container { padding: 0 20px; padding-bottom: 100px; }
         .card { background-color: var(--card-bg); border-radius: 22px; padding: 18px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px var(--shadow); border: 1px solid var(--border); cursor: pointer; opacity: 0; animation: elasticSlide 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-        .card:nth-child(1) { animation-delay: 0.05s; } .card:nth-child(2) { animation-delay: 0.10s; } .card:nth-child(3) { animation-delay: 0.15s; } .card:nth-child(4) { animation-delay: 0.20s; } .card:nth-child(5) { animation-delay: 0.25s; }
+        /* Ritardi Card - Aumentati per Veglia */
+        .card:nth-child(1) { animation-delay: 0.05s; } .card:nth-child(2) { animation-delay: 0.10s; } .card:nth-child(3) { animation-delay: 0.15s; } .card:nth-child(4) { animation-delay: 0.20s; } .card:nth-child(5) { animation-delay: 0.25s; } .card:nth-child(6) { animation-delay: 0.30s; }
         .card:active { transform: scale(0.95) !important; background-color: var(--border); transition: 0.1s; }
         .card-left { display: flex; align-items: center; }
         .icon-box { width: 52px; height: 52px; background-color: var(--icon-bg); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-right: 18px; overflow: hidden; flex-shrink: 0; }
@@ -208,6 +209,24 @@
         .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 0.7rem; font-weight: 700; color: #bbbbbb; transition: color 0.3s, transform 0.3s; }
         .nav-item.active { color: var(--accent); transform: translateY(-4px); }
         .nav-item .material-icons { font-size: 1.6rem; margin-bottom: 4px; }
+
+        /* Stile specifico per il testo della Veglia */
+        .veglia-text-container {
+            animation: elasticSlide 0.6s ease; 
+            background:var(--card-bg); 
+            padding:30px 20px; 
+            border-radius:20px; 
+            box-shadow: 0 4px 15px var(--shadow);
+            white-space: pre-line;
+            line-height: 1.8;
+            font-size: 1.05rem;
+            text-align: left; /* Testo allineato a sinistra per la veglia */
+        }
+        .veglia-text-container h3 {
+            color: var(--accent);
+            text-align: center;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -263,6 +282,16 @@
                 </div>
                 <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
             </div>
+
+            <div class="card" onclick="openVegliaPage()">
+                <div class="card-left">
+                    <div class="icon-box">
+                        <img src="assets/veglia.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                        <span class="material-icons fallback-icon">flight</span> </div>
+                    <div class="card-title">Veglia</div>
+                </div>
+                <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
+            </div>
             
             <div class="card" onclick="openReader('Libretto')">
                 <div class="card-left">
@@ -303,6 +332,19 @@
             <div class="nav-item active" onclick="goHome()"><span class="material-icons">home</span><span>HOME</span></div>
             <div class="nav-item" onclick="goUser()"><span class="material-icons">person</span><span>PROFILO</span></div>
         </div>
+    </div>
+
+    <div id="page-veglia" class="page-overlay">
+        <div class="top-bar">
+            <div class="back-btn-circle" onclick="goHome()">
+                <span class="material-icons">arrow_back</span>
+            </div>
+            <h2 style="margin:0; font-size: 1.2rem;">Veglia</h2>
+            <div style="width: 44px;"></div>
+        </div>
+        
+        <div class="veglia-text-container" id="veglia-content">
+            </div>
     </div>
 
     <div id="page-lodi" class="page-overlay">
@@ -413,6 +455,66 @@
     <script>
         const LINK_FOTO_RICORDO = "https://photos.app.goo.gl/TUO_LINK_QUI"; 
         
+        // --- TESTO VEGLIA (NUOVO) ---
+        const TEXT_VEGLIA = `<b>Celebrante:</b>
+Nel nome del Padre, del Figlio e dello Spirito Santo,
+<b>Assemblea:</b> Amen
+<b>Celebrante:</b> Il Signore sia con voi.
+<b>Celebrante:</b> La pace del Signore nostro Gesù Cristo, l’amore di Dio Padre e la comunione nello Spirito Santo, siano con tutti voi. 
+Dio non ci ha creati per stare comodi, ci ha creati per camminare. Questa sera non resteremo fermi: cammineremo per le strade portando Gesù con noi. Lo porteremo fuori, tra la gente, perché la fede non si chiude, si dona. Chiediamo il coraggio di partire e di fidarci di Lui. Perché non siamo fatti per restare. Siamo fatti per andare.
+Esposizione Eucaristica
+Canto davanti al Re
+
+<h3>1 TAPPA PARTIRE – “Non sei fatto per restare”</h3>
+<b>Dai discorsi di papa Francesco</b>
+Camminare. L’uomo è un essere in cammino. Per tutta la vita è chiamato a mettersi in cammino, in continua uscita da dove si trova: da quando esce dal grembo della madre a quando passa da un’età della vita a un’altra; dal momento in cui lascia la casa dei genitori fino a quando esce da questa esistenza terrena. Il cuore ci invita ad andare, a raggiungere una meta. Ma camminare è una disciplina, una fatica, servono pazienza quotidiana e allenamento costante. Occorre rinunciare a tante strade per scegliere quella che conduce alla meta e ravvivare la memoria per non smarrirla. Camminare richiede l’umiltà di tornare sui propri passi, quando è necessario, e la cura per i compagni di viaggio, perché solo insieme si cammina bene. Camminare, insomma, esige una conversione continua di sé. Per questo tanti vi rinunciano, preferendo la quiete domestica, dove curare comodamente i propri affari senza esporsi ai rischi del viaggio. Ma così ci si aggrappa a sicurezze effimere, che non danno quella pace e quella gioia cui il cuore aspira, e che si trovano solo uscendo da sé stessi.
+
+<b>Guida:</b> Siamo fatti per camminare. Eppure a volte ci fermiamo, per paura, per comodità, perché ogni passo chiede coraggio. Camminare è scegliere, è fidarsi anche quando la strada non è tutta chiara. Stasera vogliamo rimetterci in cammino con Lui e affidargli i nostri passi. Dove ti sei fermato? A che punto sei del cammino? Come ti senti davvero? Ora lasciamo un breve spazio di silenzio, perché queste domande entrino nel cuore, poi il sacerdote, portando Gesù Eucaristia, si incamminerà verso l’esterno e noi durante il canto seguiremo Gesù. Il nostro muoverci verso la prossima tappa sarà un segno concreto: non vogliamo restare fermi, vogliamo camminare con Lui, dietro di Lui, portandolo per le strade. 
+Canto
+
+<h3>2 LUNGO LA VIA - “Gesù si accostò e camminava con loro”</h3>
+<b>Dal Vangelo secondo Luca</b>
+In quello stesso giorno due dei discepoli erano in cammino verso un villaggio chiamato Emmaus e conversavano tra loro di tutto ciò che era accaduto. Mentre discorrevano insieme, Gesù in persona si accostò e camminava con loro, ma i loro occhi erano incapaci di riconoscerlo. Ed egli, lungo la via, spiegò loro nelle Scritture ciò che si riferiva a lui. Giunti al villaggio, lo invitarono dicendo: «Resta con noi, perché si fa sera». Quando fu a tavola con loro, prese il pane, pronunciò la benedizione, lo spezzò e lo diede loro. Allora si aprirono i loro occhi e lo riconobbero. Ed essi dissero l’uno all’altro: «Non ardeva forse il nostro cuore mentre conversava con noi lungo il cammino?». E senza indugio partirono e tornarono a Gerusalemme per annunciare che il Signore è davvero risorto.
+
+<b>Dagli scritti di Sant’Agostino</b>
+Qual è dunque il contenuto specifico che la presente lettura offre a noi? Davvero importante, se lo comprendiamo. Gesù appare: i discepoli lo vedevano con gli occhi, ma senza riconoscerlo. Il Maestro camminava con loro per via, anzi egli stesso era la via, ma loro non camminavano per quella via. Egli stesso dovette constatare che erano andati fuori della via. Nel tempo trascorso con loro prima della passione, infatti, egli aveva predetto ogni cosa: che avrebbe patito, che sarebbe morto, che il terzo giorno sarebbe risorto. Aveva predetto tutto, ma la sua morte fu per loro come una perdita di memoria. Quando lo videro sospeso al patibolo furono così turbati che dimenticarono i suoi insegnamenti, non attesero più la sua resurrezione, non rimasero saldi nelle sue promesse.
+Dicono: Noi speravamo che egli fosse il redentore d'Israele. O discepoli, l'avevate sperato. Vuol dire che adesso non lo sperate più. Ecco, Cristo vive, ma in voi la speranza è morta. Sì, Cristo è veramente vivo; ma questo Cristo vivo trova morti i cuori dei discepoli. Apparve e non apparve ai loro occhi; era visibile e insieme nascosto. In effetti, se non lo si vedeva, come potevano udire le sue domande e rispondere ad esse? Camminava per via come un compagno di viaggio, anzi era lui che li conduceva. Quindi lo vedevano, ma non erano in grado di riconoscerlo. I loro occhi - abbiamo così inteso - erano impediti dal riconoscerlo. Erano impediti non di vederlo ma di riconoscerlo.
+
+<b>Guida:</b> Anche noi, come i discepoli di Emmaus, a volte camminiamo con il cuore stanco, pieni di dubbi e di domande. Ci sono momenti in cui la strada sembra difficile e possiamo sentirci soli. Ma il Vangelo ci ricorda che Gesù cammina accanto a noi, anche quando non riusciamo a riconoscerlo. E ci dona dei compagni di viaggio, perché la fede non si vive da soli. Per questo, come segno di questo cammino condiviso, prendiamoci per mano e, come una sola famiglia, insieme cantiamo la preghiera del Padre Nostro
+
+<h3>3 TAPPA RICONCILIARSI – “Ripartire insieme”</h3>
+<b>Dal Vangelo secondo Matteo</b>
+Avete inteso che fu detto: Occhio per occhio e dente per dente. Ma io vi dico di non opporvi al malvagio; anzi, se uno ti dà uno schiaffo sulla guancia destra, tu porgi gli anche l’altra, e a chi vuole portarti in tribunale e toglierti la tunica, tu lascia anche il mantello. E se uno ti costringerà ad accompagnarlo per un miglio, tu con lui fanne due. Dà a chi ti chiede, e a chi desidera da te un prestito non voltare le spalle. Avete inteso che fu detto: Amerai il tuo prossimo e odierai il tuo nemico. Ma io vi dico: amate i vostri nemici e pregate per quelli che vi perseguitano, affinché siate figli del Padre vostro che è nei cieli; egli fa sorgere il suo sole sui cattivi e sui buoni, e fa piovere sui giusti e sugli ingiusti. Infatti, se amate quelli che vi amano, quale ricompensa ne avete? Non fanno così anche i pubblicani? E se date il saluto soltanto ai vostri fratelli, che cosa fate di straordinario? Non fanno così anche i pagani? Voi, dunque, siate perfetti come è perfetto il Padre vostro celeste.
+
+<b>Lettore1:</b> Nulla rende gli uomini così forti nel cammino come la pace tra di loro. Dove c’è carità, lì abita Cristo; dove i fratelli vivono uniti, lì il Signore cammina in mezzo a loro.
+
+<b>Guida:</b> Nel cammino della vita non mancano le fatiche: a volte ci si ferma, a volte ci si allontana, a volte il cuore perde la pace. Ma il Signore ci chiama sempre a ritrovarci e a riprendere la strada insieme. Prima di continuare il nostro cammino, compiamo allora un gesto semplice ma vero: riconoscerci fratelli. Scambiamoci ora un segno di pace, una stretta di mano, uno sguardo, un abbraccio, perché chi cammina con Cristo non lascia indietro nessuno.
+
+<h3>4 TAPPA ANDARE – Destinazione mondo</h3>
+<b>Dal Vangelo secondo Matteo</b>
+In quel tempo, gli undici discepoli andarono in Galilea, sul monte che Gesù aveva loro indicato. Quando lo videro, si prostrarono. Essi però dubitarono. Gesù si avvicinò e disse loro: «A me è stato dato ogni potere in cielo e sulla terra. Andate dunque e fate discepoli tutti i popoli, battezzandoli nel nome del Padre e del Figlio e dello Spirito Santo, insegnando loro a osservare tutto ciò che vi ho comandato. Ed ecco, io sono con voi tutti i giorni, fino alla fine del mondo».
+
+<b>Commento del Sacerdote</b>
+
+<b>Dai Discorsi di Papa Leone ai giovani</b>
+Carissimi giovani, forse vi rammaricate di aver ereditato un mondo lacerato da guerre e sfigurato dalle ingiustizie sociali. Eppure c’è speranza, in voi risiede speranza! Voi avete un dono, che spesso a noi adulti sembra ormai sfuggire. Voi avete speranza! Voi avete il tempo! Avete più tempo per sognare, organizzare e compiere il bene. Voi siete il presente e tra le vostre mani già si sta costruendo il futuro! E avete l’entusiasmo per cambiare il corso della storia! La vera resistenza al male non è il male, ma l’amore, capace di guarire le proprie ferite, mentre si curano quelle degli altri.
+
+<b>Guida:</b> Il mondo che abitiamo è spesso ferito, segnato da guerre, ingiustizie e solitudini. Ma il Signore affida proprio a noi la missione di portare luce: ognuno può essere una piccola luce nel mondo. Ai piedi dell’altare è posto un mappamondo. Ora ciascuno riceverà un lumino e lo deporrà attorno ad esso. È il segno della nostra missione: portare la luce di Cristo nel mondo, nei luoghi della nostra vita.
+
+<b>Preghiera finale</b>
+Signore Gesù,
+questa sera abbiamo camminato con Te
+e abbiamo scoperto che il cammino non finisce qui.
+La nostra destinazione è il mondo:
+le nostre case, le nostre amicizie,
+i luoghi della vita di ogni giorno.
+Donaci il coraggio di vivere ciò che ci ha insegnato
+Luigi Guanella: “fermarsi non si può quando c’è amore da donare e bene da compiere”.
+Fa’ che la nostra vita diventi missione,
+perché chi incontra Te
+non può restare fermo.
+Amen.`;
+
         // --- TESTO INNO PRINCIPALE ---
         const LYRICS_INNO = `From far and wide to gather in this place
 We spread our wings and here we are, 
@@ -454,7 +556,7 @@ Le fruit est béni, c'est mon Seigneur!
 And I want to hear: You trusted in my word and happiness 
 Is yours`;
 
-        // --- DATABASE LODI (NUOVO) ---
+        // --- DATABASE LODI ---
         const LODI = [
             {
                 num: 1,
@@ -761,7 +863,7 @@ R. Amen.`
             }
         ];
 
-        let currentLodiIndex = 0; // Indice per le Lodi
+        let currentLodiIndex = 0; 
 
         // --- DATABASE CANTI ---
         const CANTI = [
@@ -912,10 +1014,18 @@ R. Amen.`
         function openNotes() { hideAll(); animatePageEntry('page-notes'); }
         function openLinkFoto() { window.open(LINK_FOTO_RICORDO, '_blank'); }
 
+        // --- LOGICA VEGLIA ---
+        function openVegliaPage() {
+            hideAll();
+            document.getElementById('veglia-content').innerHTML = TEXT_VEGLIA;
+            animatePageEntry('page-veglia');
+            document.getElementById('page-veglia').scrollTop = 0;
+        }
+
         // --- LOGICA LODI MATTUTINE ---
         function openLodiPage() {
             hideAll();
-            renderLodi(0); // Apre il primo giorno di default
+            renderLodi(0); 
             animatePageEntry('page-lodi');
         }
 
