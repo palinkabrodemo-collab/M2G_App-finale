@@ -10,11 +10,11 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="M2G">
     
-    <link rel="apple-touch-icon" href="assets/m2g_logo.png?v=6">
-    <link rel="apple-touch-icon" sizes="152x152" href="assets/m2g_logo.png?v=6">
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/m2g_logo.png?v=6">
-    <link rel="icon" type="image/png" sizes="192x192" href="assets/m2g_logo.png?v=6">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/m2g_logo.png?v=6">
+    <link rel="apple-touch-icon" href="assets/m2g_logo.png?v=7">
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/m2g_logo.png?v=7">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/m2g_logo.png?v=7">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/m2g_logo.png?v=7">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/m2g_logo.png?v=7">
     
     <link rel="manifest" href='data:application/manifest+json,{"name":"M2G App","short_name":"M2G","start_url":"./index.html","display":"standalone","background_color":"#6a8a73","theme_color":"#6a8a73","icons":[{"src":"assets/m2g_logo.png","sizes":"192x192","type":"image/png"},{"src":"assets/m2g_logo.png","sizes":"512x512","type":"image/png"}]}'>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -136,18 +136,18 @@
         }
         #notes-input:focus { border-color: var(--accent); outline: none; }
 
-        /* --- INPUT RICERCA CANTI --- */
-        .canti-search-box {
+        /* --- INPUT RICERCA (Condiviso tra Lodi e Canti) --- */
+        .search-box {
             display: flex; align-items: center; background: var(--card-bg); 
             border-radius: 20px; padding: 5px 15px; border: 1px solid var(--border);
             box-shadow: 0 2px 8px var(--shadow);
         }
-        .canti-search-box input {
+        .search-box input {
             border: none; background: transparent; width: 40px; text-align: center;
             font-size: 1rem; color: var(--text-color); font-weight: bold; outline: none;
             font-family: inherit;
         }
-        .canti-search-box span { font-size: 0.9rem; color: var(--text-sec); margin-right: 5px; font-weight: bold;}
+        .search-box span { font-size: 0.9rem; color: var(--text-sec); margin-right: 5px; font-weight: bold;}
 
         /* --- ANIMAZIONI & TEATRO CELESTE --- */
         @keyframes elasticSlide { 0% { opacity: 0; transform: translateY(50px) scale(0.8); } 60% { opacity: 1; transform: translateY(-10px) scale(1.02); } 80% { transform: translateY(5px) scale(0.98); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
@@ -175,7 +175,6 @@
         .page-overlay.visible { opacity: 1; transform: translateY(0); }
         .container { padding: 0 20px; padding-bottom: 100px; }
         .card { background-color: var(--card-bg); border-radius: 22px; padding: 18px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px var(--shadow); border: 1px solid var(--border); cursor: pointer; opacity: 0; animation: elasticSlide 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-        /* Ritardi Card */
         .card:nth-child(1) { animation-delay: 0.05s; } .card:nth-child(2) { animation-delay: 0.10s; } .card:nth-child(3) { animation-delay: 0.15s; } .card:nth-child(4) { animation-delay: 0.20s; } .card:nth-child(5) { animation-delay: 0.25s; }
         .card:active { transform: scale(0.95) !important; background-color: var(--border); transition: 0.1s; }
         .card-left { display: flex; align-items: center; }
@@ -257,13 +256,14 @@
         </div>
 
         <div class="container">
-            <div class="card" onclick="openReader('Lodi Mattutine')">
+            <div class="card" onclick="openLodiPage()">
                 <div class="card-left">
                     <div class="icon-box"><img src="assets/sunrise.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"><span class="material-icons fallback-icon">wb_sunny</span></div>
                     <div class="card-title">Lodi Mattutine</div>
                 </div>
                 <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
             </div>
+            
             <div class="card" onclick="openReader('Libretto')">
                 <div class="card-left">
                     <div class="icon-box"><img src="assets/book-open.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"><span class="material-icons fallback-icon">menu_book</span></div>
@@ -290,6 +290,7 @@
                 </div>
                 <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
             </div>
+            
             <div class="card" onclick="openLinkFoto()">
                 <div class="card-left">
                     <div class="icon-box"><img src="assets/camera.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"><span class="material-icons fallback-icon">photo_camera</span></div>
@@ -304,13 +305,41 @@
         </div>
     </div>
 
+    <div id="page-lodi" class="page-overlay">
+        <div class="top-bar">
+            <div class="back-btn-circle" onclick="goHome()">
+                <span class="material-icons">arrow_back</span>
+            </div>
+            
+            <div class="search-box">
+                <span>Giorno</span>
+                <input type="number" id="lodi-search-input" min="1" max="2" onchange="jumpToLodi(this.value)">
+            </div>
+        </div>
+        
+        <div id="lodi-content-container" style="animation: elasticSlide 0.6s ease; background:var(--card-bg); padding:30px 20px; border-radius:20px; box-shadow: 0 4px 15px var(--shadow);">
+            <h2 id="lodi-title-display" style="text-align:center; color: var(--accent); margin-top:0; margin-bottom: 20px; font-size: 1.4rem;">Titolo</h2>
+            <div id="lodi-text-display" style="white-space:pre-line; text-align:center; line-height:1.8; font-size: 1.05rem;">
+                Testo lodi qui...
+            </div>
+            
+            <hr style="border:0; border-top:1px solid var(--border); margin:30px 0 20px 0;">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="back-btn-circle" onclick="prevLodi()" style="background-color: var(--icon-bg); color: var(--accent);"><span class="material-icons">chevron_left</span></div>
+                <span id="lodi-counter" style="font-weight: bold; color: var(--text-sec);">1 / 2</span>
+                <div class="back-btn-circle" onclick="nextLodi()" style="background-color: var(--icon-bg); color: var(--accent);"><span class="material-icons">chevron_right</span></div>
+            </div>
+        </div>
+    </div>
+
     <div id="page-canti" class="page-overlay">
         <div class="top-bar">
             <div class="back-btn-circle" onclick="goHome()">
                 <span class="material-icons">arrow_back</span>
             </div>
             
-            <div class="canti-search-box">
+            <div class="search-box">
                 <span>N°</span>
                 <input type="number" id="canto-search-input" min="1" max="28" onchange="jumpToCanto(this.value)">
             </div>
@@ -425,6 +454,315 @@ Le fruit est béni, c'est mon Seigneur!
 And I want to hear: You trusted in my word and happiness 
 Is yours`;
 
+        // --- DATABASE LODI (NUOVO) ---
+        const LODI = [
+            {
+                num: 1,
+                title: "Lodi mattutine - 1 maggio",
+                text: `Introduzione 
+V. O Dio, vieni a salvarmi. 
+R. Signore, vieni presto in mio aiuto. Gloria al Padre e al Figlio e allo Spirito Santo. Come era nel principio, e ora e sempre, nei secoli dei secoli. 
+
+Amen. Alleluia.
+
+1 ant.
+Crea in me, o Dio, un cuore puro,
+rinnova in me uno spirito saldo.
+
+Inno 
+Santa e dolce dimora, 
+dove Gesù fanciullo nasconde la sua gloria!
+Giuseppe addestra all'umile arte 
+del falegname il Figlio dell'Altissimo.
+Accanto a lui Maria fa lieta 
+la sua casa di una limpida gioia.
+La mano del Signore li guida 
+e li protegge nei giorni del mistero.
+Sia lode alla Trinità, 
+che ha colmato di grazia la santa Famiglia. 
+
+Amen.
+
+Salmo 50: 
+Pietà di me, o Dio, secondo la tua misericordia; 
+nel tuo grande amore cancella il mio peccato.
+Lavami da tutte le mie colpe, 
+mondami dal mio peccato.
+
+Riconosco la mia colpa, 
+il mio peccato mi sta sempre dinanzi.
+Contro di te, contro te solo ho peccato, 
+quello che è male ai tuoi occhi, 
+io l’ho fatto; perciò sei giusto quando parli, 
+retto nel tuo giudizio.
+Ecco, nella colpa sono stato generato,
+ nel peccato mi ha generato mia madre. 
+
+Ma tu vuoi la sincerità del cuore 
+e nell’intimo mi insegni la sapienza.
+Purificami con issopo e sarò mondato; 
+lavami e sarò più bianco della neve. 
+
+Fammi sentire gioia e letizia; 
+esulteranno le ossa che hai spezzato. 
+Distogli lo sguardo dai miei peccati, 
+cancella tutte le mie colpe, 
+
+Crea in me, o Dio, un cuore puro,
+ rinnova in me uno spirito saldo. 
+Non respingermi dalla tua presenza
+e non privarmi del tuo Santo Spirito.
+
+Rendimi la gioia di essere salvato, 
+sostiene in me un animo generoso.
+Insegnerò agli erranti le tue vie 
+e i peccatori a te ritorneranno. 
+
+Liberami dal sangue, Dio, mia salvezza, 
+la mia lingua esalterà la tua giustizia. 
+Signore, apri le mie labbra e la mia bocca 
+proclami la tua lode, poiché non gradisci il sacrificio 
+e se offro olocausti, non li accetti. 
+
+Uno spirito contrito è sacrificio a Dio, 
+un cuore affranto e umiliato tu, o Dio, non disprezzi.
+Nel tuo amore fa grazia a Sion, 
+rialza le mura di Gerusalemme. 
+Allora gradirai i sacrifici prescritti, 
+l’olocausto e l’intera oblazione, 
+allora immoleranno vittime sopra il tuo altare.
+
+1 ant.
+Crea in me, o Dio, un cuore puro,
+rinnova in me uno spirito saldo.
+
+2 ant.
+Rallegrati Gerusalemme:
+in te si raduneranno i popoli e benediranno il Signore.
+
+Lettura Breve (Col 3, 23-24)
+Qualunque cosa facciate, fatela di cuore come per il Signore e non per gli uomini, 
+sapendo che in ricompensa riceverete dal Signore l'eredità. 
+Servite a Cristo Signore.
+
+Responsorio breve
+R. Invocherò l’Altissimo: da lui ogni mio bene.
+Invocherò l’altissimo: da lui ogni mio bene.
+
+V. Dal cielo manderà la sua salvezza:
+da lui ogni mio bene.
+
+Gloria la Padre e al Figlio e allo Spirito Santo.
+Invocherò l’Altissimo: da lui ogni mio bene
+
+Antifona: 
+Uomo fedele e ammirevole, 
+nella sua vita laboriosa Giuseppe fu caro a Dio, alleluia. 
+
+Cantico di Zaccaria (Benedictus)
+Benedetto il Signore Dio d'Israele,
+perché ha visitato e redento il suo popolo,
+e ha suscitato per noi una salvezza potente
+nella casa di Davide, suo servo.
+
+Come aveva promesso
+per bocca dei suoi santi profeti d'un tempo:
+salvezza dai nostri nemici
+e dalle mani di quanti ci odiano.
+
+Così egli ha concesso misericordia ai nostri padri
+e si è ricordato della sua santa alleanza,
+del giuramento fatto ad Abramo, nostro padre,
+di concederci, liberati dalle mani dei nemici,
+di servirlo senza timore, in santità e giustizia
+al suo cospetto, per tutti i nostri giorni.
+
+E tu, bambino, sarai chiamato profeta dell'Altissimo
+perché andrai innanzi al Signore a preparargli le strade,
+per dare al suo popolo la conoscenza della salvezza
+nella remissione dei suoi peccati.
+
+Grazie alla bontà misericordiosa del nostro Dio,
+per cui verrà a visitarci dall'alto un sole che sorge,
+per rischiarare quelli che stanno nelle tenebre
+e nell'ombra di morte
+e dirigere i nostri passi sulla via della pace. 
+
+Amen.
+
+Invocazioni 
+Rivolgiamo la nostra preghiera a Dio, Padre provvidente, e diciamo insieme: 
+R. Ascoltaci, o Signore!
+
+Padre santo, che hai rivelato a san Giuseppe il mistero di Cristo nascosto nei secoli eterni, 
+- donaci di conoscere e di amare sempre più il tuo Figlio fatto uomo per la nostra salvezza. 
+
+Tu che nutri gli uccelli dell'aria e vesti i gigli del campo, 
+- dona a tutti gli uomini il pane quotidiano. 
+
+Hai affidato alle nostre mani l'opera della tua creazione, 
+- concedi agli operai, agli artigiani, ai contadini un'adeguata ricompensa delle loro fatiche.
+
+O fonte di ogni santità, che chiami tutti gli uomini a configurarsi a te, 
+- concedi a noi, per intercessione di san Giuseppe, di camminare in santità e giustizia tutti i giorni della nostra vita. 
+
+Guarda con bontà ai moribondi e ai defunti, 
+- fa' che siano eternamente felici con Gesù, Giuseppe e Maria. 
+
+Padre Nostro 
+
+Orazione Finale 
+O Dio, che nella tua provvidenza hai chiamato l'uomo a cooperare con il lavoro al disegno della creazione, fa' che per l'intercessione e l'esempio di san Giuseppe siamo fedeli alle responsabilità che ci affidi, e riceviamo la ricompensa che ci prometti. Per il nostro Signore Gesù Cristo, tuo Figlio, che è Dio, e vive e regna con te, nell'unità dello Spirito Santo, per tutti i secoli dei secoli. Amen.
+
+Conclusione 
+V. Il Signore ci benedica, ci preservi da ogni male, e ci conduca alla vita eterna. 
+R. Amen.`
+            },
+            {
+                num: 2,
+                title: "Lodi mattutine – 2 maggio",
+                text: `Introduzione 
+V. O Dio, vieni a salvarmi. 
+R. Signore, vieni presto in mio aiuto. 
+Gloria al Padre e al Figlio e allo Spirito Santo. 
+Come era nel principio, e ora e sempre, nei secoli dei secoli. 
+Amen. Alleluia.
+
+Inno 
+Aurora di luce rifulge nell'alto, 
+il cielo fa eco a canti di lode, 
+la terra si unisce a un coro di gioia, 
+l'inferno profondo nell'ombra si duole.
+
+Il Cristo ha distrutto la morte e il peccato, 
+e libero e forte, dal grembo del buio, 
+ridona la vita ai padri in attesa, 
+che sciolgono al vento un inno di gloria.
+
+Sia lode e onore a Cristo risorto, 
+al Padre e allo Spirito Santo, 
+nei secoli eterni e in ogni dimora, 
+un cantico nuovo di gioia e di pace. 
+Amen.
+
+Salmodia 
+I salmi si prendono dal Sabato della IV settimana del Salterio.
+
+Salmo 91 
+È bello dar lode al Signore 
+e cantare al tuo nome, o Altissimo, 
+annunziare al mattino il tuo amore, 
+la tua fedeltà lungo la notte, 
+sull'arpa a dieci corde e sulla lira,
+con canti sulla cetra.
+
+Poiché mi rallegri, Signore con le tue meraviglie, 
+esulto per l'opera delle tue mani.
+Come sono grandi le tue opere, Signore, 
+quanto profondi i tuoi pensieri!
+
+L'uomo insensato non intende 
+e lo stolto non capisce:
+se i peccatori germogliano come l'erba 
+e fioriscono tutti i malfattori, 
+li attende una rovina eterna: 
+ma tu sei l'eccelso per sempre, o Signore.
+
+Ecco, i tuoi nemici, o Signore, 
+ecco, i tuoi nemici periranno, 
+saranno dispersi tutti i malfattori.
+
+Tu mi doni la forza di un bufalo, 
+mi cospargi di olio splendente.
+I miei occhi disprezzeranno i miei nemici, 
+e contro gli iniqui che mi assalgono 
+i miei orecchi udranno cose infauste.
+
+Il giusto fiorirà come palma, 
+crescerà come cedro del Libano;
+piantati nella casa del Signore, 
+fioriranno negli atri del nostro Dio.
+
+Nella vecchiaia daranno ancora frutti, 
+saranno vegeti e rigogliosi,
+per annunziare quanto è retto il Signore:
+mia roccia, in lui non c'è ingiustizia.
+
+Lettura Breve (Rm 14, 7-9) 
+Nessuno di noi vive per se stesso e nessuno muore per se stesso, perché se noi viviamo, viviamo per il Signore, se noi moriamo, moriamo per il Signore. Sia che viviamo, sia che moriamo, siamo dunque del Signore. Per questo infatti Cristo è morto ed è ritornato alla vita: per essere il Signore dei morti e dei vivi.
+
+Responsorio breve
+R. Esultano le mie labbra cantando le tue lodi.
+Esultano le mie labbra cantando le tue lodi.
+
+V. La mia lingua proclama la tua giustizia
+cantando le tue lodi.
+
+Gloria la Padre e al Figlio e allo Spirito Santo.
+Invocherò l’Altissimo: da lui ogni mio bene
+
+Antifona:
+Rallegratevi ed esultate: 
+grande è la vostra ricompensa nei cieli, alleluia.
+
+Cantico di Zaccaria
+Benedetto il Signore Dio d'Israele,
+perché ha visitato e redento il suo popolo,
+e ha suscitato per noi una salvezza potente
+nella casa di Davide, suo servo.
+
+Come aveva promesso
+per bocca dei suoi santi profeti d'un tempo:
+salvezza dai nostri nemici
+e dalle mani di quanti ci odiano.
+
+Così egli ha concesso misericordia ai nostri padri
+e si è ricordato della sua santa alleanza,
+del giuramento fatto ad Abramo, nostro padre,
+di concederci, liberati dalle mani dei nemici,
+di servirlo senza timore, in santità e giustizia
+al suo cospetto, per tutti i nostri giorni.
+
+E tu, bambino, sarai chiamato profeta dell'Altissimo
+perché andrai innanzi al Signore a preparargli le strade,
+per dare al suo popolo la conoscenza della salvezza
+nella remissione dei suoi peccati.
+
+Grazie alla bontà misericordiosa del nostro Dio,
+per cui verrà a visitarci dall'alto un sole che sorge,
+per rischiarare quelli che stanno nelle tenebre
+e nell'ombra di morte
+e dirigere i nostri passi sulla via della pace.
+
+Invocazioni 
+Cristo, buon pastore, ha dato la vita per le sue pecore. 
+A lui innalziamo la nostra preghiera: R. Pasci il tuo popolo, Signore!
+
+Cristo, che nei santi pastori ci hai rivelato la tua misericordia e il tuo amore, 
+- continua a manifestarti a noi per mezzo di loro. 
+
+Tu, che attraverso i tuoi vicari continui a svolgere il ministero di pastore delle anime, 
+- non cessare di guidarci tu stesso. 
+
+Tu, che nei santi vescovi, ministri della parola, ci istruisci e ci guidi, 
+- fa' che essi ci aiutino a cercare la verità e a viverla nell'amore. 
+
+Tu, che hai affidato ai ministri della Chiesa la tua parola di salvezza e di gioia, 
+- rinnova il prodigio della Pentecoste nei cuori dei credenti. 
+
+Padre Nostro 
+
+Orazione Finale 
+Dio onnipotente ed eterno, che hai suscitato nella tua Chiesa il vescovo sant'Atanasio, insigne difensore della divinità del tuo Figlio, concedi anche a noi, per la sua intercessione e i suoi insegnamenti, di crescere sempre nella tua conoscenza e nel tuo amore. Per il nostro Signore Gesù Cristo, tuo Figlio, che è Dio, e vive e regna con te, nell'unità dello Spirito Santo, per tutti i secoli dei secoli. Amen.
+
+Conclusione 
+V. Il Signore ci benedica, ci preservi da ogni male, e ci conduca alla vita eterna. 
+R. Amen.`
+            }
+        ];
+
+        let currentLodiIndex = 0; // Indice per le Lodi
+
         // --- DATABASE CANTI ---
         const CANTI = [
             { num: 1, title: "1. Canto dell’amore", text: `Se dovrai attraversare il deserto\nnon temere io sarò con te\nse dovrai camminare nel fuoco\nla sua fiamma non ti brucerà\nseguirai la mia luce nella notte\nsentirai la mia forza nel cammino\nio sono il tuo Dio, il Signore.\n\nSono io che ti ho fatto e plasmato\nti ho chiamato per nome\nio da sempre ti ho conosciuto\ne ti ho dato il mio amore\nperché tu sei prezioso ai miei occhi\nvali più del più grande dei tesori\nio sarò con te dovunque andrai\n\nNon pensare alle cose di ieri\ncose nuove fioriscono già\naprirò nel deserto sentieri\ndarò acqua nell'aridità\nperché tu sei prezioso ai miei occhi\nvali più del più grande dei tesori\nio sarò con te dovunque andrai\nperché tu sei prezioso ai miei occhi\nvali più del più grande dei tesori\nio sarò con te dovunque andrai.\n\nIo ti sarò accanto sarò con te\nper tutto il tuo viaggio sarò con te\nio ti sarò accanto sarò con te\nper tutto il tuo viaggio sarò con te.` },
@@ -457,7 +795,7 @@ Is yours`;
             { num: 28, title: "28. VIENI E SEGUIMI", text: `Lascia che il mondo vada per la sua strada,\nlascia che l'uomo ritorni alla sua casa,\nlascia che la gente accumuli la sua fortuna.\nMa tu, tu vieni e seguimi\ntu, vieni e seguimi.\n\nLascia che la barca in mare spieghi la vela,\nlascia che trovi affetto chi segue il cuore,\nlascia che dall'albero cadano i frutti maturi.\nMa tu, tu vieni e seguimi\ntu, vieni e seguimi.\n\nE sarai luce per gli uomini\ne sarai sale della terra\ne nel mondo deserto aprirai\nuna strada nuova. (2v)\n\nE per questa strada va, va\ne non voltarti indietro, va\ne non voltarti indietro` }
         ];
 
-        let currentCantoIndex = 0; // Indice dell'array (0 a 27)
+        let currentCantoIndex = 0; 
 
         // INIT GENERALI
         const savedName = localStorage.getItem('m2g_name') || 'Utente';
@@ -574,58 +912,69 @@ Is yours`;
         function openNotes() { hideAll(); animatePageEntry('page-notes'); }
         function openLinkFoto() { window.open(LINK_FOTO_RICORDO, '_blank'); }
 
-        // --- NUOVA LOGICA CANTI ---
+        // --- LOGICA LODI MATTUTINE ---
+        function openLodiPage() {
+            hideAll();
+            renderLodi(0); // Apre il primo giorno di default
+            animatePageEntry('page-lodi');
+        }
+
+        function renderLodi(index) {
+            if (index < 0 || index >= LODI.length) return;
+            currentLodiIndex = index;
+            const lode = LODI[currentLodiIndex];
+            
+            document.getElementById('lodi-title-display').textContent = lode.title;
+            document.getElementById('lodi-text-display').textContent = lode.text;
+            document.getElementById('lodi-counter').textContent = `${lode.num} / ${LODI.length}`;
+            document.getElementById('lodi-search-input').value = lode.num;
+            
+            document.getElementById('page-lodi').scrollTop = 0;
+        }
+
+        function nextLodi() { if (currentLodiIndex < LODI.length - 1) renderLodi(currentLodiIndex + 1); }
+        function prevLodi() { if (currentLodiIndex > 0) renderLodi(currentLodiIndex - 1); }
+        function jumpToLodi(val) {
+            let num = parseInt(val);
+            if (isNaN(num)) return;
+            if (num < 1) num = 1;
+            if (num > LODI.length) num = LODI.length;
+            renderLodi(num - 1);
+            document.getElementById('lodi-search-input').blur();
+        }
+
+        // --- LOGICA CANTI ---
         function openCantiPage() {
             hideAll();
-            renderCanto(0); // Apre sempre il primo canto quando entri nella sezione
+            renderCanto(0); 
             animatePageEntry('page-canti');
         }
 
         function renderCanto(index) {
             if (index < 0 || index >= CANTI.length) return;
             currentCantoIndex = index;
-            
             const canto = CANTI[currentCantoIndex];
             
-            // Imposta titolo e testo
             document.getElementById('canto-title-display').textContent = canto.title;
             document.getElementById('canto-text-display').textContent = canto.text;
-            
-            // Aggiorna contatore e casella di ricerca
             document.getElementById('canto-counter').textContent = `${canto.num} / ${CANTI.length}`;
             document.getElementById('canto-search-input').value = canto.num;
             
-            // Torna all'inizio della pagina (se avevi scrollato in basso nel canto precedente)
             document.getElementById('page-canti').scrollTop = 0;
         }
 
-        function nextCanto() {
-            if (currentCantoIndex < CANTI.length - 1) {
-                renderCanto(currentCantoIndex + 1);
-            }
-        }
-
-        function prevCanto() {
-            if (currentCantoIndex > 0) {
-                renderCanto(currentCantoIndex - 1);
-            }
-        }
-
+        function nextCanto() { if (currentCantoIndex < CANTI.length - 1) renderCanto(currentCantoIndex + 1); }
+        function prevCanto() { if (currentCantoIndex > 0) renderCanto(currentCantoIndex - 1); }
         function jumpToCanto(val) {
             let num = parseInt(val);
             if (isNaN(num)) return;
-            
-            // Assicura che il numero sia entro i limiti
             if (num < 1) num = 1;
             if (num > CANTI.length) num = CANTI.length;
-            
-            renderCanto(num - 1); // L'indice è il numero - 1
-            
-            // Togli il focus dall'input per far chiudere la tastiera sul telefono
+            renderCanto(num - 1);
             document.getElementById('canto-search-input').blur();
         }
-        // -------------------------
 
+        // --- READER GENERICO (Inno, Libretto) ---
         function openReader(title) {
             hideAll();
             document.getElementById('reader-title').textContent = title;
@@ -652,10 +1001,6 @@ Is yours`;
 ${LYRICS_INNO}
                         </div>
                     </div>`;
-            } else if (title === 'Lodi Mattutine') {
-                let htmlImages = '<div style="text-align:center">';
-                for (let i = 1; i <= 5; i++) { htmlImages += `<img src="assets/lodi${i}.jpg" class="reader-image" loading="lazy" onerror="this.style.display='none'">`; }
-                htmlImages += '</div>'; content.innerHTML = htmlImages;
             } else if (title === 'Libretto') {
                 let htmlImages = '<div style="text-align:center">';
                 for (let i = 1; i <= 5; i++) { htmlImages += `<img src="assets/lib${i}.jpg" class="reader-image" loading="lazy" onerror="this.style.display='none'">`; }
