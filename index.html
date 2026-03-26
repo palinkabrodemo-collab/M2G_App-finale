@@ -274,7 +274,10 @@
             
             <div class="card" onclick="openCantiPage()">
                 <div class="card-left">
-                    <div class="icon-box" style="background-color: #e0d5c1;"><span class="material-icons fallback-icon" style="display:block; color:#a38b66;">library_music</span></div>
+                    <div class="icon-box">
+                        <img src="assets/canti.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                        <span class="material-icons fallback-icon">library_music</span>
+                    </div>
                     <div class="card-title">Canti</div>
                 </div>
                 <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
