@@ -37,7 +37,7 @@
             background-color: var(--bg-color); color: var(--text-color);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0; padding: 0;
-            transition: background-color 2.0s ease-in-out, color 2.0s ease-in-out;
+            transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
             -webkit-tap-highlight-color: transparent; font-size: var(--base-size);
             overflow-x: hidden;
             padding-bottom: 150px; 
@@ -53,9 +53,9 @@
             border-radius: 18px; display: flex; align-items: center; justify-content: center; 
             color: white; font-weight: bold; font-size: 1.2rem; margin-bottom: 15px; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); 
+            transition: transform 0.2s; 
         }
-        .logo-box:active { transform: scale(0.9) rotate(-10deg); }
+        .logo-box:active { transform: scale(0.9); }
         .welcome-text { font-size: 1.5rem; font-weight: 800; }
 
         /* --- TASTI ROTONDI "GLASS" --- */
@@ -73,7 +73,7 @@
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
             color: var(--text-color);
-            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s;
+            transition: transform 0.2s, background-color 0.2s;
         }
         body.dark-mode .back-btn-circle { background-color: rgba(40, 40, 40, 0.8); border-color: rgba(255,255,255,0.1); }
         .back-btn-circle:active { transform: scale(0.9); }
@@ -148,9 +148,9 @@
             font-family: inherit;
         }
         .search-box span { font-size: 0.9rem; color: var(--text-sec); margin-right: 5px; font-weight: bold;}
-
         /* --- ANIMAZIONI & TEATRO CELESTE --- */
-        @keyframes elasticSlide { 0% { opacity: 0; transform: translateY(50px) scale(0.8); } 60% { opacity: 1; transform: translateY(-10px) scale(1.02); } 80% { transform: translateY(5px) scale(0.98); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes elasticSlide { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+        
         #celestial-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; opacity: 0; transition: opacity 0.5s ease; display: flex; justify-content: center; align-items: flex-end; overflow: hidden; }
         #celestial-container.active { opacity: 1; }
         .celestial-body { position: absolute; bottom: -150px; font-size: 120px; }
@@ -169,12 +169,12 @@
         .animate-sunrise #moon-group { animation: moonsetMoveDown 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
         .animate-sunset #sun-icon { animation: sunsetMoveDown 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
         .animate-sunset #moon-group { animation: moonriseMoveUp 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
-        /* --- STILI APP STANDARD --- */
-        .page-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--bg-color); z-index: 100; padding: 20px; overflow-y: auto; opacity: 0; transform: translateY(30px); transition: opacity 0.3s ease-out, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); padding-bottom: 150px; }
-        .page-overlay.visible { opacity: 1; transform: translateY(0); }
+
+        /* --- STILI APP STANDARD (Animazioni alleggerite) --- */
+        .page-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--bg-color); z-index: 100; padding: 20px; overflow-y: auto; opacity: 0; transition: opacity 0.2s ease; padding-bottom: 150px; }
+        .page-overlay.visible { opacity: 1; }
         .container { padding: 0 20px; padding-bottom: 100px; }
-        .card { background-color: var(--card-bg); border-radius: 22px; padding: 18px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px var(--shadow); border: 1px solid var(--border); cursor: pointer; opacity: 0; animation: elasticSlide 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-        /* Ritardi Card - Aumentati per Veglia */
+        .card { background-color: var(--card-bg); border-radius: 22px; padding: 18px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px var(--shadow); border: 1px solid var(--border); cursor: pointer; opacity: 0; animation: elasticSlide 0.4s ease forwards; }
         .card:nth-child(1) { animation-delay: 0.05s; } .card:nth-child(2) { animation-delay: 0.10s; } .card:nth-child(3) { animation-delay: 0.15s; } .card:nth-child(4) { animation-delay: 0.20s; } .card:nth-child(5) { animation-delay: 0.25s; } .card:nth-child(6) { animation-delay: 0.30s; }
         .card:active { transform: scale(0.95) !important; background-color: var(--border); transition: 0.1s; }
         .card-left { display: flex; align-items: center; }
@@ -182,7 +182,7 @@
         .asset-img { width: 60%; height: 60%; object-fit: contain; }
         .fallback-icon { display: none; color: var(--accent); font-size: 1.5rem; }
         .card-title { font-weight: 700; font-size: 1rem; color: var(--text-color); }
-        .reader-image { width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 4px 10px var(--shadow); display: block; animation: elasticSlide 0.6s ease-out forwards; opacity: 0; }
+        .reader-image { width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 4px 10px var(--shadow); display: block; }
         .profile-pic-container { width: 100px; height: 100px; margin: 0 auto; position: relative; }
         .profile-pic { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 4px solid var(--accent); background-color: white; transition: border-color 0.3s; }
         .settings-box { background-color: var(--card-bg); border-radius: 20px; padding: 20px; margin-top: 20px; border: 1px solid var(--border); }
@@ -197,13 +197,6 @@
         input:checked + .slider:before { transform: translateX(22px); }
         input[type="text"] { width: 100%; padding: 18px; border-radius: 16px; border: 2px solid var(--border); margin-bottom: 15px; background: var(--card-bg); color: var(--text-color); font-size: 1rem; box-sizing: border-box; transition: border-color 0.3s; text-align: center; }
         input[type="text"]:focus { border-color: var(--accent); outline: none; }
-        .main-player-ui { background-color: var(--card-bg); border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 15px var(--shadow); border: 1px solid var(--border); text-align: center; }
-        .main-controls { display: flex; justify-content: center; align-items: center; margin-bottom: 15px; }
-        .main-play-btn { background-color: var(--accent); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: transform 0.2s; }
-        .main-play-btn:active { transform: scale(0.9); }
-        .main-slider-container { display: flex; align-items: center; gap: 10px; font-size: 0.8rem; color: var(--text-sec); font-variant-numeric: tabular-nums; }
-        .main-slider { flex: 1; -webkit-appearance: none; height: 6px; border-radius: 3px; background: #e0e0e0; outline: none; accent-color: var(--accent); }
-        .main-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); cursor: pointer; }
         .navbar { position: fixed; bottom: 25px; left: 25px; right: 25px; background-color: var(--card-bg); border-radius: 25px; padding: 12px 0; display: flex; justify-content: space-around; box-shadow: 0 10px 25px var(--shadow); z-index: 50; transition: transform 0.3s; }
         .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 0.7rem; font-weight: 700; color: #bbbbbb; transition: color 0.3s, transform 0.3s; }
         .nav-item.active { color: var(--accent); transform: translateY(-4px); }
@@ -211,7 +204,6 @@
 
         /* Stile specifico per il testo della Veglia */
         .veglia-text-container {
-            animation: elasticSlide 0.6s ease; 
             background:var(--card-bg); 
             padding:30px 20px; 
             border-radius:20px; 
@@ -366,17 +358,16 @@
         </div>
         
         <div id="lodi-content-container" style="background:var(--card-bg); padding:30px 20px; border-radius:20px; box-shadow: 0 4px 15px var(--shadow);">
-            <h2 id="lodi-title-display" style="text-align:center; color: var(--accent); margin-top:0; margin-bottom: 20px; font-size: 1.4rem;">Titolo</h2>
+            <h2 id="lodi-title-display" style="text-align:center; color: var(--accent); margin-top:0; margin-bottom: 20px; font-size: 1.4rem;"></h2>
             
-            <div id="lodi-text-display" class="testo-giustificato" style="white-space:pre-line; font-size: 1.05rem;">
-                Testo lodi qui...
-            </div>
+            <div id="lodi-text-display" class="testo-giustificato" style="font-size: 1.05rem;">
+                </div>
             
             <hr style="border:0; border-top:1px solid var(--border); margin:30px 0 20px 0;">
             
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div class="back-btn-circle" onclick="prevLodi()" style="background-color: var(--icon-bg); color: var(--accent);"><span class="material-icons">chevron_left</span></div>
-                <span id="lodi-counter" style="font-weight: bold; color: var(--text-sec);">1 / 2</span>
+                <span id="lodi-counter" style="font-weight: bold; color: var(--text-sec);"></span>
                 <div class="back-btn-circle" onclick="nextLodi()" style="background-color: var(--icon-bg); color: var(--accent);"><span class="material-icons">chevron_right</span></div>
             </div>
         </div>
@@ -395,17 +386,16 @@
         </div>
         
         <div id="canto-content-container" style="background:var(--card-bg); padding:30px 20px; border-radius:20px; box-shadow: 0 4px 15px var(--shadow);">
-            <h2 id="canto-title-display" style="text-align:center; color: var(--accent); margin-top:0; margin-bottom: 20px; font-size: 1.4rem;">Titolo</h2>
+            <h2 id="canto-title-display" style="text-align:center; color: var(--accent); margin-top:0; margin-bottom: 20px; font-size: 1.4rem;"></h2>
             
-            <div id="canto-text-display" class="testo-giustificato" style="white-space:pre-line; font-size: 1.05rem;">
-                Testo del canto qui...
-            </div>
+            <div id="canto-text-display" class="testo-giustificato" style="font-size: 1.05rem;">
+                </div>
             
             <hr style="border:0; border-top:1px solid var(--border); margin:30px 0 20px 0;">
             
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div class="back-btn-circle" onclick="prevCanto()" style="background-color: var(--icon-bg); color: var(--accent);"><span class="material-icons">chevron_left</span></div>
-                <span id="canto-counter" style="font-weight: bold; color: var(--text-sec);">1 / 28</span>
+                <span id="canto-counter" style="font-weight: bold; color: var(--text-sec);"></span>
                 <div class="back-btn-circle" onclick="nextCanto()" style="background-color: var(--icon-bg); color: var(--accent);"><span class="material-icons">chevron_right</span></div>
             </div>
         </div>
@@ -416,7 +406,7 @@
             <div class="back-btn-circle" onclick="goHome()">
                 <span class="material-icons">arrow_back</span>
             </div>
-            <h2 id="reader-title" style="margin:0; font-size: 1.2rem;">Titolo</h2>
+            <h2 id="reader-title" style="margin:0; font-size: 1.2rem;"></h2>
             <div style="width: 44px;"></div>
         </div>
         <div id="reader-content" class="testo-giustificato" style="padding: 0 20px;"></div>
@@ -460,15 +450,15 @@
         <textarea id="notes-input" rows="20" placeholder="Scrivi qui..." oninput="saveNotes()"></textarea>
     </div>
     <script>
-    // --- DATABASE TESTI: LODI (Aggiornato con formattazione HTML) ---
+    // --- DATABASE TESTI: LODI (Formattazione HTML speculare al Word) ---
     const LODI = [
         {
             num: 1,
             title: "Lodi mattutine - 1 maggio",
             text: `<b>Introduzione</b><br>
 <b>V.</b> O Dio, vieni a salvarmi.<br>
-<b>R.</b> Signore, vieni presto in mio aiuto. <br>
-Gloria al Padre e al Figlio e allo Spirito Santo. <br>
+<b>R.</b> Signore, vieni presto in mio aiuto.<br>
+Gloria al Padre e al Figlio e allo Spirito Santo.<br>
 Come era nel principio, e ora e sempre, nei secoli dei secoli. Amen. Alleluia.<br><br>
 
 <b>E’ bello lodarti</b><br>
@@ -609,8 +599,8 @@ Concedi al tuo popolo, o Dio, l’abbondanza dei tui doni, perché sia sempre fe
             title: "Lodi mattutine - 2 maggio",
             text: `<b>Introduzione</b><br>
 <b>V.</b> O Dio, vieni a salvarmi.<br>
-<b>R.</b> Signore, vieni presto in mio aiuto. <br>
-Gloria al Padre e al Figlio e allo Spirito Santo. <br>
+<b>R.</b> Signore, vieni presto in mio aiuto.<br>
+Gloria al Padre e al Figlio e allo Spirito Santo.<br>
 Come era nel principio, e ora e sempre, nei secoli dei secoli. Amen. Alleluia.<br><br>
 
 <b>Quale gioia è star con Te Gesù</b><br>
@@ -677,7 +667,7 @@ mia roccia, in lui non c'è ingiustizia.<br><br>
 Secondo la promessa del Signore, noi aspettiamo nuovi cieli e una terra nuova nei quali avrà stavile dimora la giustizia. Perciò, carissimi, nell’attesa di questi eventi, cercate d’essere senza macchia e irreprensibili davanti a Dio, in pace. La magnanimità del Signore nostro giudicatela come salvezza.<br><br>
 
 <b>Responsorio breve</b><br>
-<b>R.</b> Esultano le mie labbra cantando le tue lodi. <br>
+<b>R.</b> Esultano le mie labbra cantando le tue lodi.<br>
 Esultano le mie labbra cantando le tue lodi.<br>
 <b>V.</b> La mia lingua proclama la tua giustizia cantando le tue lodi.<br>
 Gloria al Padre e al Figlio e allo Spirito Santo.<br>
@@ -734,13 +724,10 @@ O Dio, vera luce e giorno senza tramonto, accogli la lode mattutina del tuo popo
         }
     ];
 
-    // --- DATABASE TESTI: VEGLIA ---
-    const VEGLIA_TEXT = `<h3>Veglia di Preghiera</h3><br>Inserire qui il testo completo della Veglia...`;
+    const VEGLIA_TEXT = `<h3>Veglia di Preghiera</h3><br>Il testo della Veglia apparirà qui.`;
 
-    // --- DATABASE TESTI: CANTI (Esempi) ---
     const CANTI = [
-        { num: 1, title: "Canto di Inizio", text: "Testo del primo canto..." },
-        // Aggiungi qui gli altri canti
+        { num: 1, title: "Canto di Inizio", text: "Testo del canto..." }
     ];
         // --- VARIABILI DI STATO ---
     let currentLodiIndex = 0;
@@ -748,19 +735,21 @@ O Dio, vera luce e giorno senza tramonto, accogli la lode mattutina del tuo popo
     let audio = document.getElementById('global-audio');
     let isPlaying = false;
 
-    // --- NAVIGAZIONE E UI ---
+    // --- NAVIGAZIONE ULTRA-RAPIDA (Senza blocchi) ---
     function hideAll() {
+        // Nascondiamo tutto immediatamente senza attendere transizioni pesanti
         document.querySelectorAll('.page-overlay').forEach(p => {
+            p.style.display = 'none';
             p.classList.remove('visible');
-            setTimeout(() => p.style.display = 'none', 300);
         });
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById('page-home').style.display = 'none';
     }
 
     function animatePageEntry(pageId) {
-        let page = document.getElementById(pageId);
+        const page = document.getElementById(pageId);
         page.style.display = 'block';
-        // Breve timeout per permettere al display:block di applicarsi prima dell'animazione base
+        // Piccolissimo delay solo per la dissolvenza fluida
         setTimeout(() => page.classList.add('visible'), 10);
     }
 
@@ -786,12 +775,12 @@ O Dio, vera luce e giorno senza tramonto, accogli la lode mattutina del tuo popo
     function openReader(title) {
         hideAll();
         document.getElementById('reader-title').textContent = title;
-        document.getElementById('reader-content').innerHTML = "<div style='padding:20px; text-align:center; color:var(--text-sec)'>Contenuto di " + title + " in fase di sviluppo...</div>";
+        document.getElementById('reader-content').innerHTML = `<div style="padding:20px; text-align:center; color:var(--text-sec)">Contenuto di ${title} in fase di aggiornamento...</div>`;
         animatePageEntry('page-reader');
     }
 
     function openLinkFoto() {
-        window.open('https://photos.google.com', '_blank'); // Modifica con il link reale se necessario
+        window.open('https://photos.google.com', '_blank'); 
     }
 
     // --- LOGICA LODI ---
@@ -806,10 +795,8 @@ O Dio, vera luce e giorno senza tramonto, accogli la lode mattutina del tuo popo
         currentLodiIndex = index;
         const lode = LODI[currentLodiIndex];
         
-        // Uso innerHTML per renderizzare i tag <b> e <br> del database
         document.getElementById('lodi-title-display').innerHTML = lode.title;
         document.getElementById('lodi-text-display').innerHTML = lode.text;
-        
         document.getElementById('lodi-counter').textContent = `${lode.num} / ${LODI.length}`;
         document.getElementById('lodi-search-input').value = lode.num;
         
@@ -820,9 +807,7 @@ O Dio, vera luce e giorno senza tramonto, accogli la lode mattutina del tuo popo
     function prevLodi() { if (currentLodiIndex > 0) renderLodi(currentLodiIndex - 1); }
     function jumpToLodi(val) {
         let num = parseInt(val);
-        if (isNaN(num)) return;
-        if (num < 1) num = 1;
-        if (num > LODI.length) num = LODI.length;
+        if (isNaN(num) || num < 1 || num > LODI.length) return;
         renderLodi(num - 1);
         document.getElementById('lodi-search-input').blur();
     }
@@ -839,10 +824,8 @@ O Dio, vera luce e giorno senza tramonto, accogli la lode mattutina del tuo popo
         currentCantoIndex = index;
         const canto = CANTI[currentCantoIndex];
         
-        // Uso innerHTML anche qui
         document.getElementById('canto-title-display').innerHTML = canto.title;
         document.getElementById('canto-text-display').innerHTML = canto.text;
-        
         document.getElementById('canto-counter').textContent = `${canto.num} / ${CANTI.length}`;
         document.getElementById('canto-search-input').value = canto.num;
         
@@ -853,9 +836,7 @@ O Dio, vera luce e giorno senza tramonto, accogli la lode mattutina del tuo popo
     function prevCanto() { if (currentCantoIndex > 0) renderCanto(currentCantoIndex - 1); }
     function jumpToCanto(val) {
         let num = parseInt(val);
-        if (isNaN(num)) return;
-        if (num < 1) num = 1;
-        if (num > CANTI.length) num = CANTI.length;
+        if (isNaN(num) || num < 1 || num > CANTI.length) return;
         renderCanto(num - 1);
         document.getElementById('canto-search-input').blur();
     }
@@ -872,7 +853,6 @@ O Dio, vera luce e giorno senza tramonto, accogli la lode mattutina del tuo popo
             isPlaying = true;
             mpContainer.classList.add('visible');
             document.getElementById('celestial-container').classList.add('active');
-            updateCelestial();
         } else {
             audio.pause();
             icon.textContent = 'play_arrow';
@@ -888,7 +868,6 @@ O Dio, vera luce e giorno senza tramonto, accogli la lode mattutina del tuo popo
         document.getElementById('mp-play-icon').textContent = 'play_arrow';
         document.getElementById('miniplayer').classList.remove('visible');
         document.getElementById('celestial-container').classList.remove('active');
-        document.body.classList.remove('animate-sunrise', 'animate-sunset');
     }
 
     audio.addEventListener('timeupdate', () => {
@@ -899,37 +878,20 @@ O Dio, vera luce e giorno senza tramonto, accogli la lode mattutina del tuo popo
         }
     });
 
-    audio.addEventListener('ended', () => {
-        document.getElementById('mp-play-icon').textContent = 'play_arrow';
-        isPlaying = false;
-        document.getElementById('mp-fill').style.width = '0%';
-        document.getElementById('celestial-container').classList.remove('active');
-        document.body.classList.remove('animate-sunrise', 'animate-sunset');
-    });
-
     function updateCelestial() {
         if (!audio.duration) return;
         const progress = audio.currentTime / audio.duration;
         const isDark = document.body.classList.contains('dark-mode');
-        
         document.body.classList.remove('animate-sunrise', 'animate-sunset');
-        
-        if (!isDark) {
-            if (progress > 0.1 && progress < 0.9) {
-                document.body.classList.add('animate-sunrise');
-            }
-        } else {
-            if (progress > 0.1 && progress < 0.9) {
-                document.body.classList.add('animate-sunset');
-            }
-        }
+        if (!isDark && progress > 0.05 && progress < 0.95) document.body.classList.add('animate-sunrise');
+        if (isDark && progress > 0.05 && progress < 0.95) document.body.classList.add('animate-sunset');
     }
 
-    // --- PROFILO, SETTINGS E NOTE ---
+    // --- PROFILO & SETTINGS ---
     function uploadImage(input) {
         if (input.files && input.files[0]) {
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = e => {
                 document.getElementById('profile-img').src = e.target.result;
                 localStorage.setItem('m2g_profilePic', e.target.result);
             };
@@ -949,60 +911,23 @@ O Dio, vera luce e giorno senza tramonto, accogli la lode mattutina del tuo popo
     }
 
     function handleThemeToggle(isDark) {
-        if (isDark) {
-            document.body.classList.add('dark-mode');
-            localStorage.setItem('m2g_theme', 'dark');
-        } else {
-            document.body.classList.remove('dark-mode');
-            localStorage.setItem('m2g_theme', 'light');
-        }
+        document.body.classList.toggle('dark-mode', isDark);
+        localStorage.setItem('m2g_theme', isDark ? 'dark' : 'light');
     }
 
-    function openNotes() {
-        hideAll();
-        animatePageEntry('page-notes');
-    }
+    function openNotes() { hideAll(); animatePageEntry('page-notes'); }
+    function saveNotes() { localStorage.setItem('m2g_notes', document.getElementById('notes-input').value); }
 
-    function saveNotes() {
-        const text = document.getElementById('notes-input').value;
-        localStorage.setItem('m2g_notes', text);
-    }
-
-    // --- INIZIALIZZAZIONE ALL'AVVIO ---
     window.onload = () => {
-        // Ripristino dati utente
-        const savedName = localStorage.getItem('m2g_userName');
-        if(savedName) {
-            document.getElementById('name-input').value = savedName;
-            document.getElementById('user-name-display').textContent = savedName;
-        }
-        
-        const savedPic = localStorage.getItem('m2g_profilePic');
-        if(savedPic) {
-            document.getElementById('profile-img').src = savedPic;
-        }
-        
-        const savedNotes = localStorage.getItem('m2g_notes');
-        if(savedNotes) {
-            document.getElementById('notes-input').value = savedNotes;
-        }
-        
-        const savedSize = localStorage.getItem('m2g_fontSize');
-        if(savedSize) {
-            document.getElementById('font-slider').value = savedSize;
-            changeFontSize(savedSize);
-        }
-        
-        const savedTheme = localStorage.getItem('m2g_theme');
-        if(savedTheme === 'dark') {
-            document.getElementById('dark-mode-toggle').checked = true;
-            document.body.classList.add('dark-mode');
-        }
-        
-        // PWA Safe area padding
-        if (window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
-            document.body.style.paddingTop = 'env(safe-area-inset-top)';
-        }
+        const name = localStorage.getItem('m2g_userName');
+        if(name) { document.getElementById('name-input').value = name; document.getElementById('user-name-display').textContent = name; }
+        const pic = localStorage.getItem('m2g_profilePic');
+        if(pic) document.getElementById('profile-img').src = pic;
+        const notes = localStorage.getItem('m2g_notes');
+        if(notes) document.getElementById('notes-input').value = notes;
+        const size = localStorage.getItem('m2g_fontSize');
+        if(size) { document.getElementById('font-slider').value = size; changeFontSize(size); }
+        if(localStorage.getItem('m2g_theme') === 'dark') { document.getElementById('dark-mode-toggle').checked = true; document.body.classList.add('dark-mode'); }
     };
 </script>
 </body>
