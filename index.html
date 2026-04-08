@@ -170,7 +170,7 @@
         .animate-sunset #sun-icon { animation: sunsetMoveDown 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
         .animate-sunset #moon-group { animation: moonriseMoveUp 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
 
-/* --- EFFETTO SFOGLIO LIBRO (CANTI & LODI) --- */
+        /* --- EFFETTO SFOGLIO LIBRO (CANTI & LODI) --- */
         @keyframes pageTurnNext {
             0% { transform: perspective(1000px) rotateY(90deg); opacity: 0; transform-origin: left; }
             100% { transform: perspective(1000px) rotateY(0deg); opacity: 1; transform-origin: left; }
@@ -181,7 +181,6 @@
         }
         .flip-next { animation: pageTurnNext 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important; }
         .flip-prev { animation: pageTurnPrev 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important; }
-        
         /* --- STILI APP STANDARD --- */
         .page-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--bg-color); z-index: 100; padding: 20px; overflow-y: auto; opacity: 0; transform: translateY(30px); transition: opacity 0.3s ease-out, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); padding-bottom: 150px; }
         .page-overlay.visible { opacity: 1; transform: translateY(0); }
@@ -232,12 +231,13 @@
             white-space: pre-line;
             line-height: 1.8;
             font-size: 1.05rem;
-            text-align: left; /* Testo allineato a sinistra per la veglia */
+            text-align: left;
         }
         .veglia-text-container h3 {
             color: var(--accent);
             text-align: center;
             margin-top: 10px;
+            font-size: 1.2rem;
         }
     </style>
 </head>
@@ -263,7 +263,7 @@
         <div class="mp-fill-layer" id="mp-fill"></div>
         <div class="mp-content-layer">
             <div class="mp-info" onclick="openReader('Inno')">
-                <div class="mp-icon"><span class="material-icons" style="font-size:20px">music_note</span></div>
+                <div class="mp-icon"><span class="material-icons" style="font-size:1.2rem">music_note</span></div>
                 <div class="mp-text">
                     <span class="mp-title">Inno M2G</span>
                     <span class="mp-subtitle">In Riproduzione...</span>
@@ -299,7 +299,8 @@
                 <div class="card-left">
                     <div class="icon-box">
                         <img src="assets/veglia.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
-                        <span class="material-icons fallback-icon">flight</span> </div>
+                        <span class="material-icons fallback-icon">flight</span> 
+                    </div>
                     <div class="card-title">Veglia</div>
                 </div>
                 <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
@@ -345,7 +346,6 @@
             <div class="nav-item" onclick="goUser()"><span class="material-icons">person</span><span>PROFILO</span></div>
         </div>
     </div>
-
     <div id="page-veglia" class="page-overlay">
         <div class="top-bar">
             <div class="back-btn-circle" onclick="goHome()">
@@ -371,7 +371,7 @@
             </div>
         </div>
         
-        <div id="lodi-content-container" style="animation: elasticSlide 0.6s ease; background:var(--card-bg); padding:30px 20px; border-radius:20px; box-shadow: 0 4px 15px var(--shadow);">
+        <div id="lodi-content-container" style="background:var(--card-bg); padding:30px 20px; border-radius:20px; box-shadow: 0 4px 15px var(--shadow);">
             <h2 id="lodi-title-display" style="text-align:center; color: var(--accent); margin-top:0; margin-bottom: 20px; font-size: 1.4rem;">Titolo</h2>
             <div id="lodi-text-display" style="white-space:pre-line; text-align:center; line-height:1.8; font-size: 1.05rem;">
                 Testo lodi qui...
@@ -399,7 +399,7 @@
             </div>
         </div>
         
-        <div id="canto-content-container" style="animation: elasticSlide 0.6s ease; background:var(--card-bg); padding:30px 20px; border-radius:20px; box-shadow: 0 4px 15px var(--shadow);">
+        <div id="canto-content-container" style="background:var(--card-bg); padding:30px 20px; border-radius:20px; box-shadow: 0 4px 15px var(--shadow);">
             <h2 id="canto-title-display" style="text-align:center; color: var(--accent); margin-top:0; margin-bottom: 20px; font-size: 1.4rem;">Titolo</h2>
             <div id="canto-text-display" style="white-space:pre-line; text-align:center; line-height:1.8; font-size: 1.05rem;">
                 Testo del canto qui...
@@ -437,12 +437,12 @@
         <div style="text-align: center; margin-top: 10px;">
             <div class="profile-pic-container" onclick="document.getElementById('file-input').click()">
                 <img id="profile-img" src="assets/user.png" class="profile-pic" onerror="this.src='assets/user.png'">
-                <div style="position:absolute; bottom:0; right:0; background:var(--accent); color:white; border-radius:50%; padding:5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"><span class="material-icons" style="font-size:16px">edit</span></div>
+                <div style="position:absolute; bottom:0; right:0; background:var(--accent); color:white; border-radius:50%; padding:5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"><span class="material-icons" style="font-size:1rem">edit</span></div>
             </div>
             <input type="file" id="file-input" accept="image/*" onchange="uploadImage(this)" style="display:none">
             <br><input type="text" id="name-input" placeholder="Il tuo nome" oninput="saveName()">
             <div class="settings-box">
-                <div class="setting-row"><span class="setting-label">Grandezza Testo</span><div style="display:flex; align-items:center;"><span style="font-size:12px; margin-right:5px">A</span><input type="range" id="font-slider" min="14" max="24" value="16" oninput="changeFontSize(this.value)"><span style="font-size:20px; margin-left:5px">A</span></div></div>
+                <div class="setting-row"><span class="setting-label">Grandezza Testo</span><div style="display:flex; align-items:center;"><span style="font-size:0.8rem; margin-right:5px">A</span><input type="range" id="font-slider" min="14" max="24" value="16" oninput="changeFontSize(this.value)"><span style="font-size:1.3rem; margin-left:5px">A</span></div></div>
                 <hr style="border:0; border-top:1px solid var(--border); margin:10px 0;">
                 <div class="setting-row">
                     <span class="setting-label">Modalità Notte</span>
@@ -463,678 +463,424 @@
         </div>
         <textarea id="notes-input" rows="20" placeholder="Scrivi qui..." oninput="saveNotes()"></textarea>
     </div>
-
     <script>
-        const LINK_FOTO_RICORDO = "https://photos.app.goo.gl/TUO_LINK_QUI"; 
-        
-        // --- TESTO VEGLIA (NUOVO) ---
-        const TEXT_VEGLIA = `<b>Celebrante:</b>
-Nel nome del Padre, del Figlio e dello Spirito Santo,
-<b>Assemblea:</b> Amen
-<b>Celebrante:</b> Il Signore sia con voi.
-<b>Celebrante:</b> La pace del Signore nostro Gesù Cristo, l’amore di Dio Padre e la comunione nello Spirito Santo, siano con tutti voi. 
-Dio non ci ha creati per stare comodi, ci ha creati per camminare. Questa sera non resteremo fermi: cammineremo per le strade portando Gesù con noi. Lo porteremo fuori, tra la gente, perché la fede non si chiude, si dona. Chiediamo il coraggio di partire e di fidarci di Lui. Perché non siamo fatti per restare. Siamo fatti per andare.
-Esposizione Eucaristica
-Canto davanti al Re
+    // --- DATABASE TESTI: LODI (Aggiornato dal documento Word) ---
+    const LODI = [
+        {
+            num: 1,
+            title: "Lodi mattutine - 1 maggio",
+            text: `Introduzione
+V. O Dio, vieni a salvarmi.
+R. Signore, vieni presto in mio aiuto. 
+Gloria al Padre e al Figlio e allo Spirito Santo. Come era nel principio, e ora e sempre, nei secoli dei secoli. Amen. Alleluia.
 
-<h3>1 TAPPA PARTIRE – “Non sei fatto per restare”</h3>
-<b>Dai discorsi di papa Francesco</b>
-Camminare. L’uomo è un essere in cammino. Per tutta la vita è chiamato a mettersi in cammino, in continua uscita da dove si trova: da quando esce dal grembo della madre a quando passa da un’età della vita a un’altra; dal momento in cui lascia la casa dei genitori fino a quando esce da questa esistenza terrena. Il cuore ci invita ad andare, a raggiungere una meta. Ma camminare è una disciplina, una fatica, servono pazienza quotidiana e allenamento costante. Occorre rinunciare a tante strade per scegliere quella che conduce alla meta e ravvivare la memoria per non smarrirla. Camminare richiede l’umiltà di tornare sui propri passi, quando è necessario, e la cura per i compagni di viaggio, perché solo insieme si cammina bene. Camminare, insomma, esige una conversione continua di sé. Per questo tanti vi rinunciano, preferendo la quiete domestica, dove curare comodamente i propri affari senza esporsi ai rischi del viaggio. Ma così ci si aggrappa a sicurezze effimere, che non danno quella pace e quella gioia cui il cuore aspira, e che si trovano solo uscendo da sé stessi.
+Inno: E’ bello lodarti
+È bello cantare il Tuo amore, è bello lodare il Tuo nome. È bello cantare il Tuo amore, è bello lodarti, Signore, è bello cantare a Te! (2 volte)
 
-<b>Guida:</b> Siamo fatti per camminare. Eppure a volte ci fermiamo, per paura, per comodità, perché ogni passo chiede coraggio. Camminare è scegliere, è fidarsi anche quando la strada non è tutta chiara. Stasera vogliamo rimetterci in cammino con Lui e affidargli i nostri passi. Dove ti sei fermato? A che punto sei del cammino? Come ti senti davvero? Ora lasciamo un breve spazio di silenzio, perché queste domande entrino nel cuore, poi il sacerdote, portando Gesù Eucaristia, si incamminerà verso l’esterno e noi durante il canto seguiremo Gesù. Il nostro muoverci verso la prossima tappa sarà un segno concreto: non vogliamo restare fermi, vogliamo camminare con Lui, dietro di Lui, portandolo per le strade. 
-Canto
+Tu, che sei l’Amore infinito che neppure il cielo può contenere, Ti sei fatto uomo, Tu sei venuto qui ad abitare in mezzo a noi, allora: 
+È bello cantare il tuo amore…
 
-<h3>2 LUNGO LA VIA - “Gesù si accostò e camminava con loro”</h3>
-<b>Dal Vangelo secondo Luca</b>
-In quello stesso giorno due dei discepoli erano in cammino verso un villaggio chiamato Emmaus e conversavano tra loro di tutto ciò che era accaduto. Mentre discorrevano insieme, Gesù in persona si accostò e camminava con loro, ma i loro occhi erano incapaci di riconoscerlo. Ed egli, lungo la via, spiegò loro nelle Scritture ciò che si riferiva a lui. Giunti al villaggio, lo invitarono dicendo: «Resta con noi, perché si fa sera». Quando fu a tavola con loro, prese il pane, pronunciò la benedizione, lo spezzò e lo diede loro. Allora si aprirono i loro occhi e lo riconobbero. Ed essi dissero l’uno all’altro: «Non ardeva forse il nostro cuore mentre conversava con noi lungo il cammino?». E senza indugio partirono e tornarono a Gerusalemme per annunciare che il Signore è davvero risorto.
+Tu che conti tutte le stelle e le chiami ad una ad una per nome, da mille sentieri ci hai radunati qui, ci hai chiamati figli Tuoi, allora: 
+È bello cantare il tuo amore, è bello lodare il Tuo nome. È bello cantare il Tuo amore, è bello lodarti, Signore, è bello cantare a Te! (2 volte)
 
-<b>Dagli scritti di Sant’Agostino</b>
-Qual è dunque il contenuto specifico che la presente lettura offre a noi? Davvero importante, se lo comprendiamo. Gesù appare: i discepoli lo vedevano con gli occhi, ma senza riconoscerlo. Il Maestro camminava con loro per via, anzi egli stesso era la via, ma loro non camminavano per quella via. Egli stesso dovette constatare che erano andati fuori della via. Nel tempo trascorso con loro prima della passione, infatti, egli aveva predetto ogni cosa: che avrebbe patito, che sarebbe morto, che il terzo giorno sarebbe risorto. Aveva predetto tutto, ma la sua morte fu per loro come una perdita di memoria. Quando lo videro sospeso al patibolo furono così turbati che dimenticarono i suoi insegnamenti, non attesero più la sua resurrezione, non rimasero saldi nelle sue promesse.
-Dicono: Noi speravamo che egli fosse il redentore d'Israele. O discepoli, l'avevate sperato. Vuol dire che adesso non lo sperate più. Ecco, Cristo vive, ma in voi la speranza è morta. Sì, Cristo è veramente vivo; ma questo Cristo vivo trova morti i cuori dei discepoli. Apparve e non apparve ai loro occhi; era visibile e insieme nascosto. In effetti, se non lo si vedeva, come potevano udire le sue domande e rispondere ad esse? Camminava per via come un compagno di viaggio, anzi era lui che li conduceva. Quindi lo vedevano, ma non erano in grado di riconoscerlo. I loro occhi - abbiamo così inteso - erano impediti dal riconoscerlo. Erano impediti non di vederlo ma di riconoscerlo.
+1 ant. Crea in me, o Dio, un cuore puro, rinnova in me uno spirito saldo.
 
-<b>Guida:</b> Anche noi, come i discepoli di Emmaus, a volte camminiamo con il cuore stanco, pieni di dubbi e di domande. Ci sono momenti in cui la strada sembra difficile e possiamo sentirci soli. Ma il Vangelo ci ricorda che Gesù cammina accanto a noi, anche quando non riusciamo a riconoscerlo. E ci dona dei compagni di viaggio, perché la fede non si vive da soli. Per questo, come segno di questo cammino condiviso, prendiamoci per mano e, come una sola famiglia, insieme cantiamo la preghiera del Padre Nostro
+Salmo 50
+Pietà di me, o Dio, secondo la tua misericordia; nel tuo grande amore cancella il mio peccato. Lavami da tutte le mie colpe, mondami dal mio peccato. Riconosco la mia colpa, il mio peccato mi sta sempre dinanzi. 
+Contro di te, contro te solo ho peccato, quello che è male ai tuoi occhi, io l’ho fatto; perciò sei giusto quando parli, retto nel tuo giudizio. 
+Ecco, nella colpa sono stato generato, nel peccato mi ha generato mia madre. Ma tu vuoi la sincerità del cuore e nell’intimo mi insegni la sapienza. 
+Purificami con issopo e sarò mondato; lavami e sarò più bianco della neve. Fammi sentire gioia e letizia; esulteranno le ossa che hai spezzato. 
+Distogli lo sguardo dai miei peccati, cancella tutte le mie colpe. Crea in me, o Dio, un cuore puro, rinnova in me uno spirito saldo. 
+Non respingermi dalla tua presenza e non privarmi del tuo Santo Spirito. Rendimi la gioia di essere salvato, sostiene in me un animo generoso. 
+Insegnerò agli erranti le tue vie e i peccatori a te ritorneranno. Liberami dal sangue, Dio, mia salvezza, la mia lingua esalterà la tua giustizia. 
+Signore, apri le mie labbra e la mia bocca proclami la tua lode, poiché non gradisci il sacrificio e se offro olocausti, non li accetti. 
+Uno spirito contrito è sacrificio a Dio, un cuore affranto e umiliato tu, o Dio, non disprezzi. 
+Nel tuo amore fa grazia a Sion, rialza le mura di Gerusalemme. Allora gradirai i sacrifici prescritti, l’olocausto e l’intera oblazione, allora immoleranno vittime sopra il tuo altare.
 
-<h3>3 TAPPA RICONCILIARSI – “Ripartire insieme”</h3>
-<b>Dal Vangelo secondo Matteo</b>
-Avete inteso che fu detto: Occhio per occhio e dente per dente. Ma io vi dico di non opporvi al malvagio; anzi, se uno ti dà uno schiaffo sulla guancia destra, tu porgi gli anche l’altra, e a chi vuole portarti in tribunale e toglierti la tunica, tu lascia anche il mantello. E se uno ti costringerà ad accompagnarlo per un miglio, tu con lui fanne due. Dà a chi ti chiede, e a chi desidera da te un prestito non voltare le spalle. Avete inteso che fu detto: Amerai il tuo prossimo e odierai il tuo nemico. Ma io vi dico: amate i vostri nemici e pregate per quelli che vi perseguitano, affinché siate figli del Padre vostro che è nei cieli; egli fa sorgere il suo sole sui cattivi e sui buoni, e fa piovere sui giusti e sugli ingiusti. Infatti, se amate quelli che vi amano, quale ricompensa ne avete? Non fanno così anche i pubblicani? E se date il saluto soltanto ai vostri fratelli, che cosa fate di straordinario? Non fanno così anche i pagani? Voi, dunque, siate perfetti come è perfetto il Padre vostro celeste.
+1 ant. Crea in me, o Dio, un cuore puro, rinnova in me uno spirito saldo.
 
-<b>Lettore1:</b> Nulla rende gli uomini così forti nel cammino come la pace tra di loro. Dove c’è carità, lì abita Cristo; dove i fratelli vivono uniti, lì il Signore cammina in mezzo a loro.
-
-<b>Guida:</b> Nel cammino della vita non mancano le fatiche: a volte ci si ferma, a volte ci si allontana, a volte il cuore perde la pace. Ma il Signore ci chiama sempre a ritrovarci e a riprendere la strada insieme. Prima di continuare il nostro cammino, compiamo allora un gesto semplice ma vero: riconoscerci fratelli. Scambiamoci ora un segno di pace, una stretta di mano, uno sguardo, un abbraccio, perché chi cammina con Cristo non lascia indietro nessuno.
-
-<h3>4 TAPPA ANDARE – Destinazione mondo</h3>
-<b>Dal Vangelo secondo Matteo</b>
-In quel tempo, gli undici discepoli andarono in Galilea, sul monte che Gesù aveva loro indicato. Quando lo videro, si prostrarono. Essi però dubitarono. Gesù si avvicinò e disse loro: «A me è stato dato ogni potere in cielo e sulla terra. Andate dunque e fate discepoli tutti i popoli, battezzandoli nel nome del Padre e del Figlio e dello Spirito Santo, insegnando loro a osservare tutto ciò che vi ho comandato. Ed ecco, io sono con voi tutti i giorni, fino alla fine del mondo».
-
-<b>Commento del Sacerdote</b>
-
-<b>Dai Discorsi di Papa Leone ai giovani</b>
-Carissimi giovani, forse vi rammaricate di aver ereditato un mondo lacerato da guerre e sfigurato dalle ingiustizie sociali. Eppure c’è speranza, in voi risiede speranza! Voi avete un dono, che spesso a noi adulti sembra ormai sfuggire. Voi avete speranza! Voi avete il tempo! Avete più tempo per sognare, organizzare e compiere il bene. Voi siete il presente e tra le vostre mani già si sta costruendo il futuro! E avete l’entusiasmo per cambiare il corso della storia! La vera resistenza al male non è il male, ma l’amore, capace di guarire le proprie ferite, mentre si curano quelle degli altri.
-
-<b>Guida:</b> Il mondo che abitiamo è spesso ferito, segnato da guerre, ingiustizie e solitudini. Ma il Signore affida proprio a noi la missione di portare luce: ognuno può essere una piccola luce nel mondo. Ai piedi dell’altare è posto un mappamondo. Ora ciascuno riceverà un lumino e lo deporrà attorno ad esso. È il segno della nostra missione: portare la luce di Cristo nel mondo, nei luoghi della nostra vita.
-
-<b>Preghiera finale</b>
-Signore Gesù,
-questa sera abbiamo camminato con Te
-e abbiamo scoperto che il cammino non finisce qui.
-La nostra destinazione è il mondo:
-le nostre case, le nostre amicizie,
-i luoghi della vita di ogni giorno.
-Donaci il coraggio di vivere ciò che ci ha insegnato
-Luigi Guanella: “fermarsi non si può quando c’è amore da donare e bene da compiere”.
-Fa’ che la nostra vita diventi missione,
-perché chi incontra Te
-non può restare fermo.
-Amen.`;
-
-        // --- TESTO INNO PRINCIPALE ---
-        const LYRICS_INNO = `From far and wide to gather in this place
-We spread our wings and here we are, 
-And with Mary proclaiming our Yes 
-We seek to serve and follow the will 
-Of the Lord, our Father 
-Chiamati ad essere come Cristo Gesù, 
-Vogliamo dare, diventare, 
-Docili al sì, essere come Maria.
-Ritornello: 
-Todos vão ouvir a nossa voz, 
-Levantemos braços, há pressa no ar. 
-Jesus vive e não nos deixa sós: 
-Não mais deixaremos de amar.
-Tú que te buscas saber quién eres 
-parte a descubrir, ven a ver lo que vi. 
-Ven con nosotros a mirar más allá, 
-de lo que haces y que no te deja 
-reír y amar. 
-Oublie le passé, ne dis pas non. 
-Écoute donc ton coeur, 
-Et pars sans peur sur cette mission.
-[Ritornello]
-È stata Maria ad accogliere per prima 
-La grande sorpresa della vita per sempre. 
-Fiduciosa e semplice, volle ricevere 
-il grande mistero di un Dio che è 
-Per te e per me 
-No puedo callar, no puedo dejar 
-de cantar: “Mi Señor, 
-cuenta conmigo, ¡no más callaré!”
-[Ritornello]
-Sans aucun doute sur sa mission, 
-Si jeune, Marie quitte promptement 
-Sa maison et part dans les montagnes 
-Voir Elisabeth et trouve immédiatement 
-Salutation, communion. 
-Le fruit est béni, c'est mon Seigneur! 
-And I want to hear: You trusted in my word and happiness 
-Is yours`;
-
-        // --- DATABASE LODI ---
-        const LODI = [
-            {
-                num: 1,
-                title: "Lodi mattutine - 1 maggio",
-                text: `Introduzione 
-V. O Dio, vieni a salvarmi. 
-R. Signore, vieni presto in mio aiuto. Gloria al Padre e al Figlio e allo Spirito Santo. Come era nel principio, e ora e sempre, nei secoli dei secoli. 
-
-Amen. Alleluia.
-
-1 ant.
-Crea in me, o Dio, un cuore puro,
-rinnova in me uno spirito saldo.
-
-Inno 
-Santa e dolce dimora, 
-dove Gesù fanciullo nasconde la sua gloria!
-Giuseppe addestra all'umile arte 
-del falegname il Figlio dell'Altissimo.
-Accanto a lui Maria fa lieta 
-la sua casa di una limpida gioia.
-La mano del Signore li guida 
-e li protegge nei giorni del mistero.
-Sia lode alla Trinità, 
-che ha colmato di grazia la santa Famiglia. 
-
-Amen.
-
-Salmo 50: 
-Pietà di me, o Dio, secondo la tua misericordia; 
-nel tuo grande amore cancella il mio peccato.
-Lavami da tutte le mie colpe, 
-mondami dal mio peccato.
-
-Riconosco la mia colpa, 
-il mio peccato mi sta sempre dinanzi.
-Contro di te, contro te solo ho peccato, 
-quello che è male ai tuoi occhi, 
-io l’ho fatto; perciò sei giusto quando parli, 
-retto nel tuo giudizio.
-Ecco, nella colpa sono stato generato,
- nel peccato mi ha generato mia madre. 
-
-Ma tu vuoi la sincerità del cuore 
-e nell’intimo mi insegni la sapienza.
-Purificami con issopo e sarò mondato; 
-lavami e sarò più bianco della neve. 
-
-Fammi sentire gioia e letizia; 
-esulteranno le ossa che hai spezzato. 
-Distogli lo sguardo dai miei peccati, 
-cancella tutte le mie colpe, 
-
-Crea in me, o Dio, un cuore puro,
- rinnova in me uno spirito saldo. 
-Non respingermi dalla tua presenza
-e non privarmi del tuo Santo Spirito.
-
-Rendimi la gioia di essere salvato, 
-sostiene in me un animo generoso.
-Insegnerò agli erranti le tue vie 
-e i peccatori a te ritorneranno. 
-
-Liberami dal sangue, Dio, mia salvezza, 
-la mia lingua esalterà la tua giustizia. 
-Signore, apri le mie labbra e la mia bocca 
-proclami la tua lode, poiché non gradisci il sacrificio 
-e se offro olocausti, non li accetti. 
-
-Uno spirito contrito è sacrificio a Dio, 
-un cuore affranto e umiliato tu, o Dio, non disprezzi.
-Nel tuo amore fa grazia a Sion, 
-rialza le mura di Gerusalemme. 
-Allora gradirai i sacrifici prescritti, 
-l’olocausto e l’intera oblazione, 
-allora immoleranno vittime sopra il tuo altare.
-
-1 ant.
-Crea in me, o Dio, un cuore puro,
-rinnova in me uno spirito saldo.
-
-2 ant.
-Rallegrati Gerusalemme:
-in te si raduneranno i popoli e benediranno il Signore.
-
-Lettura Breve (Col 3, 23-24)
-Qualunque cosa facciate, fatela di cuore come per il Signore e non per gli uomini, 
-sapendo che in ricompensa riceverete dal Signore l'eredità. 
-Servite a Cristo Signore.
+Lettura Breve (Gal 2, 20)
+Sono stato crocifisso con Cristo e non sono più io che vivo, ma Cristo vive in me. Questa vita che vivo nella carne io la vivo nella fede del Figlio di Dio, che mi ha amato e ha dato se stesso per me.
 
 Responsorio breve
 R. Invocherò l’Altissimo: da lui ogni mio bene.
-Invocherò l’altissimo: da lui ogni mio bene.
+V. Dal cielo manderà la sua salvezza: da lui ogni mio bene.
+Gloria la Padre e al Figlio e allo Spirito Santo. Invocherò l’Altissimo: da lui ogni mio bene.
 
-V. Dal cielo manderà la sua salvezza:
-da lui ogni mio bene.
-
-Gloria la Padre e al Figlio e allo Spirito Santo.
-Invocherò l’Altissimo: da lui ogni mio bene
-
-Antifona: 
-Uomo fedele e ammirevole, 
-nella sua vita laboriosa Giuseppe fu caro a Dio, alleluia. 
+Antifona al Benedictus: 
+Nella sua misericordia il nostro Dio ci ha visitati dall’alto come sole che sorge.
 
 Cantico di Zaccaria (Benedictus)
-Benedetto il Signore Dio d'Israele,
-perché ha visitato e redento il suo popolo,
-e ha suscitato per noi una salvezza potente
-nella casa di Davide, suo servo.
+Benedetto il Signore Dio d'Israele, perché ha visitato e redento il suo popolo, e ha suscitato per noi una salvezza potente nella casa di Davide, suo servo. 
+Come aveva promesso per bocca dei suoi santi profeti d'un tempo: salvezza dai nostri nemici e dalle mani di quanti ci odiano. 
+Così egli ha concesso misericordia ai nostri padri e si è ricordato della sua santa alleanza, del giuramento fatto ad Abramo, nostro padre, di concederci, liberati dalle mani dei nemici, di servirlo senza timore, in santità e giustizia al suo cospetto, per tutti i nostri giorni. 
+E tu, bambino, sarai chiamato profeta dell'Altissimo perché andrai innanzi al Signore a preparargli le strade, per dare al suo popolo la conoscenza della salvezza nella remissione dei suoi peccati. 
+Grazie alla bontà misericordiosa del nostro Dio, per cui verrà a visitarci dall'alto un sole che sorge, per rischiarare quelli che stanno nelle tenebre e nell'ombra di morte e dirigere i nostri passi sulla via della pace. Amen.
 
-Come aveva promesso
-per bocca dei suoi santi profeti d'un tempo:
-salvezza dai nostri nemici
-e dalle mani di quanti ci odiano.
-
-Così egli ha concesso misericordia ai nostri padri
-e si è ricordato della sua santa alleanza,
-del giuramento fatto ad Abramo, nostro padre,
-di concederci, liberati dalle mani dei nemici,
-di servirlo senza timore, in santità e giustizia
-al suo cospetto, per tutti i nostri giorni.
-
-E tu, bambino, sarai chiamato profeta dell'Altissimo
-perché andrai innanzi al Signore a preparargli le strade,
-per dare al suo popolo la conoscenza della salvezza
-nella remissione dei suoi peccati.
-
-Grazie alla bontà misericordiosa del nostro Dio,
-per cui verrà a visitarci dall'alto un sole che sorge,
-per rischiarare quelli che stanno nelle tenebre
-e nell'ombra di morte
-e dirigere i nostri passi sulla via della pace. 
-
-Amen.
-
-Invocazioni 
+Invocazioni
 Rivolgiamo la nostra preghiera a Dio, Padre provvidente, e diciamo insieme: 
-R. Ascoltaci, o Signore!
+R. Conferma ciò che hai operato in noi, Signore.
 
-Padre santo, che hai rivelato a san Giuseppe il mistero di Cristo nascosto nei secoli eterni, 
-- donaci di conoscere e di amare sempre più il tuo Figlio fatto uomo per la nostra salvezza. 
+- Dio di misericordia, guidaci sulla via della santità, perché cerchiamo sempre ciò che è vero, buono e giusto.
+- Non abbandonarci, o Dio, per il tuo grande amore, non dimenticare la tua alleanza.
+- Accogli l’offerta del nostro cuore contrito e umiliato, fa’ che non siano confusi quelli che si affidano a te.
+- Tu che ci hai resi partecipi della missione profetica del Cristo, fa’ che annunziamo con le parole e le opere le meraviglie del tuo amore.
 
-Tu che nutri gli uccelli dell'aria e vesti i gigli del campo, 
-- dona a tutti gli uomini il pane quotidiano. 
+Padre Nostro
 
-Hai affidato alle nostre mani l'opera della tua creazione, 
-- concedi agli operai, agli artigiani, ai contadini un'adeguata ricompensa delle loro fatiche.
+Orazione Finale
+Concedi al tuo popolo, o Dio, l’abbondanza dei tui doni, perché sia sempre fedele agli impegni del suo battesimo, e viva nella prosperità e nella pace in attesa della gioia eterna. Per il nostro Signore.
 
-O fonte di ogni santità, che chiami tutti gli uomini a configurarsi a te, 
-- concedi a noi, per intercessione di san Giuseppe, di camminare in santità e giustizia tutti i giorni della nostra vita. 
-
-Guarda con bontà ai moribondi e ai defunti, 
-- fa' che siano eternamente felici con Gesù, Giuseppe e Maria. 
-
-Padre Nostro 
-
-Orazione Finale 
-O Dio, che nella tua provvidenza hai chiamato l'uomo a cooperare con il lavoro al disegno della creazione, fa' che per l'intercessione e l'esempio di san Giuseppe siamo fedeli alle responsabilità che ci affidi, e riceviamo la ricompensa che ci prometti. Per il nostro Signore Gesù Cristo, tuo Figlio, che è Dio, e vive e regna con te, nell'unità dello Spirito Santo, per tutti i secoli dei secoli. Amen.
-
-Conclusione 
+Conclusione
 V. Il Signore ci benedica, ci preservi da ogni male, e ci conduca alla vita eterna. 
 R. Amen.`
-            },
-            {
-                num: 2,
-                title: "Lodi mattutine – 2 maggio",
-                text: `Introduzione 
-V. O Dio, vieni a salvarmi. 
+        },
+        {
+            num: 2,
+            title: "Lodi mattutine - 2 maggio",
+            text: `Introduzione
+V. O Dio, vieni a salvarmi.
 R. Signore, vieni presto in mio aiuto. 
-Gloria al Padre e al Figlio e allo Spirito Santo. 
-Come era nel principio, e ora e sempre, nei secoli dei secoli. 
-Amen. Alleluia.
+Gloria al Padre e al Figlio e allo Spirito Santo. Come era nel principio, e ora e sempre, nei secoli dei secoli. Amen. Alleluia.
 
-Inno 
-Aurora di luce rifulge nell'alto, 
-il cielo fa eco a canti di lode, 
-la terra si unisce a un coro di gioia, 
-l'inferno profondo nell'ombra si duole.
+Inno: Quale gioia è star con Te Gesù
+Ogni volta che Ti cerco, ogni volta che Ti invoco, sempre mi accogli, Signor. Grandi sono i Tuoi prodigi, Tu sei buono verso tutti, Santo, Tu regni tra noi. 
 
-Il Cristo ha distrutto la morte e il peccato, 
-e libero e forte, dal grembo del buio, 
-ridona la vita ai padri in attesa, 
-che sciolgono al vento un inno di gloria.
+Quale gioia è star con Te, Gesù, vivo e vicino; bello è dar lode a Te: Tu sei il Signor. Quale dono è aver creduto in Te, che non mi abbandoni; io per sempre abiterò la Tua casa, mio Re. 
 
-Sia lode e onore a Cristo risorto, 
-al Padre e allo Spirito Santo, 
-nei secoli eterni e in ogni dimora, 
-un cantico nuovo di gioia e di pace. 
-Amen.
+Hai guarito il mio dolore, hai cambiato questo cuore: oggi rinasco, Signor. Grandi sono i Tuoi prodigi, Tu sei buono verso tutti, Santo, Tu regni tra noi. (Rit)
 
-Salmodia 
-I salmi si prendono dal Sabato della IV settimana del Salterio.
+Hai salvato la mia vita, hai aperto la mia bocca; canto per Te, mio Signor. Grandi sono i Tuoi prodigi, Tu sei buono verso tutti, Santo, Tu regni tra noi. (Rit)
 
-Salmo 91 
-È bello dar lode al Signore 
-e cantare al tuo nome, o Altissimo, 
-annunziare al mattino il tuo amore, 
-la tua fedeltà lungo la notte, 
-sull'arpa a dieci corde e sulla lira,
-con canti sulla cetra.
+1 ant. È bello dar lode all’Altissimo, annunziare al mattino il suo amore.
 
-Poiché mi rallegri, Signore con le tue meraviglie, 
-esulto per l'opera delle tue mani.
-Come sono grandi le tue opere, Signore, 
-quanto profondi i tuoi pensieri!
+Salmo 91
+È bello dar lode al Signore e cantare al tuo nome, o Altissimo, annunziare al mattino il tuo amore, la tua fedeltà lungo la notte, sull'arpa a dieci corde e sulla lira, con canti sulla cetra. 
+Poiché mi rallegri, Signore con le tue meraviglie, esulto per l'opera delle tue mani. Come sono grandi le tue opere, Signore, quanto profondi i tuoi pensieri! L'uomo insensato non intende e lo stolto non capisce: se i peccatori germogliano come l'erba e fioriscono tutti i malfattori, li attende una rovina eterna: ma tu sei l'eccelso per sempre, o Signore. 
+Ecco, i tuoi nemici, o Signore, ecco, i tuoi nemici periranno, saranno dispersi tutti i malfattori. Tu mi doni la forza di un bufalo, mi cospargi di olio splendente. I miei occhi disprezzeranno i miei nemici, e contro gli iniqui che mi assalgono i miei orecchi udranno cose infauste. 
+Il giusto fiorirà come palma, crescerà come cedro del Libano; piantati nella casa del Signore, fioriranno negli atri del nostro Dio. Nella vecchiaia daranno ancora frutti, saranno vegeti e rigogliosi, per annunziare quanto è retto il Signore: mia roccia, in lui non c'è ingiustizia.
 
-L'uomo insensato non intende 
-e lo stolto non capisce:
-se i peccatori germogliano come l'erba 
-e fioriscono tutti i malfattori, 
-li attende una rovina eterna: 
-ma tu sei l'eccelso per sempre, o Signore.
-
-Ecco, i tuoi nemici, o Signore, 
-ecco, i tuoi nemici periranno, 
-saranno dispersi tutti i malfattori.
-
-Tu mi doni la forza di un bufalo, 
-mi cospargi di olio splendente.
-I miei occhi disprezzeranno i miei nemici, 
-e contro gli iniqui che mi assalgono 
-i miei orecchi udranno cose infauste.
-
-Il giusto fiorirà come palma, 
-crescerà come cedro del Libano;
-piantati nella casa del Signore, 
-fioriranno negli atri del nostro Dio.
-
-Nella vecchiaia daranno ancora frutti, 
-saranno vegeti e rigogliosi,
-per annunziare quanto è retto il Signore:
-mia roccia, in lui non c'è ingiustizia.
-
-Lettura Breve (Rm 14, 7-9) 
-Nessuno di noi vive per se stesso e nessuno muore per se stesso, perché se noi viviamo, viviamo per il Signore, se noi moriamo, moriamo per il Signore. Sia che viviamo, sia che moriamo, siamo dunque del Signore. Per questo infatti Cristo è morto ed è ritornato alla vita: per essere il Signore dei morti e dei vivi.
+Lettura Breve (2 Pt 3, 13-14)
+Secondo la promessa del Signore, noi aspettiamo nuovi cieli e una terra nuova nei quali avrà stavile dimora la giustizia. Perciò, carissimi, nell’attesa di questi eventi, cercate d’essere senza macchia e irreprensibili davanti a Dio, in pace. La magnanimità del Signore nostro giudicatela come salvezza.
 
 Responsorio breve
-R. Esultano le mie labbra cantando le tue lodi.
+R. Esultano le mie labbra cantando le tue lodi. 
 Esultano le mie labbra cantando le tue lodi.
+V. La mia lingua proclama la tua giustizia cantando le tue lodi.
+Gloria la Padre e al Figlio e allo Spirito Santo. Invocherò l’Altissimo: da lui ogni mio bene.
 
-V. La mia lingua proclama la tua giustizia
-cantando le tue lodi.
+Antifona: Guida i nostri passi, o Signore, sulla via della pace.
 
-Gloria la Padre e al Figlio e allo Spirito Santo.
-Invocherò l’Altissimo: da lui ogni mio bene
+Cantico di Zaccaria (Benedictus)
+Benedetto il Signore Dio d'Israele, perché ha visitato e redento il suo popolo, e ha suscitato per noi una salvezza potente nella casa di Davide, suo servo. 
+Come aveva promesso per bocca dei suoi santi profeti d'un tempo: salvezza dai nostri nemici e dalle mani di quanti ci odiano. 
+Così egli ha concesso misericordia ai nostri padri e si è ricordato della sua santa alleanza, del giuramento fatto ad Abramo, nostro padre, di concederci, liberati dalle mani dei nemici, di servirlo senza timore, in santità e giustizia al suo cospetto, per tutti i nostri giorni. 
+E tu, bambino, sarai chiamato profeta dell'Altissimo perché andrai innanzi al Signore a preparargli le strade, per dare al suo popolo la conoscenza della salvezza nella remissione dei suoi peccati. 
+Grazie alla bontà misericordiosa del nostro Dio, per cui verrà a visitarci dall'alto un sole che sorge, per rischiarare quelli che stanno nelle tenebre e nell'ombra di morte e dirigere i nostri passi sulla via della pace.
 
-Antifona:
-Rallegratevi ed esultate: 
-grande è la vostra ricompensa nei cieli, alleluia.
+Invocazioni
+Adoriamo Dio Padre, che nel Cristo, suo Figlio, ha ridato al mondo la speranza e la vita. Animati da questa certezza diciamo: 
+R. Signore ascolta la nostra preghiera.
 
-Cantico di Zaccaria
-Benedetto il Signore Dio d'Israele,
-perché ha visitato e redento il suo popolo,
-e ha suscitato per noi una salvezza potente
-nella casa di Davide, suo servo.
+- Dio, Padre di tutti, che ci hai gatto giungere all’alba del nuovo giorno, fa’ che viviamo nell’amore del Cristo a lode e gloria del tuo nome.
+- Rafforza in noi la fede, la speranza e la carità, che lo Spirito Santo ha seminato nei nostri cuori.
+- Il nostro sguardo sia sempre rivolto a te, perché rispondiamo prontamente alla tua chiamata.
+- Salvaci dalle insidie e dalle seduzioni del male, difendici da ogni pericolo nel cammino verso la patria del cielo.
 
-Come aveva promesso
-per bocca dei suoi santi profeti d'un tempo:
-salvezza dai nostri nemici
-e dalle mani di quanti ci odiano.
+Padre Nostro
 
-Così egli ha concesso misericordia ai nostri padri
-e si è ricordato della sua santa alleanza,
-del giuramento fatto ad Abramo, nostro padre,
-di concederci, liberati dalle mani dei nemici,
-di servirlo senza timore, in santità e giustizia
-al suo cospetto, per tutti i nostri giorni.
+Orazione Finale
+O Dio, vera luce e giorno senza tramonto, accogli la lode mattutina del tuo popolo e fa’ che il nostro spirito, libero dalle tenebre della colpa, risplenda nel fulgore della tua venuta. Per il nostro Signore.
 
-E tu, bambino, sarai chiamato profeta dell'Altissimo
-perché andrai innanzi al Signore a preparargli le strade,
-per dare al suo popolo la conoscenza della salvezza
-nella remissione dei suoi peccati.
-
-Grazie alla bontà misericordiosa del nostro Dio,
-per cui verrà a visitarci dall'alto un sole che sorge,
-per rischiarare quelli che stanno nelle tenebre
-e nell'ombra di morte
-e dirigere i nostri passi sulla via della pace.
-
-Invocazioni 
-Cristo, buon pastore, ha dato la vita per le sue pecore. 
-A lui innalziamo la nostra preghiera: R. Pasci il tuo popolo, Signore!
-
-Cristo, che nei santi pastori ci hai rivelato la tua misericordia e il tuo amore, 
-- continua a manifestarti a noi per mezzo di loro. 
-
-Tu, che attraverso i tuoi vicari continui a svolgere il ministero di pastore delle anime, 
-- non cessare di guidarci tu stesso. 
-
-Tu, che nei santi vescovi, ministri della parola, ci istruisci e ci guidi, 
-- fa' che essi ci aiutino a cercare la verità e a viverla nell'amore. 
-
-Tu, che hai affidato ai ministri della Chiesa la tua parola di salvezza e di gioia, 
-- rinnova il prodigio della Pentecoste nei cuori dei credenti. 
-
-Padre Nostro 
-
-Orazione Finale 
-Dio onnipotente ed eterno, che hai suscitato nella tua Chiesa il vescovo sant'Atanasio, insigne difensore della divinità del tuo Figlio, concedi anche a noi, per la sua intercessione e i suoi insegnamenti, di crescere sempre nella tua conoscenza e nel tuo amore. Per il nostro Signore Gesù Cristo, tuo Figlio, che è Dio, e vive e regna con te, nell'unità dello Spirito Santo, per tutti i secoli dei secoli. Amen.
-
-Conclusione 
+Conclusione
 V. Il Signore ci benedica, ci preservi da ogni male, e ci conduca alla vita eterna. 
 R. Amen.`
-            }
-        ];
-
-        let currentLodiIndex = 0; 
-
-        // --- DATABASE CANTI ---
-        const CANTI = [
-            { num: 1, title: "1. Canto dell’amore", text: `Se dovrai attraversare il deserto\nnon temere io sarò con te\nse dovrai camminare nel fuoco\nla sua fiamma non ti brucerà\nseguirai la mia luce nella notte\nsentirai la mia forza nel cammino\nio sono il tuo Dio, il Signore.\n\nSono io che ti ho fatto e plasmato\nti ho chiamato per nome\nio da sempre ti ho conosciuto\ne ti ho dato il mio amore\nperché tu sei prezioso ai miei occhi\nvali più del più grande dei tesori\nio sarò con te dovunque andrai\n\nNon pensare alle cose di ieri\ncose nuove fioriscono già\naprirò nel deserto sentieri\ndarò acqua nell'aridità\nperché tu sei prezioso ai miei occhi\nvali più del più grande dei tesori\nio sarò con te dovunque andrai\nperché tu sei prezioso ai miei occhi\nvali più del più grande dei tesori\nio sarò con te dovunque andrai.\n\nIo ti sarò accanto sarò con te\nper tutto il tuo viaggio sarò con te\nio ti sarò accanto sarò con te\nper tutto il tuo viaggio sarò con te.` },
-            { num: 2, title: "2. Sono qui a lodarti", text: `Luce del mondo, nel buio del cuore\nVieni ed illuminami\nTu mia sola speranza di vita\nResta per sempre con me\n\nSono qui a lodarti, qui per adorarti\nQui per dirti che Tu sei il mio Dio\nE solo Tu sei santo, sei meraviglioso\nDegno e glorioso sei per me\n\nRe della storia e Re nella gloria\nSei sceso in terra fra noi\nCon umiltà il Tuo trono hai lasciato\nPer dimostrarci il Tuo amor\n\nSono qui a lodarti, qui per adorarti\nQui per dirti che Tu sei il mio Dio\nE solo Tu sei santo, sei meraviglioso\nDegno e glorioso sei per me\nNon so quanto è costato a Te\nMorire in croce, lì per me` },
-            { num: 3, title: "3. Ave Maria", text: `Donna dell’attesa e madre di speranza\nOra pro nobis.\nDonna del sorriso e madre del silenzio\nOra pro nobis.\nDonna di frontiera e madre dell’ardore\nOra pro nobis.\nDonna del riposo e madre del sentiero\nOra pro nobis.\n\nAve Maria, Ave.\nAve Maria, Ave.\n\nDonna del deserto e madre del respiro\nOra pro nobis.\nDonna della sera e madre del ricordo\nOra pro nobis.\nDonna del presente e madre del ritorno\nOra pro nobis.\nDonna della terra e madre dell’amore\nOra pro nobis.\n\nAve Maria, Ave.\nAve Maria, Ave.` },
-            { num: 4, title: "4. Come fuoco vivo", text: `Come fuoco vivo si accende in noi\nun’immensa felicità\nche mai più nessuno ci toglierà\nperchè Tu sei ritornato.\nChi potrà tacere, da ora in poi,\nche sei Tu in cammino con noi.\nChe la morte è vinta per sempre,\nche ci hai ridonato la vita\n\nSpezzi il pane davanti a noi\nmentre il sole è al tramonto:\nora gli occhi ti vedono,\nsei Tu ! Resta con noi.\n\nCome fuoco vivo si accende in noi\nun’immensa felicità\nche mai più nessuno ci toglierà\nperchè Tu sei ritornato.\nChi potrà tacere, da ora in poi,\nche sei Tu in cammino con noi.\nChe la morte è vinta per sempre,\nche ci hai ridonato la vita\n\nE per sempre ti mostrerai\nin quel gesto d’amore:\nmani che ancora spezzano\npane d’eternità.\n\nCome fuoco vivo si accende in noi\nun’immensa felicità\nche mai più nessuno ci toglierà\nperchè Tu sei ritornato.\nChi potrà tacere, da ora in poi,\nche sei Tu in cammino con noi.\nChe la morte è vinta per sempre,\nche ci hai ridonato la vita` },
-            { num: 5, title: "5. Beati i Misericordiosi – Inno GMG 2016", text: `Sei sceso dalla tua immensità\nin nostro aiuto.\nMisericordia scorre da te\nsopra tutti noi.\nPersi in un mondo d’oscurità\nlì Tu ci trovi.\nNelle tue braccia ci stringi e poi\ndai la vita per noi.\n\nBeato è il cuore che perdona!\nMisericordia riceverà da Dio in cielo!\n\nSolo il perdono riporterà\npace nel mondo.\nSolo il perdono ci svelerà\ncome figli tuoi.\n\nBeato è il cuore che perdona!\nMisericordia riceverà da Dio in cielo!\n\nCol sangue in croce hai pagato Tu\nle nostre povertà.\nSe noi ci amiamo e restiamo in te\nil mondo crederà!\n\nBeato è il cuore che perdona!\nMisericordia riceverà da Dio in cielo! (2v)` },
-            { num: 6, title: "6. Come tu mi vuoi", text: `Eccomi Signor, vengo a Te mio Re, che si compia in me la Tua volontà.\nEccomi Signore, vengo a Te mio Dio, plasma il cuore mio e di Te vivrò.\nSe Tu lo vuoi Signore manda me e il Tuo nome annuncerò.\n\nRit: Come Tu mi vuoi io sarò, dove Tu mi vuoi io andrò.\nQuesta vita io voglio donarla a Te per dar gloria al Tuo nome mio re.\nCome Tu mi vuoi io sarò, dove Tu mi vuoi io andrò,\nse mi guida il Tuo amore paura non ho\nper sempre io sarò, come Tu mi vuoi.\n\nEccomi Signor, vengo a Te mio Re, che si compia in me la Tua volontà.\nEccomi Signore, vengo a Te mio Dio, plasma il cuore mio e di Te vivrò.\nTra le tue mani mai più vacillerò e strumento tuo sarò.` },
-            { num: 7, title: "7. Adoro Te", text: `Sei qui davanti a me, o mio Signore, sei in questa brezza che ristora il cuore,\nroveto che mai si consumerà, presenza che riempie l'anima.\n\nAdoro Te, fonte della Vita, adoro Te, Trinità infinità.\nI miei calzari leverò su questo santo suolo,\nalla presenza Tua mi prostrerò.\n\nSei qui davanti a me, o mio Signore, nella Tua grazia trovo la mia gioia.\nIo lodo, ringrazio e prego perché il mondo ritorni a vivere in Te.\n\nAdoro Te, fonte della Vita, adoro Te, Trinità infinità.\nI miei calzari leverò su questo santo suolo,\nalla presenza Tua mi prostrerò.\n\nAdoro Te, fonte della Vita, adoro Te, Trinità infinità.\nI miei calzari leverò su questo santo suolo,\nalla presenza Tua mi prostrerò, mio Signor.` },
-            { num: 8, title: "8. Resta accanto a me", text: `Ora vado sulla mia strada\ncon l’amore tuo che mi guida\no Signore ovunque io vada\nresta accanto a me.\nIo ti prego, stammi vicino\nogni passo del mio cammino\nogni notte, ogni mattino\nresta accanto a me.\n\nIl tuo sguardo puro\nsia luce per me\ne la tua parola sia voce per me.\nChe io trovi il senso del mio andare\nsolo in Te,\nnel tuo fedele amare il mio perché. Rit.\n\nFa’ che chi mi guarda\nnon veda che Te.\nFa’ che Chi mi ascolta\nnon senta che Te\ne chi pensa a me, fa’ che nel cuore\npensi a Te\ne trovi quell’amore\nche hai dato a me.` },
-            { num: 9, title: "9. Verbum Panis", text: `Prima del tempo\nprima ancora che la terra\ncominciasse a vivere\nil Verbo era presso Dio.\nVenne nel mondo\ne per non abbandonarci\nin questo viaggio ci lasciò\ntutto se stesso come pane.\nVerbum caro factum est\nVerbum panis factum est.\n\nQui spezzi ancora il pane in mezzo a noi\ne chiunque mangerà non avrà più fame.\nQui vive la tua chiesa intorno a te\ndove ognuno troverà la sua vera casa.\n\nVerbum caro factum est...\n\nPrima del tempo\nquando l'universo fu creato\ndall'oscurità\nil Verbo era presso Dio.\nVenne nel mondo\nnella sua misericordia\nDio ha mandato il Figlio suo\ntutto se stesso come pane.\n\nVerbum caro factum est... (Rit.)` },
-            { num: 10, title: "10. Quale gioia è star con te", text: `Ogni volta che ti cerco, ogni volta che t’invoco, sempre mi accogli Signor.\nGrandi sono i tuoi prodigi, Tu sei buono verso tutti, Santo Tu regni tra noi.\n\nQuale gioia è star con te Gesù vivo e vicino,\nbello è dar lode a Te, Tu sei il Signor.\nquale dono è aver creduto in Te che non mi abbandoni,\nio per sempre abiterò la Tua casa, mio Re.\n\nHai guarito il mio dolore, hai cambiato questo cuore, oggi rinasco, Signor.\nGrandi sono i tuoi prodigi, tu sei buono verso tutti, Santo Tu regni tra noi.\nRit.\nHai salvato la mia vita, hai aperto la mia bocca, canto per Te, mio Signor.\nGrandi sono i Tuoi prodigi, Tu sei buono verso tutti, Santo Tu regni tra noi.\n\nQuale gioia è star con te Gesù vivo e vicino,\nbello è dar lode a Te, Tu sei il Signor.\nquale dono è aver creduto in Te che non mi abbandoni,\nio per sempre abiterò la Tua casa, mio Re.` },
-            { num: 11, title: "11. Alle porte del cielo", text: `Con le paure, i dubbi e questa carne debole,\nCon la mia fragilità,\nHo costruito e son caduto in mille trappole,\nPur di un po' di libertà.\nE in quel mio buio ti sei rivelato, fino a condurmi qua, e….\n\nVoglio ricominciare da zero, attraversando la porta del cielo,\nE urlare al mondo spaventato e deluso:\nPuoi sperare ancora, esiste il paradiso!\nVoglio ricominciare davvero, attraversando la porta del cielo,\nPadre, trasforma ogni peccato in sorriso\nE facci arrivare tutti in paradiso!\n\nVogliamo essere ordinaria straordinarietà,\nLuci nell'oscurità\nE testimoni della tua misericordia,\nNella quotidianità.\n\nEd anche chi sembra più lontano ti si avvicinerà,…\nPiù cado giù, più sei con me, più cado giù, più sei con me\nPiù cado giù, più sei con me\nDammi la forza di essere un dono di pace per chi è attorno a me` },
-            { num: 12, title: "12. Vieni Spirito dall’alto", text: `Vieni Spirito, forza dall’alto, nel mio cuore\nfammi rinascere, Signore, Spirito (2v)\n\nCome una fonte vieni in me\ncome un oceano vieni in me\ncome un fiume vieni in me\ncome un fragore vieni in me.\n\nVieni Spirito, forza dall’alto, nel mio cuore\nfammi rinascere, Signore, Spirito\n\nCome un vento con il tuo amore\ncome una fiamma con la tua pace\ncome un fuoco con la tua gioia\ncome una luce con la tua forza.\n\nVieni Spirito, forza dall’alto, nel mio cuore\nfammi rinascere, Signore, Spirito (2v)` },
-            { num: 13, title: "13. Chiamati per nome", text: `Veniamo da te\nChiamati per nome\nChe festa, Signore, tu cammini con noi\nCi parli di te\nPer noi spezzi il pane\nTi riconosciamo e il cuore arde, sei tu\nE noi tuo popolo\nSiamo qui\n\nSiamo come terra ed argilla\nE la tua parola ci plasmerà\nBrace pronta per la scintilla\nE il tuo spirito soffierà\nC'infiammerà\n\nVeniamo da te\nChiamati per nome\nChe festa, Signore, tu cammini con noi\nCi parli di te\nPer noi spezzi il pane\nTi riconosciamo e il cuore arde, sei tu\nE noi tuo popolo\nSiamo qui\n\nSiamo come semi nel solco\nCome vigna che il suo frutto darà\nGrano del Signore risorto\nLa tua messe che fiorirà d'eternità\n\nVeniamo da te\nChiamati per nome\nChe festa, Signore, tu cammini con noi\nCi parli di te\nPer noi spezzi il pane\nTi riconosciamo e il cuore arde, sei tu\nE noi tuo popolo\nSiamo qui\nE noi tuo popolo\nSiamo qui\nSiamo qui` },
-            { num: 14, title: "14. E CONTINUIAMO A CHIAMARLO PADRE", text: `Cammina il figlio per strada\nla mano al Padre gli dà.\nSfiora leggero quei fiori:\n“colori e canto con te”.\nSicuro il viaggio con lui\nmi fermo e gioco un po’, ti và?\nIl tuo volto, che strano,\nnon invecchia mai.\n\nE allora, dai! Continua a chiamarlo Padre!\nTroverai una presenza d’amore nella tua vita.\nPer lui, vali molto di più, e certezza di Padre.\n\nTanti bambini fratelli gioca il papà,\nche festa!\nSeduto un figlio da solo,\ndura la vita è per lui.\nRide negli occhi del padre\ntende la mano e tu lo sai,\nil suo amore, che strano\ndura un’eternità.\n\nTi guardi intorno e mi chiedi:\n“quel fiore ha un nome?”. Chi sa...\nil vento, il freddo, è già sera\ndomani non ci sarà.\nPrendi quel sasso per gioco,\nguardalo bene e capirai:\n“è in armonia col mondo\nfatto d’amore per noi”.` },
-            { num: 15, title: "15. CANTATE CON NOI", text: `Scatenate la gioia oggi qui si fa festa,\ndai cantate con noi, qui la festa siamo noi.\n\nVoi che venite da lontano\ne che portate gioia e amore\nVoi che da sempre aspettavate,\ndi fare festa insieme a noi\n\nLa nostra fede ci avvicina\ne don Guanella ci accomuna\nSentiamo vivo dentro il cuore\nche siam fratelli con voi\n\nSe avete perso la speranza\nse percorrete vecchie strade\nSe ruminate stanchi amori\nripetete insieme a noi.` },
-            { num: 16, title: "16. CERCO SOLO TE", text: `Cerco solo Te Signor, mio liberatore sei\nFonte dell’amore Tu riempi la mia vita\n\nCerco solo Te Signor, mio liberatore sei\nFonte dell’amore Tu riempi la mia vita\nVolgi il Tuo sguardo su di me Dio di immensa bontà\nE rendi forte la mia vita\npiù non vacillerò\n\nCrea un cuore puro in me\nrinnova il mio spirito\nla mia bocca proclami la tua lode.` },
-            { num: 17, title: "17. DIO CI SEI", text: `Vorrei cantare che ci sei,\ndietro ogni volto tu ci sei,\ntu sei la strada della storia;\ntu sei il sogno d’infinito,\ntu sei la porta della vita\nche ci apre il cuore ad ogni istante.\n\nTu sei l’amore che si fa\npresenza viva in mezzo a noi\nquando accogliamo la tua luce;\nsei l’altalena della vita\nche ci riscatti dalla notte\ne fai volare nel tuo cielo.\n\nTu sei presenza misteriosa\nche si sommerge nel profondo\ndi ogni creatura che ti cerca.\nTu sei il Padre che conosce,\nche perdona, che accompagna\na rispecchiarci nel tuo volto.\n\nTu sei la forza che ci spinge\na scavalcare le frontiere\ndelle croci del cammino;\ntu sei speranza di ogni uomo\nche ti cerca, che ti prega,\nche ti pensa: Tu sei Dio.` },
-            { num: 18, title: "18. DUC IN ALTUM", text: `Anche quando tutto ti ha deluso\nanche quando non ti importa più\nanche quando scivoli confuso\nin un altro te che non sei tu\nSe stai cadendo giù\ne ti si spacca il cuore\nricorda che in quel cuore ci sei tu\nAnche quando ti ritrovi solo\ne non vedi amici intorno a te\nl'anima attraccata lì sul molo\nancorata a tutti i tuoi perché\nRicorda che se vuoi puoi sempre ripartire e conquistare il mare aperto\n\nDuc in altum lascia il porto con noi\ne prendi il largo grande pesca farai\nperché quel vento che gonfia\nle vele del tuo cuore\nè il soffio del Signore\nche ora è in te\ne la speranza che canta\ne danza nel mio cuore\nè il canto del Signore\nche ora è in me\n\nAnche quando non hai più parole\nla risacca le ha portate via\nle tue reti vuote stese al sole\nintrecciate di malinconia\nRicorda che se vuoi puoi sempre riprovare\ne ritornare in mare aperto RIT\n\n...e la speranza che canta\ne danza nel mio cuore\nè il canto del Signore\nche ora è in me\nche ora è in me che ora è in me` },
-            { num: 19, title: "19. E' BELLO LODARTI", text: `E' bello cantare il tuo amore,\nè bello lodare il tuo nome.\nE' bello cantare il tuo amore,\nè bello lodarti, Signore,\nè bello cantare a Te!\n\nTu che sei l'amore infinito che neppure il cielo\npuò contenere,\nti sei fatto uomo; Tu sei venuto qui\nad abitare in mezzo a noi, allora...Rit.\n\nTu che conti tutte le stelle\ne le chiami una ad una per nome,\nda mille sentieri ci hai radunati qui,\nci hai chiamati figli tuoi, allora...Rit.` },
-            { num: 20, title: "20. E’ DIO CHE FA", text: `C’è una gioia c’è un dolore\ndentro il ritmo di ogni cuore\nDove ognuno ha chiuso le sue verità.\nC’è una lacrima e un sorriso\nche passeggiano sul viso\nE ne solcano e ne mietono l’età.\nE c’è un vecchi c’è un bambino\nche si alternano in un sogno che verrà\nRimaniamo ad osservare\nl’orizzonte della vita e dio che fa\n\nE’ Dio che fa nella tua vita,\nè Dio che fa in questa storia infinita\nè Dio che fa in ogni sogno,\nè Dio che fa nella gioia e nel bisogno\nè dio che fa...\n\nQuando la notte no non dormo,\nquando mi accorgo che mi sbaglio\nmentre calpesto le mie strade\nin questo tempo che mi assale.\nIncontro un uomo e non lo sento\nperchè il mio cuore ancora è spento\nsoffocato in questo mare di realtà.\nEppure il sogno tuo che fa\nche mi fa vivere e mi da la libertà,\nsenso vero di ogni cosa\nè la speranza di una attesa, è Dio che fa` },
-            { num: 21, title: "21. MANIFESTO", text: `Noi giovani crediamo possibile\nnoi seguire i passi di don Guanella;\nnoi siamo convinti di poter vivere\nquando cantiamo e soffriamo,\nlavoriamo e amiamo, ci fermiamo\ne incerti cerchiamo la verità.\n\nLui, la nostra strada è sempre Lui.\nLui, Padre buono che veste i gigli del campo,\nLui, che nutre gli uccelli del cielo,\nun Padre pieno di misericordia\nche trasforma in Eucaristia la nostra fragilità.\n\nManifesto è\ntutti insieme ci impegniamo con costanza,\nManifesto è\ncostruire il Regno della Carità.\nManifesto è, manifesto è Carità.\n\nNoi sicuri che è Dio che fa.\nNoi speranza anche nei sacrifici.\nNoi uniti dalla carità\ninsieme siamo una famiglia\ndiamo la mano al povero\ncon semplicità.\n\nLei Madre della Provvidenza,\na Lei diamo i nostri desideri\na Lei noi diamo tutto il nostro cuore\ne camminiamo verso il Padre\ninsieme a don Guanella nella sua Carità. RIT` },
-            { num: 22, title: "22. RITORNA A NOI DON GUANELLA", text: `Un cuore fervente, che crede e sente Cristo\nnon può trattenersi senza aiutare il povero;\nperché in questo si vedrà se siamo testimoni,\nnon amiamo con parole, viviam la nostra fede..\n\nRitorna a noi don Guanella\nbuon servo della carità!\nCome tu amasti i tuoi fratelli,\ndonaci un cuore grande per amare!\n\nIl tempo non lo perdi se tu lo dai ai piccoli,\nse per amor di Cristo ti dai tutto intero;\nperché in loro trovi chiara, chiara la risposta\ndi lui stesso che ti dice: “In loro sono io”. RIT\n\nFinché ci sono poveri\nche solcano il nostro mondo,\ncontinuiamo con impegno e senza riposo;\nessi sono i prediletti del Padre Provvidente,\nil “Pane e il Signore” diamo a tutti già.\nFacciamo tutti insieme il bene ai fratelli,\nbenedizione dal cielo cadrà sopra di noi;\n“tutto il mondo è patria vostra”:\nmettiamoci in cammino,\nla carità di Cristo il mondo salverà.` },
-            { num: 23, title: "23. SEMINARE DIO", text: `Se la parola cade sulla strada\nDentro il cuore della gente che non crede\nChe ascolta e non capisce che guarda ma non vede\nè un seme abbandonato che muore e non fiorisce\nSe ascolti la parola con amore,\nma per non essere deriso o emarginato\nla soffochi nel cuore può appena germogliare\nma la tua gioia è breve se poi ti lasci andare\n\nTogliamo le spine, le pietre dai nostri cuori;\nariamo con tutto l’amore i nostri campi;\naspettiamo che passi l’inverno con la sua pioggia\ne avremo la terra imbiondita di grano,\nil sole che splende, l’arcobaleno.\n\nNon farti soffocare dalle spine\ndal mondo che ti attrae coi suoi colori\nÈ solo l’apparenza che acceca gli occhi tuoi\n\naccendi la tua vita colorati di Lui.\nE c’è un terreno fertile dell’uomo\nche fa fruttare il seme dell’amore\nChe impegna la sua vita e tutto ciò che è suo\nche si gioca l’esistenza per seminare Dio` },
-            { num: 24, title: "24. SEGNI DEL TUO AMORE", text: `Mille e mille grani nelle spighe d'oro\nmandano fragranza e danno gioia al cuore,\nquando, macinati, fanno un pane solo:\npane quotidiano, dono tuo, Signore.\n\nEcco il pane e il vino, segni del tuo amore.\nEcco questa offerta, accoglila Signore:\ntu di mille e mille cuori fai un cuore solo,\nun corpo solo in te\ne il Figlio tuo verrà, vivrà\nancora in mezzo a noi.\n\nMille grappoli maturi sotto il sole,\nfesta della terra, donano vigore,\nquando da ogni perla stilla il vino nuovo:\nvino della gioia, dono tuo, Signore.` },
-            { num: 25, title: "25. SO CHE TU SEI IL MIO SIGNOR", text: `Il volto Tuo risplende in me\nSo che Tu sei il mio Signor.\nMi illumini, mi liberi,\nso che Tu sei il mio Signor\n\nSe intorno a me io vedrò che tutto crolla\nio starò fra le tue mani nel Tuo amor\nso che Tu sei il mio Signor\n\nMia forza sei, mia gioia o Dio\nso che Tu sei il mio Signor\nMi salverai, confido in Te,\nso che Tu sei il mio Signor` },
-            { num: 26, title: "26. STELLA DEL MARE", text: `Chiaro mattino\nChe il sole baciò\nNeanche una nuvola in cielo\nDolce è la brezza\nFra i mandorli in fiore\nSpande il profumo\nInebriante calore\nUn raggio di luce Le illumina il Volto\nImmerso in profonda preghiera il Suo Cuore\nSi aprono i Cieli soltanto per lei\nE accolta è la Vergine Madre nell’Eternità\n\nE da quel giorno per sempre sarà\nRegina del Cielo e Stella del mare\nUn Cuore di Madre che batte per noi\nDifesa e consiglio per i figli suoi\nLei nostro rifugio e nostra speranza\nLe ali che portano il cuore dell’uomo al Cuore di Dio\n\nLei piena di grazia dall’eternità\nFu serva docile, ancella obbediente\nTenera madre, castissima sposa\nIncoronata Regina sarà\n\nCon una corona di dodici stelle\nVestita di sole e la luna ai Suoi piedi\nOnnipotente per grazia sarà\nColei che condusse la vita\nIn piena umiltà\n\nE da quel giorno per sempre sarà Regina del Cielo e Stella del mare\nUn Cuore di Madre che batte per noi\nDifesa e consiglio per i figli Suoi\nLei nostro rifugio e nostra speranza\nLe ali che portano il cuore dell’uomo al Cuore di Dio\n\nE tutto il creato\nAi suoi piedi sarà\nLei capolavoro di Dio\nRimase nascosta in terra con umiltà\nOra nei cieli risplenderà\n\nLei nostro rifugio e nostra speranza\nLe ali che portano il cuore dell’uomo al Cuore di Dio\nLe ali che portano il cuore dell’uomo al Cuore di Dio` },
-            { num: 27, title: "27. UNTI E’ BELLO", text: `Unto il mio cuore profuma di Dio\nil mio respiro è al passo col suo\nvoglio cantarlo e gridarlo anche a te\nsenza quel soffio vita non c’è.\n\nDammi Signore lo spirito di sapienza\nper apprezzare i frutti del tuo amore.\nDammi Signore lo spirito d’intelletto\na illuminare la mente con la luce di verità.\n\nDammi Signore lo spirito di consiglio\nper saper scegliere la via verso te.\nDammi Signore lo spirito di fortezza\nper affrontare la vita col coraggio\nche ci infonderà.\n\nDammi Signore lo spirito della scienza\nper riconoscere i doni che dai.\nDammi Signore lo spirito di pietà\nper poter servirti con amore\ncome tuo figlio ha fatto per noi.` },
-            { num: 28, title: "28. VIENI E SEGUIMI", text: `Lascia che il mondo vada per la sua strada,\nlascia che l'uomo ritorni alla sua casa,\nlascia che la gente accumuli la sua fortuna.\nMa tu, tu vieni e seguimi\ntu, vieni e seguimi.\n\nLascia che la barca in mare spieghi la vela,\nlascia che trovi affetto chi segue il cuore,\nlascia che dall'albero cadano i frutti maturi.\nMa tu, tu vieni e seguimi\ntu, vieni e seguimi.\n\nE sarai luce per gli uomini\ne sarai sale della terra\ne nel mondo deserto aprirai\nuna strada nuova. (2v)\n\nE per questa strada va, va\ne non voltarti indietro, va\ne non voltarti indietro` }
-        ];
-
-        let currentCantoIndex = 0; 
-
-        // INIT GENERALI
-        const savedName = localStorage.getItem('m2g_name') || 'Utente';
-        const savedNotes = localStorage.getItem('m2g_notes') || '';
-        const savedPic = localStorage.getItem('m2g_pic');
-        const savedFont = localStorage.getItem('m2g_fontsize') || '16';
-        const savedDark = localStorage.getItem('m2g_dark') === 'true';
-        document.getElementById('user-name-display').textContent = savedName;
-        document.getElementById('name-input').value = savedName;
-        document.getElementById('notes-input').value = savedNotes;
-        if (savedPic) document.getElementById('profile-img').src = savedPic;
-        changeFontSize(savedFont);
-        document.getElementById('font-slider').value = savedFont;
-        if (savedDark) document.body.classList.add('dark-mode');
-        document.getElementById('dark-mode-toggle').checked = savedDark;
-
-        // --- AUDIO SYSTEM ---
-        const audio = document.getElementById('global-audio');
-        const miniplayer = document.getElementById('miniplayer');
-        const mpPlayIcon = document.getElementById('mp-play-icon');
-        const mpFill = document.getElementById('mp-fill'); 
-
-        function formatTime(seconds) {
-            const m = Math.floor(seconds / 60);
-            const s = Math.floor(seconds % 60);
-            return `${m}:${s < 10 ? '0' : ''}${s}`;
         }
+    ];
 
-        audio.ontimeupdate = function() {
-            const curr = audio.currentTime;
-            const dur = audio.duration || 0;
-            const pct = (curr / dur) * 100;
-            
-            if (!Number.isNaN(pct)) mpFill.style.width = pct + "%";
+    // --- DATABASE TESTI: VEGLIA ---
+    const VEGLIA_TEXT = `<h3>Veglia di Preghiera</h3>\nInserire qui il testo completo della Veglia...`;
 
-            const mainSeek = document.getElementById('main-seek');
-            const currTimeText = document.getElementById('curr-time-text');
-            const totalTimeText = document.getElementById('total-time-text');
-            
-            if (mainSeek) {
-                if (!Number.isNaN(dur)) mainSeek.max = Math.floor(dur);
-                mainSeek.value = Math.floor(curr);
-                currTimeText.innerText = formatTime(curr);
-                totalTimeText.innerText = formatTime(dur);
-            }
+    // --- DATABASE TESTI: CANTI (Esempi) ---
+    const CANTI = [
+        { num: 1, title: "Canto di Inizio", text: "Testo del primo canto..." },
+        // ... Aggiungi qui gli altri 27 canti seguendo lo stesso schema
+    ];
+        // --- VARIABILI DI STATO ---
+    let currentLodiIndex = 0;
+    let currentCantoIndex = 0;
+    let audio = document.getElementById('global-audio');
+    let isPlaying = false;
 
-            if(curr >= dur && dur > 0) {
-                mpPlayIcon.textContent = 'play_arrow';
-                updateMainPlayIcon(false);
-            }
-        };
+    // --- NAVIGAZIONE E UI ---
+    function hideAll() {
+        document.querySelectorAll('.page-overlay').forEach(p => {
+            p.classList.remove('visible');
+            setTimeout(() => p.style.display = 'none', 300);
+        });
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    }
 
-        function seekAudio(val) { audio.currentTime = val; }
+    function animatePageEntry(pageId) {
+        let page = document.getElementById(pageId);
+        page.style.display = 'block';
+        // Breve timeout per permettere al display:block di applicarsi prima dell'animazione
+        setTimeout(() => page.classList.add('visible'), 10);
+    }
 
-        function toggleGlobalAudio(e) {
-            if(e) e.stopPropagation();
-            if (audio.paused) {
-                audio.play();
-                mpPlayIcon.textContent = 'pause';
-                miniplayer.classList.add('visible');
-                updateMainPlayIcon(true);
-            } else {
-                audio.pause();
-                mpPlayIcon.textContent = 'play_arrow';
-                updateMainPlayIcon(false);
-            }
-        }
+    function goHome() {
+        hideAll();
+        document.getElementById('page-home').style.display = 'block';
+        document.querySelector('.nav-item:nth-child(1)').classList.add('active');
+        window.scrollTo(0,0);
+    }
 
-        function closeMiniplayer(e) {
-            if(e) e.stopPropagation();
+    function goUser() {
+        hideAll();
+        animatePageEntry('page-user');
+        document.querySelector('.nav-item:nth-child(2)').classList.add('active');
+    }
+
+    function openVegliaPage() {
+        hideAll();
+        document.getElementById('veglia-content').innerHTML = VEGLIA_TEXT;
+        animatePageEntry('page-veglia');
+    }
+
+    function openReader(title) {
+        hideAll();
+        document.getElementById('reader-title').textContent = title;
+        document.getElementById('reader-content').innerHTML = "<div style='padding:20px; text-align:center; color:var(--text-sec)'>Contenuto di " + title + " in fase di sviluppo...</div>";
+        animatePageEntry('page-reader');
+    }
+
+    function openLinkFoto() {
+        window.open('https://photos.google.com', '_blank'); // Modifica con il link reale se necessario
+    }
+
+    // --- LOGICA LODI (CON EFFETTO SFOGLIO) ---
+    function openLodiPage() {
+        hideAll();
+        renderLodi(0, 'next'); 
+        animatePageEntry('page-lodi');
+    }
+
+    function renderLodi(index, direction) {
+        if (index < 0 || index >= LODI.length) return;
+        currentLodiIndex = index;
+        const lode = LODI[currentLodiIndex];
+        
+        const container = document.getElementById('lodi-content-container');
+        
+        // Riavvio dell'animazione CSS
+        container.classList.remove('flip-next', 'flip-prev');
+        void container.offsetWidth; // Forza il reflow
+        container.classList.add(direction === 'next' ? 'flip-next' : 'flip-prev');
+        
+        document.getElementById('lodi-title-display').textContent = lode.title;
+        document.getElementById('lodi-text-display').textContent = lode.text;
+        document.getElementById('lodi-counter').textContent = `${lode.num} / ${LODI.length}`;
+        document.getElementById('lodi-search-input').value = lode.num;
+        
+        document.getElementById('page-lodi').scrollTop = 0;
+    }
+
+    function nextLodi() { if (currentLodiIndex < LODI.length - 1) renderLodi(currentLodiIndex + 1, 'next'); }
+    function prevLodi() { if (currentLodiIndex > 0) renderLodi(currentLodiIndex - 1, 'prev'); }
+    function jumpToLodi(val) {
+        let num = parseInt(val);
+        if (isNaN(num)) return;
+        if (num < 1) num = 1;
+        if (num > LODI.length) num = LODI.length;
+        let dir = (num - 1) > currentLodiIndex ? 'next' : 'prev';
+        renderLodi(num - 1, dir);
+        document.getElementById('lodi-search-input').blur();
+    }
+
+    // --- LOGICA CANTI (CON EFFETTO SFOGLIO) ---
+    function openCantiPage() {
+        hideAll();
+        renderCanto(0, 'next'); 
+        animatePageEntry('page-canti');
+    }
+
+    function renderCanto(index, direction) {
+        if (index < 0 || index >= CANTI.length) return;
+        currentCantoIndex = index;
+        const canto = CANTI[currentCantoIndex];
+        
+        const container = document.getElementById('canto-content-container');
+        
+        // Riavvio dell'animazione CSS
+        container.classList.remove('flip-next', 'flip-prev');
+        void container.offsetWidth; 
+        container.classList.add(direction === 'next' ? 'flip-next' : 'flip-prev');
+        
+        document.getElementById('canto-title-display').textContent = canto.title;
+        document.getElementById('canto-text-display').textContent = canto.text;
+        document.getElementById('canto-counter').textContent = `${canto.num} / ${CANTI.length}`;
+        document.getElementById('canto-search-input').value = canto.num;
+        
+        document.getElementById('page-canti').scrollTop = 0;
+    }
+
+    function nextCanto() { if (currentCantoIndex < CANTI.length - 1) renderCanto(currentCantoIndex + 1, 'next'); }
+    function prevCanto() { if (currentCantoIndex > 0) renderCanto(currentCantoIndex - 1, 'prev'); }
+    function jumpToCanto(val) {
+        let num = parseInt(val);
+        if (isNaN(num)) return;
+        if (num < 1) num = 1;
+        if (num > CANTI.length) num = CANTI.length;
+        let dir = (num - 1) > currentCantoIndex ? 'next' : 'prev';
+        renderCanto(num - 1, dir);
+        document.getElementById('canto-search-input').blur();
+    }
+
+    // --- MINIPLAYER & TEATRO CELESTE ---
+    function toggleGlobalAudio(e) {
+        if(e) e.stopPropagation();
+        const icon = document.getElementById('mp-play-icon');
+        const mpContainer = document.getElementById('miniplayer');
+        
+        if (audio.paused) {
+            audio.play();
+            icon.textContent = 'pause';
+            isPlaying = true;
+            mpContainer.classList.add('visible');
+            document.getElementById('celestial-container').classList.add('active');
+            updateCelestial();
+        } else {
             audio.pause();
-            audio.currentTime = 0;
-            mpPlayIcon.textContent = 'play_arrow';
-            mpFill.style.width = "0%"; 
-            miniplayer.classList.remove('visible');
-            updateMainPlayIcon(false);
+            icon.textContent = 'play_arrow';
+            isPlaying = false;
         }
+    }
 
-        function updateMainPlayIcon(isPlaying) {
-            const btn = document.getElementById('main-play-icon');
-            if(btn) btn.textContent = isPlaying ? 'pause' : 'play_arrow';
-        }
+    function closeMiniplayer(e) {
+        if(e) e.stopPropagation();
+        audio.pause();
+        audio.currentTime = 0;
+        isPlaying = false;
+        document.getElementById('mp-play-icon').textContent = 'play_arrow';
+        document.getElementById('miniplayer').classList.remove('visible');
+        document.getElementById('celestial-container').classList.remove('active');
+        document.body.classList.remove('animate-sunrise', 'animate-sunset');
+    }
 
-        // --- THEMES & ANIMATION CELESTE ---
-        function handleThemeToggle(isDark) {
-            triggerCelestialAnimation(isDark);
-            if (isDark) document.body.classList.add('dark-mode');
-            else document.body.classList.remove('dark-mode');
-            localStorage.setItem('m2g_dark', isDark);
+    audio.addEventListener('timeupdate', () => {
+        if(audio.duration) {
+            const percent = (audio.currentTime / audio.duration) * 100;
+            document.getElementById('mp-fill').style.width = percent + '%';
+            updateCelestial();
         }
+    });
 
-        function triggerCelestialAnimation(isGoingToDark) {
-            const container = document.getElementById('celestial-container');
-            container.classList.add('active');
-            container.classList.remove('animate-sunrise', 'animate-sunset');
-            void container.offsetWidth; 
-            if (isGoingToDark) container.classList.add('animate-sunset');
-            else container.classList.add('animate-sunrise');
-            setTimeout(() => { container.classList.remove('active'); }, 2000);
-        }
+    audio.addEventListener('ended', () => {
+        document.getElementById('mp-play-icon').textContent = 'play_arrow';
+        isPlaying = false;
+        document.getElementById('mp-fill').style.width = '0%';
+        document.getElementById('celestial-container').classList.remove('active');
+        document.body.classList.remove('animate-sunrise', 'animate-sunset');
+    });
 
-        // NAVIGAZIONE
-        function animatePageEntry(pageId) {
-            const page = document.getElementById(pageId);
-            page.style.display = 'block';
-            setTimeout(() => { page.classList.add('visible'); }, 10);
-        }
-        function hideAll() {
-            document.querySelectorAll('.page-overlay').forEach(p => { p.classList.remove('visible'); p.style.display = 'none'; });
-            document.getElementById('page-home').style.display = 'none';
-        }
-        function goHome() { hideAll(); document.getElementById('page-home').style.display = 'block'; }
-        function goUser() { hideAll(); animatePageEntry('page-user'); }
-        function openNotes() { hideAll(); animatePageEntry('page-notes'); }
-        function openLinkFoto() { window.open(LINK_FOTO_RICORDO, '_blank'); }
-
-        // --- LOGICA VEGLIA ---
-        function openVegliaPage() {
-            hideAll();
-            document.getElementById('veglia-content').innerHTML = TEXT_VEGLIA;
-            animatePageEntry('page-veglia');
-            document.getElementById('page-veglia').scrollTop = 0;
-        }
-
-        // --- LOGICA LODI MATTUTINE ---
-        function openLodiPage() {
-            hideAll();
-            renderLodi(0); 
-            animatePageEntry('page-lodi');
-        }
-
-        function renderLodi(index) {
-            if (index < 0 || index >= LODI.length) return;
-            currentLodiIndex = index;
-            const lode = LODI[currentLodiIndex];
-            
-            document.getElementById('lodi-title-display').textContent = lode.title;
-            document.getElementById('lodi-text-display').textContent = lode.text;
-            document.getElementById('lodi-counter').textContent = `${lode.num} / ${LODI.length}`;
-            document.getElementById('lodi-search-input').value = lode.num;
-            
-            document.getElementById('page-lodi').scrollTop = 0;
-        }
-
-        function nextLodi() { if (currentLodiIndex < LODI.length - 1) renderLodi(currentLodiIndex + 1); }
-        function prevLodi() { if (currentLodiIndex > 0) renderLodi(currentLodiIndex - 1); }
-        function jumpToLodi(val) {
-            let num = parseInt(val);
-            if (isNaN(num)) return;
-            if (num < 1) num = 1;
-            if (num > LODI.length) num = LODI.length;
-            renderLodi(num - 1);
-            document.getElementById('lodi-search-input').blur();
-        }
-
-        // --- LOGICA CANTI ---
-        function openCantiPage() {
-            hideAll();
-            renderCanto(0); 
-            animatePageEntry('page-canti');
-        }
-
-        function renderCanto(index) {
-            if (index < 0 || index >= CANTI.length) return;
-            currentCantoIndex = index;
-            const canto = CANTI[currentCantoIndex];
-            
-            document.getElementById('canto-title-display').textContent = canto.title;
-            document.getElementById('canto-text-display').textContent = canto.text;
-            document.getElementById('canto-counter').textContent = `${canto.num} / ${CANTI.length}`;
-            document.getElementById('canto-search-input').value = canto.num;
-            
-            document.getElementById('page-canti').scrollTop = 0;
-        }
-
-        function nextCanto() { if (currentCantoIndex < CANTI.length - 1) renderCanto(currentCantoIndex + 1); }
-        function prevCanto() { if (currentCantoIndex > 0) renderCanto(currentCantoIndex - 1); }
-        function jumpToCanto(val) {
-            let num = parseInt(val);
-            if (isNaN(num)) return;
-            if (num < 1) num = 1;
-            if (num > CANTI.length) num = CANTI.length;
-            renderCanto(num - 1);
-            document.getElementById('canto-search-input').blur();
-        }
-
-        // --- READER GENERICO (Inno, Libretto) ---
-        function openReader(title) {
-            hideAll();
-            document.getElementById('reader-title').textContent = title;
-            const content = document.getElementById('reader-content');
-            content.innerHTML = "";
-            if (title === 'Inno') {
-                const isPlaying = !audio.paused;
-                const playIcon = isPlaying ? 'pause' : 'play_arrow';
-                content.innerHTML = `
-                    <div style="animation: elasticSlide 0.6s ease">
-                        <div class="main-player-ui">
-                            <div class="main-controls">
-                                <div class="main-play-btn" onclick="toggleGlobalAudio()">
-                                    <span id="main-play-icon" class="material-icons">${playIcon}</span>
-                                </div>
-                            </div>
-                            <div class="main-slider-container">
-                                <span id="curr-time-text">0:00</span>
-                                <input type="range" id="main-seek" class="main-slider" value="0" min="0" step="1" oninput="seekAudio(this.value)">
-                                <span id="total-time-text">0:00</span>
-                            </div>
-                        </div>
-                        <div style="background:var(--card-bg); padding:20px; border-radius:20px; white-space:pre-line; text-align:center; line-height:1.8; box-shadow: 0 4px 15px var(--shadow);">
-${LYRICS_INNO}
-                        </div>
-                    </div>`;
-            } else if (title === 'Libretto') {
-                let htmlImages = '<div style="text-align:center">';
-                for (let i = 1; i <= 5; i++) { htmlImages += `<img src="assets/lib${i}.jpg" class="reader-image" loading="lazy" onerror="this.style.display='none'">`; }
-                htmlImages += '</div>'; content.innerHTML = htmlImages;
+    function updateCelestial() {
+        if (!audio.duration) return;
+        const progress = audio.currentTime / audio.duration;
+        const isDark = document.body.classList.contains('dark-mode');
+        
+        document.body.classList.remove('animate-sunrise', 'animate-sunset');
+        
+        if (!isDark) {
+            if (progress > 0.1 && progress < 0.9) {
+                document.body.classList.add('animate-sunrise');
             }
-            animatePageEntry('page-reader');
+        } else {
+            if (progress > 0.1 && progress < 0.9) {
+                document.body.classList.add('animate-sunset');
+            }
         }
+    }
 
-        function saveName() { const val = document.getElementById('name-input').value; localStorage.setItem('m2g_name', val); document.getElementById('user-name-display').textContent = val; }
-        function saveNotes() { localStorage.setItem('m2g_notes', document.getElementById('notes-input').value); }
-        function uploadImage(input) { if (input.files && input.files[0]) { const reader = new FileReader(); reader.onload = function(e) { document.getElementById('profile-img').src = e.target.result; try { localStorage.setItem('m2g_pic', e.target.result); } catch(e) { alert("Immagine troppo pesante!"); } }; reader.readAsDataURL(input.files[0]); } }
-        function changeFontSize(size) { document.documentElement.style.setProperty('--base-size', size + 'px'); localStorage.setItem('m2g_fontsize', size); }
-    </script>
+    // --- PROFILO, SETTINGS E NOTE ---
+    function uploadImage(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('profile-img').src = e.target.result;
+                localStorage.setItem('m2g_profilePic', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function saveName() {
+        const name = document.getElementById('name-input').value;
+        document.getElementById('user-name-display').textContent = name || 'Utente';
+        localStorage.setItem('m2g_userName', name);
+    }
+
+    function changeFontSize(val) {
+        // Controlla l'ingrandimento globale gestendo la root
+        document.documentElement.style.setProperty('--base-size', val + 'px');
+        localStorage.setItem('m2g_fontSize', val);
+    }
+
+    function handleThemeToggle(isDark) {
+        if (isDark) {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('m2g_theme', 'dark');
+        } else {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('m2g_theme', 'light');
+        }
+    }
+
+    function openNotes() {
+        hideAll();
+        animatePageEntry('page-notes');
+    }
+
+    function saveNotes() {
+        const text = document.getElementById('notes-input').value;
+        localStorage.setItem('m2g_notes', text);
+    }
+
+    // --- INIZIALIZZAZIONE ALL'AVVIO ---
+    window.onload = () => {
+        // Ripristino dati utente
+        const savedName = localStorage.getItem('m2g_userName');
+        if(savedName) {
+            document.getElementById('name-input').value = savedName;
+            document.getElementById('user-name-display').textContent = savedName;
+        }
+        
+        const savedPic = localStorage.getItem('m2g_profilePic');
+        if(savedPic) {
+            document.getElementById('profile-img').src = savedPic;
+        }
+        
+        const savedNotes = localStorage.getItem('m2g_notes');
+        if(savedNotes) {
+            document.getElementById('notes-input').value = savedNotes;
+        }
+        
+        const savedSize = localStorage.getItem('m2g_fontSize');
+        if(savedSize) {
+            document.getElementById('font-slider').value = savedSize;
+            changeFontSize(savedSize); // Riapplica globalmente al riavvio
+        }
+        
+        const savedTheme = localStorage.getItem('m2g_theme');
+        if(savedTheme === 'dark') {
+            document.getElementById('dark-mode-toggle').checked = true;
+            document.body.classList.add('dark-mode');
+        }
+        
+        // PWA Safe area padding
+        if (window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
+            document.body.style.paddingTop = 'env(safe-area-inset-top)';
+        }
+    };
+</script>
 </body>
 </html>
