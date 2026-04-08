@@ -10,13 +10,18 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="M2G">
     
-    <link rel="apple-touch-icon" href="assets/m2g_logo.png?v=10">
-    <link rel="icon" type="image/png" href="assets/m2g_logo.png?v=10">
+    <link rel="apple-touch-icon" href="assets/m2g_logo.png?v=7">
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/m2g_logo.png?v=7">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/m2g_logo.png?v=7">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/m2g_logo.png?v=7">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/m2g_logo.png?v=7">
     
+    <link rel="manifest" href='data:application/manifest+json,{"name":"M2G App","short_name":"M2G","start_url":"./index.html","display":"standalone","background_color":"#6a8a73","theme_color":"#6a8a73","icons":[{"src":"assets/m2g_logo.png","sizes":"192x192","type":"image/png"},{"src":"assets/m2g_logo.png","sizes":"512x512","type":"image/png"}]}'>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" rel="stylesheet">
     
     <style>
+        /* --- VARIABILI COLORI --- */
         :root {
             --bg-color: #f3f0e9; --card-bg: #ffffff; --text-color: #1a1a1a;
             --text-sec: #666666; --accent: #6a8a73; --icon-bg: #dbe4de;
@@ -32,135 +37,241 @@
             background-color: var(--bg-color); color: var(--text-color);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0; padding: 0;
-            transition: background-color 0.5s ease, color 0.5s ease;
+            transition: background-color 2.0s ease-in-out, color 2.0s ease-in-out;
             -webkit-tap-highlight-color: transparent; font-size: var(--base-size);
-            overflow-x: hidden; padding-bottom: 150px; 
+            overflow-x: hidden;
+            padding-bottom: 150px; 
         }
 
-        /* --- TEATRO CELESTE: ANIMAZIONI COMPLETE --- */
-        #celestial-container { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; 
-            z-index: 9999; opacity: 0; transition: opacity 1s ease; display: flex; 
-            justify-content: center; align-items: flex-end; overflow: hidden;
+        /* --- HEADER CENTRATO --- */
+        .header { 
+            padding: 40px 20px 20px 20px; 
+            display: flex; flex-direction: column; align-items: center; text-align: center;
         }
+        .logo-box { 
+            width: 60px; height: 60px; background-color: var(--accent); 
+            border-radius: 18px; display: flex; align-items: center; justify-content: center; 
+            color: white; font-weight: bold; font-size: 1.2rem; margin-bottom: 15px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); 
+        }
+        .logo-box:active { transform: scale(0.9) rotate(-10deg); }
+        .welcome-text { font-size: 1.5rem; font-weight: 800; }
+
+        /* --- TASTI ROTONDI "GLASS" --- */
+        .top-bar {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 20px; padding-top: 20px;
+        }
+        .back-btn-circle {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(0,0,0,0.05);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            color: var(--text-color);
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s;
+        }
+        body.dark-mode .back-btn-circle { background-color: rgba(40, 40, 40, 0.8); border-color: rgba(255,255,255,0.1); }
+        .back-btn-circle:active { transform: scale(0.9); }
+        .back-btn-circle .material-icons { font-size: 22px; }
+
+        /* --- MINIPLAYER CON EFFETTO "LIQUIDO" --- */
+        #miniplayer {
+            position: fixed; bottom: 90px; left: 15px; right: 15px;
+            background-color: var(--accent); color: white;
+            border-radius: 16px; 
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+            z-index: 200; transform: translateY(150px);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden; height: 75px;
+        }
+        #miniplayer.visible { transform: translateY(0); }
+        
+        .mp-fill-layer {
+            position: absolute; top: 0; left: 0; bottom: 0;
+            width: 0%; 
+            background-color: rgba(255, 255, 255, 0.25);
+            z-index: 1; 
+            transition: width 0.25s linear; 
+            border-right: 3px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 2px 0 15px rgba(255, 255, 255, 0.5);
+        }
+        
+        @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+        .mp-fill-layer::after {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 4s linear infinite;
+        }
+
+        .mp-content-layer {
+            position: relative; z-index: 2; width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 15px;
+        }
+        .mp-info { display: flex; align-items: center; flex: 1; overflow: hidden; cursor: pointer; }
+        .mp-icon { width: 42px; height: 42px; background: rgba(0,0,0,0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 12px; backdrop-filter: blur(2px); }
+        .mp-text { display: flex; flex-direction: column; overflow: hidden; text-align: left; }
+        .mp-title { font-weight: bold; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        .mp-subtitle { font-size: 0.75rem; opacity: 0.9; }
+        .mp-controls { display: flex; align-items: center; gap: 15px; }
+        .mp-btn { background: none; border: none; color: white; cursor: pointer; padding: 0; display: flex; align-items: center; transition: transform 0.2s; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2)); }
+        .mp-btn:active { transform: scale(0.8); }
+        .mp-playhead { font-size: 34px; }
+        .mp-close { opacity: 0.8; font-size: 24px; }
+
+        /* --- NOTE "QUADERNO" --- */
+        #notes-input {
+            width: 100%; padding: 8px 18px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 15px;
+            background-color: var(--card-bg); color: var(--text-color);
+            font-size: 1rem; box-sizing: border-box; transition: border-color 0.3s;
+            background-image: linear-gradient(var(--border) 1px, transparent 1px);
+            background-size: 100% 32px; line-height: 32px; resize: none; 
+        }
+        #notes-input:focus { border-color: var(--accent); outline: none; }
+
+        /* --- INPUT RICERCA (Condiviso tra Lodi e Canti) --- */
+        .search-box {
+            display: flex; align-items: center; background: var(--card-bg); 
+            border-radius: 20px; padding: 5px 15px; border: 1px solid var(--border);
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+        .search-box input {
+            border: none; background: transparent; width: 40px; text-align: center;
+            font-size: 1rem; color: var(--text-color); font-weight: bold; outline: none;
+            font-family: inherit;
+        }
+        .search-box span { font-size: 0.9rem; color: var(--text-sec); margin-right: 5px; font-weight: bold;}
+
+        /* --- ANIMAZIONI & TEATRO CELESTE --- */
+        @keyframes elasticSlide { 0% { opacity: 0; transform: translateY(50px) scale(0.8); } 60% { opacity: 1; transform: translateY(-10px) scale(1.02); } 80% { transform: translateY(5px) scale(0.98); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+        #celestial-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; opacity: 0; transition: opacity 0.5s ease; display: flex; justify-content: center; align-items: flex-end; overflow: hidden; }
         #celestial-container.active { opacity: 1; }
         .celestial-body { position: absolute; bottom: -150px; font-size: 120px; }
         #sun-icon { color: #FFD700; filter: drop-shadow(0 0 20px orange); z-index: 2; }
         #moon-group { z-index: 1; display: flex; align-items: center; justify-content: center; }
         #moon-icon { color: #F4F6F0; filter: drop-shadow(0 0 15px #87CEEB); font-size: 100px; }
-        
         .stars { position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; transition: opacity 2s ease; }
         body.dark-mode .stars { opacity: 1; }
         .star { position: absolute; color: white; font-size: 10px; animation: twinkle 1.5s infinite alternate; }
-        
         @keyframes twinkle { from { opacity: 0.3; } to { opacity: 1; } }
-        @keyframes sunriseMoveUp { 0% { transform: translate(0, 0) scale(0.8); } 100% { transform: translate(0, -45vh) scale(1); } }
-        @keyframes moonsetMoveDown { 0% { transform: translate(0, -45vh) scale(1); } 100% { transform: translate(0, 150px) scale(0.8); } }
-        @keyframes sunsetMoveDown { 0% { transform: translate(0, -45vh) scale(1); } 100% { transform: translate(0, 150px) scale(0.8); } }
-        @keyframes moonriseMoveUp { 0% { transform: translate(0, 0) scale(0.8); } 100% { transform: translate(0, -45vh) scale(1); } }
-        
-        .animate-sunrise #sun-icon { animation: sunriseMoveUp 2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-        .animate-sunrise #moon-group { animation: moonsetMoveDown 2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-        .animate-sunset #sun-icon { animation: sunsetMoveDown 2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-        .animate-sunset #moon-group { animation: moonriseMoveUp 2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        @keyframes sunriseMoveUp { 0% { transform: translate(0, 0) scale(0.8); } 100% { transform: translate(0, -40vh) scale(1); } }
+        @keyframes moonsetMoveDown { 0% { transform: translate(0, -40vh) scale(1); } 100% { transform: translate(0, 100px) scale(0.8); } }
+        @keyframes sunsetMoveDown { 0% { transform: translate(0, -40vh) scale(1); } 100% { transform: translate(0, 100px) scale(0.8); } }
+        @keyframes moonriseMoveUp { 0% { transform: translate(0, 0) scale(0.8); } 100% { transform: translate(0, -40vh) scale(1); } }
+        .animate-sunrise #sun-icon { animation: sunriseMoveUp 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
+        .animate-sunrise #moon-group { animation: moonsetMoveDown 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
+        .animate-sunset #sun-icon { animation: sunsetMoveDown 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
+        .animate-sunset #moon-group { animation: moonriseMoveUp 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
 
-        /* --- HEADER & UI --- */
-        .header { padding: 40px 20px 20px 20px; display: flex; flex-direction: column; align-items: center; text-align: center; }
-        .logo-box { width: 60px; height: 60px; background-color: var(--accent); border-radius: 18px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.2rem; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        .welcome-text { font-size: 1.5rem; font-weight: 800; }
-        /* --- STILI CARD & NAVIGAZIONE --- */
+        /* --- STILI APP STANDARD --- */
+        .page-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--bg-color); z-index: 100; padding: 20px; overflow-y: auto; opacity: 0; transform: translateY(30px); transition: opacity 0.3s ease-out, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); padding-bottom: 150px; }
+        .page-overlay.visible { opacity: 1; transform: translateY(0); }
         .container { padding: 0 20px; padding-bottom: 100px; }
-        .card { 
-            background-color: var(--card-bg); border-radius: 22px; padding: 18px; margin-bottom: 15px; 
-            display: flex; align-items: center; justify-content: space-between; 
-            box-shadow: 0 4px 15px var(--shadow); border: 1px solid var(--border); cursor: pointer; 
-            transition: transform 0.2s, background-color 0.2s;
-        }
-        .card:active { transform: scale(0.96); background-color: var(--icon-bg); }
+        .card { background-color: var(--card-bg); border-radius: 22px; padding: 18px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px var(--shadow); border: 1px solid var(--border); cursor: pointer; opacity: 0; animation: elasticSlide 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+        /* Ritardi Card - Aumentati per Veglia */
+        .card:nth-child(1) { animation-delay: 0.05s; } .card:nth-child(2) { animation-delay: 0.10s; } .card:nth-child(3) { animation-delay: 0.15s; } .card:nth-child(4) { animation-delay: 0.20s; } .card:nth-child(5) { animation-delay: 0.25s; } .card:nth-child(6) { animation-delay: 0.30s; }
+        .card:active { transform: scale(0.95) !important; background-color: var(--border); transition: 0.1s; }
         .card-left { display: flex; align-items: center; }
-        .icon-box { 
-            width: 52px; height: 52px; background-color: var(--icon-bg); border-radius: 16px; 
-            display: flex; align-items: center; justify-content: center; margin-right: 18px; flex-shrink: 0; 
-        }
+        .icon-box { width: 52px; height: 52px; background-color: var(--icon-bg); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-right: 18px; overflow: hidden; flex-shrink: 0; }
         .asset-img { width: 60%; height: 60%; object-fit: contain; }
+        .fallback-icon { display: none; color: var(--accent); font-size: 1.5rem; }
         .card-title { font-weight: 700; font-size: 1rem; color: var(--text-color); }
-
-        /* --- SCHERMATE E TESTO --- */
-        .page-overlay { 
-            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
-            background-color: var(--bg-color); z-index: 100; padding: 20px; 
-            overflow-y: auto; opacity: 0; transition: opacity 0.3s ease; padding-bottom: 150px; 
-        }
-        .page-overlay.visible { opacity: 1; display: block; }
-        .testo-giustificato { text-align: left !important; line-height: 1.7; white-space: pre-line; }
-
-        .top-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; padding-top: 10px; }
-        .back-btn-circle {
-            width: 44px; height: 44px; border-radius: 50%; background-color: var(--card-bg);
-            display: flex; align-items: center; justify-content: center; cursor: pointer;
-            box-shadow: 0 4px 10px var(--shadow); color: var(--text-color);
-        }
-
-        /* --- MINI PLAYER ANIMATO --- */
-        #miniplayer {
-            position: fixed; bottom: 95px; left: 15px; right: 15px;
-            background-color: var(--accent); color: white; border-radius: 18px; 
-            display: flex; align-items: center; justify-content: space-between;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.25); z-index: 200; 
-            transform: translateY(150px); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            height: 75px; overflow: hidden;
-        }
-        #miniplayer.visible { transform: translateY(0); }
-        .mp-fill { position: absolute; top: 0; left: 0; height: 100%; width: 0%; background: rgba(255,255,255,0.2); z-index: 1; border-right: 2px solid white; }
-        .mp-content { position: relative; z-index: 2; width: 100%; display: flex; align-items: center; padding: 0 18px; justify-content: space-between; }
-
-        /* --- NAVBAR & UI ELEMENTS --- */
-        .navbar { 
-            position: fixed; bottom: 25px; left: 25px; right: 25px; 
-            background-color: var(--card-bg); border-radius: 25px; padding: 14px 0; 
-            display: flex; justify-content: space-around; box-shadow: 0 10px 25px var(--shadow); z-index: 50; 
-        }
-        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 0.75rem; font-weight: 700; color: #bbbbbb; cursor: pointer; }
-        .nav-item.active { color: var(--accent); }
-
-        .profile-pic-container { width: 110px; height: 110px; margin: 0 auto 20px; position: relative; }
-        .profile-pic { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 4px solid var(--accent); background: #eee; }
-        
-        .switch { position: relative; display: inline-block; width: 48px; height: 26px; }
+        .reader-image { width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 4px 10px var(--shadow); display: block; animation: elasticSlide 0.6s ease-out forwards; opacity: 0; }
+        .profile-pic-container { width: 100px; height: 100px; margin: 0 auto; position: relative; }
+        .profile-pic { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 4px solid var(--accent); background-color: white; transition: border-color 0.3s; }
+        .settings-box { background-color: var(--card-bg); border-radius: 20px; padding: 20px; margin-top: 20px; border: 1px solid var(--border); }
+        .setting-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .setting-label { font-weight: bold; font-size: 1rem; }
+        input[type="range"] { width: 100px; accent-color: var(--accent); }
+        .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
         .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 26px; }
-        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: var(--accent); }
         input:checked + .slider:before { transform: translateX(22px); }
+        input[type="text"] { width: 100%; padding: 18px; border-radius: 16px; border: 2px solid var(--border); margin-bottom: 15px; background: var(--card-bg); color: var(--text-color); font-size: 1rem; box-sizing: border-box; transition: border-color 0.3s; text-align: center; }
+        input[type="text"]:focus { border-color: var(--accent); outline: none; }
+        .main-player-ui { background-color: var(--card-bg); border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 15px var(--shadow); border: 1px solid var(--border); text-align: center; }
+        .main-controls { display: flex; justify-content: center; align-items: center; margin-bottom: 15px; }
+        .main-play-btn { background-color: var(--accent); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: transform 0.2s; }
+        .main-play-btn:active { transform: scale(0.9); }
+        .main-slider-container { display: flex; align-items: center; gap: 10px; font-size: 0.8rem; color: var(--text-sec); font-variant-numeric: tabular-nums; }
+        .main-slider { flex: 1; -webkit-appearance: none; height: 6px; border-radius: 3px; background: #e0e0e0; outline: none; accent-color: var(--accent); }
+        .main-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); cursor: pointer; }
+        .navbar { position: fixed; bottom: 25px; left: 25px; right: 25px; background-color: var(--card-bg); border-radius: 25px; padding: 12px 0; display: flex; justify-content: space-around; box-shadow: 0 10px 25px var(--shadow); z-index: 50; transition: transform 0.3s; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 0.7rem; font-weight: 700; color: #bbbbbb; transition: color 0.3s, transform 0.3s; }
+        .nav-item.active { color: var(--accent); transform: translateY(-4px); }
+        .nav-item .material-icons { font-size: 1.6rem; margin-bottom: 4px; }
 
-        .settings-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--border); }
-        .settings-row:last-child { border-bottom: none; }
+        /* Stile specifico per l'allineamento dei testi a sinistra come da Word */
+        .text-word-style {
+            text-align: left !important;
+            line-height: 1.8;
+            font-size: 1.05rem;
+            white-space: pre-line;
+            padding: 10px 5px;
+        }
+
+        .veglia-text-container {
+            animation: elasticSlide 0.6s ease; 
+            background:var(--card-bg); 
+            padding:30px 20px; 
+            border-radius:20px; 
+            box-shadow: 0 4px 15px var(--shadow);
+            white-space: pre-line;
+            line-height: 1.8;
+            font-size: 1.05rem;
+            text-align: left; 
+        }
+        .veglia-text-container h3 {
+            color: var(--accent);
+            text-align: center;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
-    <audio id="global-audio"><source src="assets/inno.mp3" type="audio/mpeg"></audio>
+
+    <audio id="global-audio" preload="auto">
+        <source src="assets/inno.mp3" type="audio/mpeg">
+    </audio>
 
     <div id="celestial-container">
         <div class="stars">
-            <span class="material-symbols-rounded star" style="top:20%; left:15%">star</span>
-            <span class="material-symbols-rounded star" style="top:45%; left:85%">star</span>
-            <span class="material-symbols-rounded star" style="top:10%; left:60%">star</span>
+            <span class="material-symbols-rounded star" style="top:10%; left:20%; animation-delay:0.2s">star</span>
+            <span class="material-symbols-rounded star" style="top:30%; left:80%; animation-delay:0.5s">star</span>
+            <span class="material-symbols-rounded star" style="top:15%; left:60%; font-size:8px;">star</span>
+            <span class="material-symbols-rounded star" style="top:40%; left:10%; font-size:12px;">star</span>
+            <span class="material-symbols-rounded star" style="top:70%; left:85%; animation-delay:1s">star</span>
         </div>
         <span id="sun-icon" class="material-symbols-rounded celestial-body">wb_sunny</span>
         <div id="moon-group" class="celestial-body"><span id="moon-icon" class="material-symbols-rounded">dark_mode</span></div>
     </div>
+
     <div id="miniplayer">
-        <div class="mp-fill" id="mp-fill"></div>
-        <div class="mp-content">
-            <div style="display:flex; align-items:center; cursor:pointer;" onclick="openReader('Inno')">
-                <div style="width:40px; height:40px; background:rgba(0,0,0,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; margin-right:12px">
-                    <span class="material-icons">music_note</span>
+        <div class="mp-fill-layer" id="mp-fill"></div>
+        <div class="mp-content-layer">
+            <div class="mp-info" onclick="openReader('Inno')">
+                <div class="mp-icon"><span class="material-icons" style="font-size:20px">music_note</span></div>
+                <div class="mp-text">
+                    <span class="mp-title">Inno M2G</span>
+                    <span class="mp-subtitle">In Riproduzione...</span>
                 </div>
-                <div style="font-size:0.85rem"><b>Inno M2G</b><br><span style="font-size:0.7rem; opacity:0.8">In riproduzione...</span></div>
             </div>
-            <div style="display:flex; align-items:center; gap:12px">
-                <span id="mp-play-icon" class="material-icons" onclick="toggleGlobalAudio()" style="font-size:32px; cursor:pointer">play_arrow</span>
-                <span class="material-icons" onclick="closeMiniplayer()" style="font-size:20px; opacity:0.6; cursor:pointer">close</span>
+            <div class="mp-controls">
+                <button class="mp-btn" onclick="toggleGlobalAudio(event)">
+                    <span id="mp-play-icon" class="material-icons mp-playhead">play_arrow</span>
+                </button>
+                <button class="mp-btn" onclick="closeMiniplayer(event)">
+                    <span class="material-icons mp-close">close</span>
+                </button>
             </div>
         </div>
     </div>
@@ -170,13 +281,11 @@
             <div class="logo-box">M2G</div>
             <div class="welcome-text">Bentornato, <br><span id="user-name-display" style="color:var(--accent)">Utente</span></div>
         </div>
+
         <div class="container">
             <div class="card" onclick="openLodiPage()">
                 <div class="card-left">
-                    <div class="icon-box">
-                        <img src="assets/sunrise.png" class="asset-img" onerror="this.nextElementSibling.style.display='block';this.style.display='none'">
-                        <span class="material-icons" style="display:none;color:var(--accent)">wb_sunny</span>
-                    </div>
+                    <div class="icon-box"><img src="assets/sunrise.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"><span class="material-icons fallback-icon">wb_sunny</span></div>
                     <div class="card-title">Lodi Mattutine</div>
                 </div>
                 <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
@@ -185,9 +294,8 @@
             <div class="card" onclick="openVegliaPage()">
                 <div class="card-left">
                     <div class="icon-box">
-                        <img src="assets/veglia.png" class="asset-img" onerror="this.nextElementSibling.style.display='block';this.style.display='none'">
-                        <span class="material-icons" style="display:none;color:var(--accent)">nights_stay</span>
-                    </div>
+                        <img src="assets/veglia.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                        <span class="material-icons fallback-icon">flight</span> </div>
                     <div class="card-title">Veglia</div>
                 </div>
                 <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
@@ -195,10 +303,7 @@
             
             <div class="card" onclick="openReader('Libretto')">
                 <div class="card-left">
-                    <div class="icon-box">
-                        <img src="assets/book-open.png" class="asset-img" onerror="this.nextElementSibling.style.display='block';this.style.display='none'">
-                        <span class="material-icons" style="display:none;color:var(--accent)">menu_book</span>
-                    </div>
+                    <div class="icon-box"><img src="assets/book-open.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"><span class="material-icons fallback-icon">menu_book</span></div>
                     <div class="card-title">Libretto</div>
                 </div>
                 <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
@@ -207,8 +312,8 @@
             <div class="card" onclick="openCantiPage()">
                 <div class="card-left">
                     <div class="icon-box">
-                        <img src="assets/canti.png" class="asset-img" onerror="this.nextElementSibling.style.display='block';this.style.display='none'">
-                        <span class="material-icons" style="display:none;color:var(--accent)">library_music</span>
+                        <img src="assets/canti.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                        <span class="material-icons fallback-icon">library_music</span>
                     </div>
                     <div class="card-title">Canti</div>
                 </div>
@@ -217,10 +322,7 @@
 
             <div class="card" onclick="openReader('Inno')">
                 <div class="card-left">
-                    <div class="icon-box">
-                        <img src="assets/music.png" class="asset-img" onerror="this.nextElementSibling.style.display='block';this.style.display='none'">
-                        <span class="material-icons" style="display:none;color:var(--accent)">music_note</span>
-                    </div>
+                    <div class="icon-box"><img src="assets/music.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"><span class="material-icons fallback-icon">music_note</span></div>
                     <div class="card-title">Inno</div>
                 </div>
                 <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
@@ -228,370 +330,783 @@
             
             <div class="card" onclick="openLinkFoto()">
                 <div class="card-left">
-                    <div class="icon-box">
-                        <img src="assets/camera.png" class="asset-img" onerror="this.nextElementSibling.style.display='block';this.style.display='none'">
-                        <span class="material-icons" style="display:none;color:var(--accent)">photo_camera</span>
-                    </div>
+                    <div class="icon-box"><img src="assets/camera.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"><span class="material-icons fallback-icon">photo_camera</span></div>
                     <div class="card-title">Foto ricordo</div>
                 </div>
                 <span class="material-icons" style="color:var(--text-sec)">open_in_new</span>
             </div>
         </div>
-        
         <div class="navbar">
             <div class="nav-item active" onclick="goHome()"><span class="material-icons">home</span><span>HOME</span></div>
             <div class="nav-item" onclick="goUser()"><span class="material-icons">person</span><span>PROFILO</span></div>
         </div>
     </div>
 
+    <div id="page-veglia" class="page-overlay">
+        <div class="top-bar">
+            <div class="back-btn-circle" onclick="goHome()">
+                <span class="material-icons">arrow_back</span>
+            </div>
+            <h2 style="margin:0; font-size: 1.2rem;">Veglia</h2>
+            <div style="width: 44px;"></div>
+        </div>
+        
+        <div class="veglia-text-container" id="veglia-content">
+            </div>
+    </div>
+
     <div id="page-lodi" class="page-overlay">
         <div class="top-bar">
-            <div class="back-btn-circle" onclick="goHome()"><span class="material-icons">arrow_back</span></div>
-            <div style="display:flex; align-items:center; background:var(--card-bg); border-radius:15px; padding:6px 15px; border:1px solid var(--border)">
-                <span style="font-size:0.8rem; margin-right:8px; font-weight:bold">Giorno</span>
-                <input type="number" id="lodi-search-input" min="1" max="2" onchange="jumpToLodi(this.value)" style="width:35px; border:none; background:none; text-align:center; font-weight:bold; outline:none; color:var(--accent)">
+            <div class="back-btn-circle" onclick="goHome()">
+                <span class="material-icons">arrow_back</span>
+            </div>
+            
+            <div class="search-box">
+                <span>Giorno</span>
+                <input type="number" id="lodi-search-input" min="1" max="2" onchange="jumpToLodi(this.value)">
             </div>
         </div>
-        <div style="background:var(--card-bg); padding:25px; border-radius:22px; box-shadow:0 4px 15px var(--shadow)">
-            <h2 id="lodi-title-display" style="text-align:center; color:var(--accent); margin-bottom:25px"></h2>
-            <div id="lodi-text-display" class="testo-giustificato"></div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:30px; border-top:1px solid var(--border); padding-top:20px">
-                <div class="back-btn-circle" onclick="prevLodi()"><span class="material-icons">chevron_left</span></div>
-                <span id="lodi-counter" style="font-weight:bold; color:var(--text-sec)"></span>
-                <div class="back-btn-circle" onclick="nextLodi()"><span class="material-icons">chevron_right</span></div>
+        
+        <div id="lodi-content-container" style="animation: elasticSlide 0.6s ease; background:var(--card-bg); padding:30px 20px; border-radius:20px; box-shadow: 0 4px 15px var(--shadow);">
+            <h2 id="lodi-title-display" style="text-align:center; color: var(--accent); margin-top:0; margin-bottom: 20px; font-size: 1.4rem;">Titolo</h2>
+            <div id="lodi-text-display" class="text-word-style">
+                Testo lodi qui...
+            </div>
+            
+            <hr style="border:0; border-top:1px solid var(--border); margin:30px 0 20px 0;">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="back-btn-circle" onclick="prevLodi()" style="background-color: var(--icon-bg); color: var(--accent);"><span class="material-icons">chevron_left</span></div>
+                <span id="lodi-counter" style="font-weight: bold; color: var(--text-sec);">1 / 2</span>
+                <div class="back-btn-circle" onclick="nextLodi()" style="background-color: var(--icon-bg); color: var(--accent);"><span class="material-icons">chevron_right</span></div>
             </div>
         </div>
     </div>
 
     <div id="page-canti" class="page-overlay">
         <div class="top-bar">
-            <div class="back-btn-circle" onclick="goHome()"><span class="material-icons">arrow_back</span></div>
-            <div style="display:flex; align-items:center; background:var(--card-bg); border-radius:15px; padding:6px 15px; border:1px solid var(--border)">
-                <span style="font-size:0.8rem; margin-right:8px; font-weight:bold">N°</span>
-                <input type="number" id="canto-search-input" min="1" max="28" onchange="jumpToCanto(this.value)" style="width:35px; border:none; background:none; text-align:center; font-weight:bold; outline:none; color:var(--accent)">
-            </div>
-        </div>
-        <div style="background:var(--card-bg); padding:25px; border-radius:22px; box-shadow:0 4px 15px var(--shadow)">
-            <h2 id="canto-title-display" style="text-align:center; color:var(--accent); margin-bottom:25px"></h2>
-            <div id="canto-text-display" class="testo-giustificato"></div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:30px; border-top:1px solid var(--border); padding-top:20px">
-                <div class="back-btn-circle" onclick="prevCanto()"><span class="material-icons">chevron_left</span></div>
-                <span id="canto-counter" style="font-weight:bold; color:var(--text-sec)"></span>
-                <div class="back-btn-circle" onclick="nextCanto()"><span class="material-icons">chevron_right</span></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="page-user" class="page-overlay">
-        <div class="top-bar">
-            <div class="back-btn-circle" onclick="goHome()"><span class="material-icons">arrow_back</span></div>
-            <h2 style="margin:0; font-size:1.2rem">Profilo</h2>
-            <div style="width:44px"></div>
-        </div>
-        <div style="text-align:center">
-            <div class="profile-pic-container" onclick="document.getElementById('file-input').click()">
-                <img id="profile-img" src="assets/user.png" class="profile-pic" onerror="this.src='assets/user.png'">
-                <div style="position:absolute; bottom:5px; right:5px; background:var(--accent); color:white; border-radius:50%; width:30px; height:30px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,0.3)">
-                    <span class="material-icons" style="font-size:1.2rem">edit</span>
-                </div>
-            </div>
-            <input type="file" id="file-input" accept="image/*" onchange="uploadImage(this)" style="display:none">
-            
-            <input type="text" id="name-input" placeholder="Il tuo nome" oninput="saveName()" style="width:100%; padding:18px; border-radius:18px; border:2px solid var(--border); background:var(--card-bg); color:var(--text-color); font-size:1.1rem; text-align:center; outline:none; margin-bottom:25px; box-sizing:border-box">
-            
-            <div style="background:var(--card-bg); border-radius:22px; padding:10px 20px; border:1px solid var(--border); text-align:left; box-shadow:0 4px 12px var(--shadow)">
-                <div class="settings-row">
-                    <span style="font-weight:bold">Grandezza Testo</span>
-                    <input type="range" id="font-slider" min="14" max="26" value="16" oninput="changeFontSize(this.value)" style="accent-color:var(--accent)">
-                </div>
-                <div class="settings-row">
-                    <span style="font-weight:bold">Modalità Notte</span>
-                    <label class="switch"><input type="checkbox" id="dark-mode-toggle" onchange="handleThemeToggle(this.checked)"><span class="slider"></span></label>
-                </div>
+            <div class="back-btn-circle" onclick="goHome()">
+                <span class="material-icons">arrow_back</span>
             </div>
             
-            <div class="card" onclick="openNotes()" style="margin-top:25px; background:var(--accent); color:white; justify-content:center; border:none; box-shadow:0 6px 20px rgba(0,0,0,0.1)">
-                <span class="material-icons" style="margin-right:12px">edit_note</span>
-                <span style="letter-spacing:1px">NOTE PERSONALI</span>
+            <div class="search-box">
+                <span>N°</span>
+                <input type="number" id="canto-search-input" min="1" max="28" onchange="jumpToCanto(this.value)">
             </div>
         </div>
-    </div>
-    <div id="page-veglia" class="page-overlay">
-        <div class="top-bar">
-            <div class="back-btn-circle" onclick="goHome()"><span class="material-icons">arrow_back</span></div>
-            <h2 style="margin:0; font-size:1.2rem">Veglia</h2>
-            <div style="width:44px"></div>
+        
+        <div id="canto-content-container" style="animation: elasticSlide 0.6s ease; background:var(--card-bg); padding:30px 20px; border-radius:20px; box-shadow: 0 4px 15px var(--shadow);">
+            <h2 id="canto-title-display" style="text-align:center; color: var(--accent); margin-top:0; margin-bottom: 20px; font-size: 1.4rem;">Titolo</h2>
+            <div id="canto-text-display" class="text-word-style">
+                Testo del canto qui...
+            </div>
+            
+            <hr style="border:0; border-top:1px solid var(--border); margin:30px 0 20px 0;">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="back-btn-circle" onclick="prevCanto()" style="background-color: var(--icon-bg); color: var(--accent);"><span class="material-icons">chevron_left</span></div>
+                <span id="canto-counter" style="font-weight: bold; color: var(--text-sec);">1 / 28</span>
+                <div class="back-btn-circle" onclick="nextCanto()" style="background-color: var(--icon-bg); color: var(--accent);"><span class="material-icons">chevron_right</span></div>
+            </div>
         </div>
-        <div id="veglia-content" class="testo-giustificato" style="background:var(--card-bg); padding:25px; border-radius:22px; box-shadow:0 4px 15px var(--shadow)"></div>
-    </div>
-
-    <div id="page-notes" class="page-overlay">
-        <div class="top-bar">
-            <div class="back-btn-circle" onclick="goUser()"><span class="material-icons">arrow_back</span></div>
-            <h2 style="margin:0; font-size:1.2rem">Note</h2>
-            <div style="width:44px"></div>
-        </div>
-        <textarea id="notes-input" placeholder="Scrivi qui i tuoi pensieri..." oninput="saveNotes()" style="width:100%; height:70vh; border-radius:22px; padding:20px; border:1px solid var(--border); background:var(--card-bg); color:var(--text-color); font-family:inherit; font-size:1rem; outline:none; resize:none; box-sizing:border-box; line-height:1.6; box-shadow:0 4px 15px var(--shadow)"></textarea>
     </div>
 
     <div id="page-reader" class="page-overlay">
         <div class="top-bar">
-            <div class="back-btn-circle" onclick="goHome()"><span class="material-icons">arrow_back</span></div>
-            <h2 id="reader-title" style="margin:0; font-size:1.2rem"></h2>
-            <div style="width:44px"></div>
+            <div class="back-btn-circle" onclick="goHome()">
+                <span class="material-icons">arrow_back</span>
+            </div>
+            <h2 id="reader-title" style="margin:0; font-size: 1.2rem;">Titolo</h2>
+            <div style="width: 44px;"></div>
         </div>
-        <div id="reader-content" class="testo-giustificato" style="background:var(--card-bg); padding:25px; border-radius:22px; box-shadow:0 4px 15px var(--shadow)"></div>
+        <div id="reader-content" class="text-word-style"></div>
+    </div>
+
+    <div id="page-user" class="page-overlay">
+        <div class="top-bar">
+            <div class="back-btn-circle" onclick="goHome()">
+                <span class="material-icons">arrow_back</span>
+            </div>
+            <h2 style="margin:0; font-size: 1.2rem;">Profilo</h2>
+            <div style="width: 44px;"></div>
+        </div>
+        <div style="text-align: center; margin-top: 10px;">
+            <div class="profile-pic-container" onclick="document.getElementById('file-input').click()">
+                <img id="profile-img" src="assets/user.png" class="profile-pic" onerror="this.src='assets/user.png'">
+                <div style="position:absolute; bottom:0; right:0; background:var(--accent); color:white; border-radius:50%; padding:5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"><span class="material-icons" style="font-size:16px">edit</span></div>
+            </div>
+            <input type="file" id="file-input" accept="image/*" onchange="uploadImage(this)" style="display:none">
+            <br><input type="text" id="name-input" placeholder="Il tuo nome" oninput="saveName()">
+            <div class="settings-box">
+                <div class="setting-row"><span class="setting-label">Grandezza Testo</span><div style="display:flex; align-items:center;"><span style="font-size:12px; margin-right:5px">A</span><input type="range" id="font-slider" min="14" max="24" value="16" oninput="changeFontSize(this.value)"><span style="font-size:20px; margin-left:5px">A</span></div></div>
+                <hr style="border:0; border-top:1px solid var(--border); margin:10px 0;">
+                <div class="setting-row">
+                    <span class="setting-label">Modalità Notte</span>
+                    <label class="switch"><input type="checkbox" id="dark-mode-toggle" onchange="handleThemeToggle(this.checked)"><span class="slider"></span></label>
+                </div>
+            </div>
+            <br><div class="card" onclick="openNotes()" style="background-color: var(--accent); color: white; justify-content: center; border:none; box-shadow: 0 10px 20px rgba(0,0,0,0.15);"><span class="material-icons" style="margin-right: 10px;">edit_note</span>APRI NOTE</div>
+        </div>
+    </div>
+
+    <div id="page-notes" class="page-overlay">
+        <div class="top-bar">
+            <div class="back-btn-circle" onclick="goUser()">
+                <span class="material-icons">arrow_back</span>
+            </div>
+            <h2 style="margin:0; font-size: 1.2rem;">Note</h2>
+            <div style="width: 44px;"></div>
+        </div>
+        <textarea id="notes-input" rows="20" placeholder="Scrivi qui..." oninput="saveNotes()"></textarea>
     </div>
 
     <script>
-    // --- DATABASE TESTI: LODI (Ripristinato Completo) ---
-    const LODI = [
-        {
-            num: 1,
-            title: "Lodi mattutine - 1 maggio",
-            text: `<b>Introduzione</b><br>
-<b>V.</b> O Dio, vieni a salvarmi.<br>
-<b>R.</b> Signore, vieni presto in mio aiuto.<br>
-Gloria al Padre e al Figlio e allo Spirito Santo. Come era nel principio, e ora e sempre, nei secoli dei secoli. Amen. Alleluia.<br><br>
+        const LINK_FOTO_RICORDO = "https://photos.app.goo.gl/TUO_LINK_QUI"; 
+        
+        // --- TESTO VEGLIA (NUOVO) ---
+        const TEXT_VEGLIA = `<b>Celebrante:</b>
+Nel nome del Padre, del Figlio e dello Spirito Santo,
+<b>Assemblea:</b> Amen
+<b>Celebrante:</b> Il Signore sia con voi.
+<b>Celebrante:</b> La pace del Signore nostro Gesù Cristo, l’amore di Dio Padre e la comunione nello Spirito Santo, siano con tutti voi. 
+Dio non ci ha creati per stare comodi, ci ha creati per camminare. Questa sera non resteremo fermi: cammineremo per le strade portando Gesù con noi. Lo porteremo fuori, tra la gente, perché la fede non si chiude, si dona. Chiediamo il coraggio di partire e di fidarci di Lui. Perché non siamo fatti per restare. Siamo fatti per andare.
+Esposizione Eucaristica
+Canto davanti al Re
 
-<b>E’ bello lodarti</b><br>
-È bello cantare il Tuo amore,<br>
-è bello lodare il Tuo nome.<br>
-È bello cantare il Tuo amore,<br>
-è bello lodarti, Signore,<br>
-è bello cantare a Te! (2 volte)<br><br>
+<h3>1 TAPPA PARTIRE – “Non sei fatto per restare”</h3>
+<b>Dai discorsi di papa Francesco</b>
+Camminare. L’uomo è un essere in cammino. Per tutta la vita è chiamato a mettersi in cammino, in continua uscita da dove si trova: da quando esce dal grembo della madre a quando passa da un’età della vita a un’altra; dal momento in cui lascia la casa dei genitori fino a quando esce da questa esistenza terrena. Il cuore ci invita ad andare, a raggiungere una meta. Ma camminare è una disciplina, una fatica, servono pazienza quotidiana e allenamento costante. Occorre rinunciare a tante strade per scegliere quella che conduce alla meta e ravvivare la memoria per non smarrirla. Camminare richiede l’umiltà di tornare sui propri passi, quando è necessario, e la cura per i compagni di viaggio, perché solo insieme si cammina bene. Camminare, insomma, esige una conversione continua di sé. Per questo tanti vi rinunciano, preferendo la quiete domestica, dove curare comodamente i propri affari senza esporsi ai rischi del viaggio. Ma così ci si aggrappa a sicurezze effimere, che non danno quella pace e quella gioia cui il cuore aspira, e che si trovano solo uscendo da sé stessi.
 
-<b>1 ant.</b> Crea in me, o Dio, un cuore puro, rinnova in me uno spirito saldo.<br><br>
+<b>Guida:</b> Siamo fatti per camminare. Eppure a volte ci fermiamo, per paura, per comodità, perché ogni passo chiede coraggio. Camminare è scegliere, è fidarsi anche quando la strada non è tutta chiara. Stasera vogliamo rimetterci in cammino con Lui e affidargli i nostri passi. Dove ti sei fermato? A che punto sei del cammino? Come ti senti davvero? Ora lasciamo un breve spazio di silenzio, perché queste domande entrino nel cuore, poi il sacerdote, portando Gesù Eucaristia, si incamminerà verso l’esterno e noi durante il canto seguiremo Gesù. Il nostro muoverci verso la prossima tappa sarà un segno concreto: non vogliamo restare fermi, vogliamo camminare con Lui, dietro di Lui, portandolo per le strade. 
+Canto
 
-<b>Salmo 50</b><br>
-Pietà di me, o Dio, secondo la tua misericordia;<br>
-nel tuo grande amore cancella il mio peccato.<br>
-Lavami da tutte le mie colpe, mondami dal mio peccato.<br>
-Riconosco la mia colpa, il mio peccato mi sta sempre dinanzi.<br><br>
+<h3>2 LUNGO LA VIA - “Gesù si accostò e camminava con loro”</h3>
+<b>Dal Vangelo secondo Luca</b>
+In quello stesso giorno due dei discepoli erano in cammino verso un villaggio chiamato Emmaus e conversavano tra loro di tutto ciò che era accaduto. Mentre discorrevano insieme, Gesù in persona si accostò e camminava con loro, ma i loro occhi erano incapaci di riconoscerlo. Ed egli, lungo la via, spiegò loro nelle Scritture ciò che si riferiva a lui. Giunti al villaggio, lo invitarono dicendo: «Resta con noi, perché si fa sera». Quando fu a tavola con loro, prese il pane, pronunciò la benedizione, lo spezzò e lo diede loro. Allora si aprirono i loro occhi e lo riconobbero. Ed essi dissero l’uno all’altro: «Non ardeva forse il nostro cuore mentre conversava con noi lungo il cammino?». E senza indugio partirono e tornarono a Gerusalemme per annunciare che il Signore è davvero risorto.
 
-Contro di te, contro te solo ho peccato,<br>
-quello che è male ai tuoi occhi, io l’ho fatto;<br>
-perciò sei giusto quando parli, retto nel tuo giudizio.<br><br>
+<b>Dagli scritti di Sant’Agostino</b>
+Qual è dunque il contenuto specifico che la presente lettura offre a noi? Davvero importante, se lo comprendiamo. Gesù appare: i discepoli lo vedevano con gli occhi, ma senza riconoscerlo. Il Maestro camminava con loro per via, anzi egli stesso era la via, ma loro non camminavano per quella via. Egli stesso dovette constatare che erano andati fuori della via. Nel tempo trascorso con loro prima della passione, infatti, egli aveva predetto ogni cosa: che avrebbe patito, che sarebbe morto, che il terzo giorno sarebbe risorto. Aveva predetto tutto, ma la sua morte fu per loro come una perdita di memoria. Quando lo videro sospeso al patibolo furono così turbati che dimenticarono i suoi insegnamenti, non attesero più la sua resurrezione, non rimasero saldi nelle sue promesse.
+Dicono: Noi speravamo che egli fosse il redentore d'Israele. O discepoli, l'avevate sperato. Vuol dire che adesso non lo sperate più. Ecco, Cristo vive, ma in voi la speranza è morta. Sì, Cristo è veramente vivo; ma questo Cristo vivo trova morti i cuori dei discepoli. Apparve e non apparve ai loro occhi; era visibile e insieme nascosto. In effetti, se non lo si vedeva, come potevano udire le sue domande e rispondere ad esse? Camminava per via come un compagno di viaggio, anzi era lui che li conduceva. Quindi lo vedevano, ma non erano in grado di riconoscerlo. I loro occhi - abbiamo così inteso - erano impediti dal riconoscerlo. Erano impediti non di vederlo ma di riconoscerlo.
 
-<b>Orazione Finale</b><br>
-Concedi al tuo popolo, o Dio, l’abbondanza dei tuoi doni, perché sia sempre fedele agli impegni del suo battesimo, e viva nella prosperità e nella pace in attesa della gioia eterna. Per il nostro Signore.<br><br>
+<b>Guida:</b> Anche noi, come i discepoli di Emmaus, a volte camminiamo con il cuore stanco, pieni di dubbi e di domande. Ci sono momenti in cui la strada sembra difficile e possiamo sentirci soli. Ma il Vangelo ci ricorda che Gesù cammina accanto a noi, anche quando non riusciamo a riconoscerlo. E ci dona dei compagni di viaggio, perché la fede non si vive da soli. Per questo, come segno di questo cammino condiviso, prendiamoci per mano e, come una sola famiglia, insieme cantiamo la preghiera del Padre Nostro
 
-<b>Conclusione</b><br>
-<b>V.</b> Il Signore ci benedica, ci preservi da ogni male, e ci conduca alla vita eterna.<br>
+<h3>3 TAPPA RICONCILIARSI – “Ripartire insieme”</h3>
+<b>Dal Vangelo secondo Matteo</b>
+Avete inteso che fu detto: Occhio per occhio e dente per dente. Ma io vi dico di non opporvi al malvagio; anzi, se uno ti dà uno schiaffo sulla guancia destra, tu porgi gli anche l’altra, e a chi vuole portarti in tribunale e toglierti la tunica, tu lascia anche il mantello. E se uno ti costringerà ad accompagnarlo per un miglio, tu con lui fanne due. Dà a chi ti chiede, e a chi desidera da te un prestito non voltare le spalle. Avete inteso che fu detto: Amerai il tuo prossimo e odierai il tuo nemico. Ma io vi dico: amate i vostri nemici e pregate per quelli che vi perseguitano, affinché siate figli del Padre vostro che è nei cieli; egli fa sorgere il suo sole sui cattivi e sui buoni, e fa piovere sui giusti e sugli ingiusti. Infatti, se amate quelli che vi amano, quale ricompensa ne avete? Non fanno così anche i pubblicani? E se date il saluto soltanto ai vostri fratelli, che cosa fate di straordinario? Non fanno così anche i pagani? Voi, dunque, siate perfetti come è perfetto il Padre vostro celeste.
+
+<b>Lettore1:</b> Nulla rende gli uomini così forti nel cammino come la pace tra di loro. Dove c’è carità, lì abita Cristo; dove i fratelli vivono uniti, lì il Signore cammina in mezzo a loro.
+
+<b>Guida:</b> Nel cammino della vita non mancano le fatiche: a volte ci si ferma, a volte ci si allontana, a volte il cuore perde la pace. Ma il Signore ci chiama sempre a ritrovarci e a riprendere la strada insieme. Prima di continuare il nostro cammino, compiamo allora un gesto semplice ma vero: riconoscerci fratelli. Scambiamoci ora un segno di pace, una stretta di mano, uno sguardo, un abbraccio, perché chi cammina con Cristo non lascia indietro nessuno.
+
+<h3>4 TAPPA ANDARE – Destinazione mondo</h3>
+<b>Dal Vangelo secondo Matteo</b>
+In quel tempo, gli undici discepoli andarono in Galilea, sul monte che Gesù aveva loro indicato. Quando lo videro, si prostrarono. Essi però dubitarono. Gesù si avvicinò e disse loro: «A me è stato dato ogni potere in cielo e sulla terra. Andate dunque e fate discepoli tutti i popoli, battezzandoli nel nome del Padre e del Figlio e dello Spirito Santo, insegnando loro a osservare tutto ciò che vi ho comandato. Ed ecco, io sono con voi tutti i giorni, fino alla fine del mondo».
+
+<b>Commento del Sacerdote</b>
+
+<b>Dai Discorsi di Papa Leone ai giovani</b>
+Carissimi giovani, forse vi rammaricate di aver ereditato un mondo lacerato da guerre e sfigurato dalle ingiustizie sociali. Eppure c’è speranza, in voi risiede speranza! Voi avete un dono, che spesso a noi adulti sembra ormai sfuggire. Voi avete speranza! Voi avete il tempo! Avete più tempo per sognare, organizzare e compiere il bene. Voi siete il presente e tra le vostre mani già si sta costruendo il futuro! E avete l’entusiasmo per cambiare il corso della storia! La vera resistenza al male non è il male, ma l’amore, capace di guarire le proprie ferite, mentre si curano quelle degli altri.
+
+<b>Guida:</b> Il mondo che abitiamo è spesso ferito, segnato da guerre, ingiustizie e solitudini. Ma il Signore affida proprio a noi la missione di portare luce: ognuno può essere una piccola luce nel mondo. Ai piedi dell’altare è posto un mappamondo. Ora ciascuno riceverà un lumino e lo deporrà attorno ad esso. È il segno della nostra missione: portare la luce di Cristo nel mondo, nei luoghi della nostra vita.
+
+<b>Preghiera finale</b>
+Signore Gesù,
+questa sera abbiamo camminato con Te
+e abbiamo scoperto che il cammino non finisce qui.
+La nostra destinazione è il mondo:
+le nostre case, le nostre amicizie,
+i luoghi della vita di ogni giorno.
+Donaci il coraggio di vivere ciò che ci ha insegnato
+Luigi Guanella: “fermarsi non si può quando c’è amore da donare e bene da compiere”.
+Fa’ che la nostra vita diventi missione,
+perché chi incontra Te
+non può restare fermo.
+Amen.`;
+
+        // --- TESTO INNO PRINCIPALE ---
+        const LYRICS_INNO = `From far and wide to gather in this place
+We spread our wings and here we are, 
+And with Mary proclaiming our Yes 
+We seek to serve and follow the will 
+Of the Lord, our Father 
+Chiamati ad essere come Cristo Gesù, 
+Vogliamo dare, diventare, 
+Docili al sì, essere come Maria.
+Ritornello: 
+Todos vão ouvir a nossa voz, 
+Levantemos braços, há pressa no ar. 
+Jesus vive e não nos deixa sós: 
+Não mais deixaremos de amar.
+Tú que te buscas saber quién eres 
+parte a descubrir, ven a ver lo que vi. 
+Ven con nosotros a mirar más allá, 
+de lo que haces y que no te deja 
+reír y amar. 
+Oublie le passé, ne dis pas non. 
+Écoute donc ton coeur, 
+Et pars sans peur sur cette mission.
+[Ritornello]
+È stata Maria ad accogliere per prima 
+La grande sorpresa della vita per sempre. 
+Fiduciosa e semplice, volle ricevere 
+il grande mistero di un Dio che è 
+Per te e per me 
+No puedo callar, no puedo dejar 
+de cantar: “Mi Señor, 
+cuenta conmigo, ¡no más callaré!”
+[Ritornello]
+Sans aucun doute sur sa mission, 
+Si jeune, Marie quitte promptement 
+Sa maison et part dans les montagnes 
+Voir Elisabeth et trouve immédiatement 
+Salutation, communion. 
+Le fruit est béni, c'est mon Seigneur! 
+And I want to hear: You trusted in my word and happiness 
+Is yours`;
+
+        // --- DATABASE LODI ---
+        const LODI = [
+            {
+                num: 1,
+                title: "Lodi mattutine - 1 maggio",
+                text: `<b>Introduzione</b> 
+<b>V.</b> O Dio, vieni a salvarmi. 
+<b>R.</b> Signore, vieni presto in mio aiuto. Gloria al Padre e al Figlio e allo Spirito Santo. 
+Come era nel principio, e ora e sempre, nei secoli dei secoli. Amen. Alleluia.
+
+<b>E’ bello lodarti</b>
+È bello cantare il Tuo amore,
+è bello lodare il Tuo nome.
+È bello cantare il Tuo amore,
+è bello lodarti, Signore,
+è bello cantare a Te!
+(2 volte)
+Tu, che sei l’Amore infinito
+che neppure il cielo può contenere,
+Ti sei fatto uomo,
+Tu sei venuto qui
+ad abitare in mezzo a noi, allora
+È bello cantare il tuo amore…
+Tu che conti tutte le stelle
+e le chiami ad una ad una per nome,
+da mille sentieri
+ci hai radunati qui, 
+ci hai chiamati figli Tuoi, allora
+È bello cantare il tuo amore,
+è bello lodare il Tuo nome.
+È bello cantare il Tuo amore,
+è bello lodarti, Signore,
+è bello cantare a Te!
+(2 volte)
+
+<b>1 ant.</b>
+Crea in me, o Dio, un cuore puro,
+rinnova in me uno spirito saldo.
+
+<b>Salmo 50</b>
+Pietà di me, o Dio, secondo la tua misericordia;
+nel tuo grande amore cancella il mio peccato.
+Lavami da tutte le mie colpe,
+mondami dal mio peccato.
+Riconosco la mia colpa,
+il mio peccato mi sta sempre dinanzi.
+Contro di te, contro te solo ho peccato,
+quello che è male ai tuoi occhi,
+io l’ho fatto;
+perciò sei giusto quando parli,
+retto nel tuo giudizio.
+Ecco, nella colpa sono stato generato,
+nel peccato mi ha generato mia madre.
+Ma tu vuoi la sincerità del cuore
+e nell’intimo mi insegni la sapienza.
+Purificami con issopo e sarò mondato;
+lavami e sarò più bianco della neve.
+Fammi sentire gioia e letizia;
+esulteranno le ossa che hai spezzato.
+Distogli lo sguardo dai miei peccati,
+cancella tutte le mie colpe,
+Crea in me, o Dio, un cuore puro,
+rinnova in me uno spirito saldo.
+Non respingermi dalla tua presenza
+e non privarmi del tuo Santo Spirito.
+Rendimi la gioia di essere salvato,
+sostiene in me un animo generoso.
+Insegnerò agli erranti le tue vie
+e i peccatori a te ritorneranno.
+Liberami dal sangue, Dio, mia salvezza,
+la mia lingua esalterà la tua giustizia.
+Signore, apri le mie labbra e la mia bocca
+proclami la tua lode, poiché non gradisci il sacrificio
+e se offro olocausti, non li accetti.
+Uno spirito contrito è sacrificio a Dio,
+un cuore affranto e umiliato tu, o Dio, non disprezzi.
+Nel tuo amore fa grazia a Sion,
+rialza le mura di Gerusalemme.
+Allora gradirai i sacrifici prescritti,
+l’olocausto e l’intera oblazione,
+allora immoleranno vittime sopra il tuo altare.
+
+<b>1 ant.</b>
+Crea in me, o Dio, un cuore puro,
+rinnova in me uno spirito saldo.
+
+<b>Lettura Breve (Gal 2, 20)</b>
+Sono stato crocifisso con Cristo e non sono più io che vivo, ma Cristo vive in me.
+Questa vita che vivo nella carne io la vivo nella fede del Figlio di Dio, che mi ha amato e ha dato se stesso per me.
+
+<b>Responsorio breve</b>
+<b>R.</b> Invocherò l’Altissimo: da lui ogni mio bene.
+Invocherò l’altissimo: da lui ogni mio bene.
+<b>V.</b> Dal cielo manderà la sua salvezza:
+da lui ogni mio bene.
+Gloria la Padre e al Figlio e allo Spirito Santo.
+Invocherò l’Altissimo: da lui ogni mio bene
+
+<b>Antifona al Benedictus:</b>
+Nella sua misericordia il nostro Dio
+Ci ha visitati dall’alto come sole che sorge.
+
+<b>Cantico di Zaccaria (Benedictus)</b>
+Benedetto il Signore Dio d'Israele,
+perché ha visitato e redento il suo popolo,
+e ha suscitato per noi una salvezza potente
+nella casa di Davide, suo servo.
+Come aveva promesso
+per bocca dei suoi santi profeti d'un tempo:
+salvezza dai nostri nemici
+e dalle mani di quanti ci odiano.
+Così egli ha concesso misericordia ai nostri padri
+e si è ricordato della sua santa alleanza,
+del giuramento fatto ad Abramo, nostro padre,
+di concederci, liberati dalle mani dei nemici,
+di servirlo senza timore, in santità e giustizia
+al suo cospetto, per tutti i nostri giorni.
+E tu, bambino, sarai chiamato profeta dell'Altissimo
+perché andrai innanzi al Signore a preparargli le strade,
+per dare al suo popolo la conoscenza della salvezza
+nella remissione dei suoi peccati.
+Grazie alla bontà misericordiosa del nostro Dio,
+per cui verrà a visitarci dall'alto un sole che sorge,
+per rischiarare quelli che stanno nelle tenebre
+e nell'ombra di morte
+e dirigere i nostri passi sulla via della pace.
+Amen.
+
+<b>Invocazioni</b>
+Rivolgiamo la nostra preghiera a Dio, Padre provvidente, e diciamo insieme:
+<b>R.</b> Conferma ciò che hai operato in noi, Signore.
+Dio di misericordia, guidaci sulla via della santità,
+- perché cerchiamo sempre ciò che è vero, buono e giusto.
+Non abbandonarci, o Dio, per il tuo grande amore,
+- non dimenticare la tua alleanza.
+Acccogli l’offerta del nostro cuore contrito e umiliato,
+- fa’ che non siano confusi quelli che si affidano a te.
+Tu che ci hai resi partecipi della missione profetica del Cristo,
+- fa’ che annunziamo con le parole e le opere le meraviglie del tuo amore.
+<b>Padre Nostro</b>
+
+<b>Orazione Finale</b>
+Concedi al tuo popolo, o Dio, l’abbondanza dei tui doni, perché sia sempre fedele agli impegni del suo battesimo, e viva nella prosperità e nella pace in attesa della gioia eterna.
+Per il nostro Signore.
+
+<b>Conclusione</b>
+<b>V.</b> Il Signore ci benedica, ci preservi da ogni male, e ci conduca alla vita eterna.
 <b>R.</b> Amen.`
-        },
-        {
-            num: 2,
-            title: "Lodi mattutine - 2 maggio",
-            text: `<b>Introduzione</b><br>
-<b>V.</b> O Dio, vieni a salvarmi.<br>
-<b>R.</b> Signore, vieni presto in mio aiuto.<br>
-Gloria al Padre e al Figlio e allo Spirito Santo. Amen. Alleluia.<br><br>
+            },
+            {
+                num: 2,
+                title: "Lodi mattutine – 2 maggio",
+                text: `<b>Introduzione</b>
+<b>V.</b> O Dio, vieni a salvarmi.
+<b>R.</b> Signore, vieni presto in mio aiuto.
+Gloria al Padre e al Figlio e allo Spirito Santo.
+Come era nel principio, e ora e sempre, nei secoli dei secoli.
+Amen. Alleluia.
 
-<b>Salmo 91</b><br>
-È bello dar lode al Signore e cantare al tuo nome, o Altissimo, annunziare al mattino il tuo amore, la tua fedeltà lungo la notte...<br><br>
+<b>Quale gioia è star con Te Gesù</b>
+Ogni volta che Ti cerco, ogni volta che Ti invoco,
+sempre mi accogli, Signor.
+Grandi sono i Tuoi prodigi, Tu sei buono verso tutti,
+Santo, Tu regni tra noi.
+Quale gioia è star con Te, Gesù, vivo e vicino;
+bello è dar lode a Te: Tu sei il Signor.
+Quale dono è aver creduto in Te, che non mi abbandoni;
+io per sempre abiterò la Tua casa, mio Re.
+Hai guarito il mio dolore, hai cambiato questo cuore:
+oggi rinasco, Signor.
+Grandi sono i Tuoi prodigi, Tu sei buono verso tutti,
+Santo, Tu regni tra noi.
+Rit
+Hai salvato la mia vita, hai aperto la mia bocca;
+canto per Te, mio Signor.
+Grandi sono i Tuoi prodigi, Tu sei buono verso tutti,
+Santo, Tu regni tra noi.
+Rit
 
-<b>Orazione Finale</b><br>
-O Dio, vera luce e giorno senza tramonto, accogli la lode mattutina del tuo popolo e fa’ che il nostro spirito risplenda nel fulgore della tua venuta. Per il nostro Signore.<br><br>
+<b>1 ant.</b>
+È bello dar lode all’Altissimo,
+annunziare al mattino il suo amore.
 
-<b>Conclusione</b><br>
-<b>V.</b> Il Signore ci benedica, ci preservi da ogni male, e ci conduca alla vita eterna.<br>
+<b>Salmo 91</b>
+È bello dar lode al Signore
+e cantare al tuo nome, o Altissimo,
+annunziare al mattino il tuo amore,
+la tua fedeltà lungo la notte,
+sull'arpa a dieci corde e sulla lira,
+con canti sulla cetra.
+Poiché mi rallegri, Signore con le tue meraviglie,
+esulto per l'opera delle tue mani.
+Come sono grandi le tue opere, Signore,
+quanto profondi i tuoi pensieri!
+L'uomo insensato non intende
+e lo stolto non capisce:
+se i peccatori germogliano come l'erba
+e fioriscono tutti i malfattori,
+li attende una rovina eterna:
+ma tu sei l'eccelso per sempre, o Signore.
+Ecco, i tuoi nemici, o Signore,
+ecco, i tuoi nemici periranno,
+saranno dispersi tutti i malfattori.
+Tu mi doni la forza di un bufalo,
+mi cospargi di olio splendente.
+I miei occhi disprezzeranno i miei nemici,
+e contro gli iniqui che mi assalgono
+i miei orecchi udranno cose infauste.
+Il giusto fiorirà come palma,
+crescerà come cedro del Libano;
+piantati nella casa del Signore,
+fioriranno negli atri del nostro Dio.
+Nella vecchiaia daranno ancora frutti,
+saranno vegeti e rigogliosi,
+per annunziare quanto è retto il Signore:
+mia roccia, in lui non c'è ingiustizia.
+
+<b>Lettura Breve (2 Pt 3, 13-14)</b>
+Secondo la promessa del Signore, noi aspettiamo nuovi cieli e una terra nuova nei quali avrà stavile dimora la giustizia.
+Perciò, carissimi, nell’attesa di questi eventi, cercate d’essere senza macchia e irreprensibili davanti a Dio, in pace.
+La magnanimità del Signore nostro giudicatela come salvezza.
+
+<b>Responsorio breve</b>
+<b>R.</b> Esultano le mie labbra cantando le tue lodi.
+Esultano le mie labbra cantando le tue lodi.
+<b>V.</b> La mia lingua proclama la tua giustizia
+cantando le tue lodi.
+Gloria la Padre e al Figlio e allo Spirito Santo.
+Invocherò l’Altissimo: da lui ogni mio bene
+
+<b>Antifona:</b>
+guida i nostri passi, o Signore,
+sulla via della pace.
+
+<b>Cantico di Zaccaria</b>
+Benedetto il Signore Dio d'Israele,
+perché ha visitato e redento il suo popolo,
+e ha suscitato per noi una salvezza potente
+nella casa di Davide, suo servo.
+Come aveva promesso
+per bocca dei suoi santi profeti d'un tempo:
+salvezza dai nostri nemici
+e dalle mani di quanti ci odiano.
+Così egli ha concesso misericordia ai nostri padri
+e si è ricordato della sua santa alleanza,
+del giuramento fatto ad Abramo, nostro padre,
+di concederci, liberati dalle mani dei nemici,
+di servirlo senza timore, in santità e giustizia
+al suo cospetto, per tutti i nostri giorni.
+E tu, bambino, sarai chiamato profeta dell'Altissimo
+perché andrai innanzi al Signore a preparargli le strade,
+per dare al suo popolo la conoscenza della salvezza
+nella remissione dei suoi peccati.
+Grazie alla bontà misericordiosa del nostro Dio,
+per cui verrà a visitarci dall'alto un sole che sorge,
+per rischiarare quelli che stanno nelle tenebre
+e nell'ombra di morte
+e dirigere i nostri passi sulla via della pace.
+
+<b>Invocazioni</b>
+Adoriamo Dio Padre, che nel Cristo, suo Figlio, ha ridato al mondo la speranza e la vita.
+Animati da questa certezza diciamo:
+<b>R.</b> Signore ascolta la nostra preghiera.
+Dio, Padre di tutti, che ci hai gatto giungere all’alba del nuovo giorno,
+- fa’ che viviamo nell’amore del Cristo a lode e gloria del tuo nome.
+Rafforza in noi la fede, la speranza e la carità,
+- che lo Spirito Santo ha seminato nei nostri cuori.
+Il nostro sguardo sia sempre rivolto a te,
+- perché rispondiamo prontamente alla tua chiamata.
+Salvaci dalle insidie e dalle seduzioni del male,
+- difendici da ogni pericolo nel cammino verso la patria del cielo.
+<b>Padre Nostro</b>
+
+<b>Orazione Finale</b>
+O Dio, vera luce e giorno senza tramonto, accogli la lode mattutina del tuo popolo e fa’ che il nostro spirito, libero dalle tenebre della colpa, risplenda nel fulgore della tua venuta.
+Peri il nostro Signore.
+
+<b>Conclusione</b>
+<b>V.</b> Il Signore ci benedica, ci preservi da ogni male, e ci conduca alla vita eterna.
 <b>R.</b> Amen.`
+            }
+        ];
+
+        let currentLodiIndex = 0; 
+
+        // --- DATABASE CANTI ---
+        const CANTI = [
+            { num: 1, title: "1. Canto dell’amore", text: `Se dovrai attraversare il deserto\nnon temere io sarò con te\nse dovrai camminare nel fuoco\nla sua fiamma non ti brucerà\nseguirai la mia luce nella notte\nsentirai la mia forza nel cammino\nio sono il tuo Dio, il Signore.\n\nSono io che ti ho fatto e plasmato\nti ho chiamato per nome\nio da sempre ti ho conosciuto\ne ti ho dato il mio amore\nperché tu sei prezioso ai miei occhi\nvali più del più grande dei tesori\nio sarò con te dovunque andrai\n\nNon pensare alle cose di ieri\ncose nuove fioriscono già\naprirò nel deserto sentieri\ndarò acqua nell'aridità\nperché tu sei prezioso ai miei occhi\nvali più del più grande dei tesori\nio sarò con te dovunque andrai\nperché tu sei prezioso ai miei occhi\nvali più del più grande dei tesori\nio sarò con te dovunque andrai.\n\nIo ti sarò accanto sarò con te\nper tutto il tuo viaggio sarò con te\nio ti sarò accanto sarò con te\nper tutto il tuo viaggio sarò con te.` },
+            { num: 2, title: "2. Sono qui a lodarti", text: `Luce del mondo, nel buio del cuore\nVieni ed illuminami\nTu mia sola speranza di vita\nResta per sempre con me\n\nSono qui a lodarti, qui per adorarti\nQui per dirti che Tu sei il mio Dio\nE solo Tu sei santo, sei meraviglioso\nDegno e glorioso sei per me\n\nRe della storia e Re nella gloria\nSei sceso in terra fra noi\nCon umiltà il Tuo trono hai lasciato\nPer dimostrarci il Tuo amor\n\nSono qui a lodarti, qui per adorarti\nQui per dirti che Tu sei il mio Dio\nE solo Tu sei santo, sei meraviglioso\nDegno e glorioso sei per me\nNon so quanto è costato a Te\nMorire in croce, lì per me` },
+            { num: 3, title: "3. Ave Maria", text: `Donna dell’attesa e madre di speranza\nOra pro nobis.\nDonna del sorriso e madre del silenzio\nOra pro nobis.\nDonna di frontiera e madre dell’ardore\nOra pro nobis.\nDonna del riposo e madre del sentiero\nOra pro nobis.\n\nAve Maria, Ave.\nAve Maria, Ave.\n\nDonna del deserto e madre del respiro\nOra pro nobis.\nDonna della sera e madre del ricordo\nOra pro nobis.\nDonna del presente e madre del ritorno\nOra pro nobis.\nDonna della terra e madre dell’amore\nOra pro nobis.\n\nAve Maria, Ave.\nAve Maria, Ave.` },
+            { num: 4, title: "4. Come fuoco vivo", text: `Come fuoco vivo si accende in noi\nun’immensa felicità\nche mai più nessuno ci toglierà\nperchè Tu sei ritornato.\nChi potrà tacere, da ora in poi,\nche sei Tu in cammino con noi.\nChe la morte è vinta per sempre,\nche ci hai ridonato la vita\n\nSpezzi il pane davanti a noi\nmentre il sole è al tramonto:\nora gli occhi ti vedono,\nsei Tu ! Resta con noi.\n\nCome fuoco vivo si accende in noi\nun’immensa felicità\nche mai più nessuno ci toglierà\nperchè Tu sei ritornato.\nChi potrà tacere, da ora in poi,\nche sei Tu in cammino con noi.\nChe la morte è vinta per sempre,\nche ci hai ridonato la vita\n\nE per sempre ti mostrerai\nin quel gesto d’amore:\nmani che ancora spezzano\npane d’eternità.\n\nCome fuoco vivo si accende in noi\nun’immensa felicità\nche mai più nessuno ci toglierà\nperchè Tu sei ritornato.\nChi potrà tacere, da ora in poi,\nche sei Tu in cammino con noi.\nChe la morte è vinta per sempre,\nche ci hai ridonato la vita` },
+            { num: 5, title: "5. Beati i Misericordiosi – Inno GMG 2016", text: `Sei sceso dalla tua immensità\nin nostro aiuto.\nMisericordia scorre da te\nsopra tutti noi.\nPersi in un mondo d’oscurità\nlì Tu ci trovi.\nNelle tue braccia ci stringi e poi\ndai la vita per noi.\n\nBeato è il cuore che perdona!\nMisericordia riceverà da Dio in cielo!\n\nSolo il perdono riporterà\npace nel mondo.\nSolo il perdono ci svelerà\ncome figli tuoi.\n\nBeato è il cuore che perdona!\nMisericordia riceverà da Dio in cielo!\n\nCol sangue in croce hai pagato Tu\nle nostre povertà.\nSe noi ci amiamo e restiamo in te\nil mondo crederà!\n\nBeato è il cuore che perdona!\nMisericordia riceverà da Dio in cielo! (2v)` },
+            { num: 6, title: "6. Come tu mi vuoi", text: `Eccomi Signor, vengo a Te mio Re, che si compia in me la Tua volontà.\nEccomi Signore, vengo a Te mio Dio, plasma il cuore mio e di Te vivrò.\nSe Tu lo vuoi Signore manda me e il Tuo nome annuncerò.\n\nRit: Come Tu mi vuoi io sarò, dove Tu mi vuoi io andrò.\nQuesta vita io voglio donarla a Te per dar gloria al Tuo nome mio re.\nCome Tu mi vuoi io sarò, dove Tu mi vuoi io andrò,\nse mi guida il Tuo amore paura non ho\nper sempre io sarò, come Tu mi vuoi.\n\nEccomi Signor, vengo a Te mio Re, che si compia in me la Tua volontà.\nEccomi Signore, vengo a Te mio Dio, plasma il cuore mio e di Te vivrò.\nTra le tue mani mai più vacillerò e strumento tuo sarò.` },
+            { num: 7, title: "7. Adoro Te", text: `Sei qui davanti a me, o mio Signore, sei in questa brezza che ristora il cuore,\nroveto che mai si consumerà, presenza che riempie l'anima.\n\nAdoro Te, fonte della Vita, adoro Te, Trinità infinità.\nI miei calzari leverò su questo santo suolo,\nalla presenza Tua mi prostrerò.\n\nSei qui davanti a me, o mio Signore, nella Tua grazia trovo la mia gioia.\nIo lodo, ringrazio e prego perché il mondo ritorni a vivere in Te.\n\nAdoro Te, fonte della Vita, adoro Te, Trinità infinità.\nI miei calzari leverò su questo santo suolo,\nalla presenza Tua mi prostrerò.\n\nAdoro Te, fonte della Vita, adoro Te, Trinità infinità.\nI miei calzari leverò su questo santo suolo,\nalla presenza Tua mi prostrerò, mio Signor.` },
+            { num: 8, title: "8. Resta accanto a me", text: `Ora vado sulla mia strada\ncon l’amore tuo che mi guida\no Signore ovunque io vada\nresta accanto a me.\nIo ti prego, stammi vicino\nogni passo del mio cammino\nogni notte, ogni mattino\nresta accanto a me.\n\nIl tuo sguardo puro\nsia luce per me\ne la tua parola sia voce per me.\nChe io trovi il senso del mio andare\nsolo in Te,\nnel tuo fedele amare il mio perché. Rit.\n\nFa’ che chi mi guarda\nnon veda che Te.\nFa’ che Chi mi ascolta\nnon senta che Te\ne chi pensa a me, fa’ che nel cuore\npensi a Te\ne trovi quell’amore\nche hai dato a me.` },
+            { num: 9, title: "9. Verbum Panis", text: `Prima del tempo\nprima ancora che la terra\ncominciasse a vivere\nil Verbo era presso Dio.\nVenne nel mondo\ne per non abbandonarci\nin questo viaggio ci lasciò\ntutto se stesso come pane.\nVerbum caro factum est\nVerbum panis factum est.\n\nQui spezzi ancora il pane in mezzo a noi\ne chiunque mangerà non avrà più fame.\nQui vive la tua chiesa intorno a te\ndove ognuno troverà la sua vera casa.\n\nVerbum caro factum est...\n\nPrima del tempo\nquando l'universo fu creato\ndall'oscurità\nil Verbo era presso Dio.\nVenne nel mondo\nnella sua misericordia\nDio ha mandato il Figlio suo\ntutto se stesso come pane.\n\nVerbum caro factum est... (Rit.)` },
+            { num: 10, title: "10. Quale gioia è star con te", text: `Ogni volta che ti cerco, ogni volta che t’invoco, sempre mi accogli Signor.\nGrandi sono i tuoi prodigi, Tu sei buono verso tutti, Santo Tu regni tra noi.\n\nQuale gioia è star con te Gesù vivo e vicino,\nbello è dar lode a Te, Tu sei il Signor.\nquale dono è aver creduto in Te che non mi abbandoni,\nio per sempre abiterò la Tua casa, mio Re.\n\nHai guarito il mio dolore, hai cambiato questo cuore, oggi rinasco, Signor.\nGrandi sono i tuoi prodigi, tu sei buono verso tutti, Santo Tu regni tra noi.\nRit.\nHai salvato la mia vita, hai aperto la mia bocca, canto per Te, mio Signor.\nGrandi sono i Tuoi prodigi, Tu sei buono verso tutti, Santo Tu regni tra noi.\n\nQuale gioia è star con te Gesù vivo e vicino,\nbello è dar lode a Te, Tu sei il Signor.\nquale dono è aver creduto in Te che non mi abbandoni,\nio per sempre abiterò la Tua casa, mio Re.` },
+            { num: 11, title: "11. Alle porte del cielo", text: `Con le paure, i dubbi e questa carne debole,\nCon la mia fragilità,\nHo costruito e son caduto in mille trappole,\nPur di un po' di libertà.\nE in quel mio buio ti sei rivelato, fino a condurmi qua, e….\n\nVoglio ricominciare da zero, attraversando la porta del cielo,\nE urlare al mondo spaventato e deluso:\nPuoi sperare ancora, esiste il paradiso!\nVoglio ricominciare davvero, attraversando la porta del cielo,\nPadre, trasforma ogni peccato in sorriso\nE facci arrivare tutti in paradiso!\n\nVogliamo essere ordinaria straordinarietà,\nLuci nell'oscurità\nE testimoni della tua misericordia,\nNella quotidianità.\n\nEd anche chi sembra più lontano ti si avvicinerà,…\nPiù cado giù, più sei con me, più cado giù, più sei con me\nPiù cado giù, più sei con me\nDammi la forza di essere un dono di pace per chi è attorno a me` },
+            { num: 12, title: "12. Vieni Spirito dall’alto", text: `Vieni Spirito, forza dall’alto, nel mio cuore\nfammi rinascere, Signore, Spirito (2v)\n\nCome una fonte vieni in me\ncome un oceano vieni in me\ncome un fiume vieni in me\ncome un fragore vieni in me.\n\nVieni Spirito, forza dall’alto, nel mio cuore\nfammi rinascere, Signore, Spirito\n\nCome un vento con il tuo amore\ncome una fiamma con la tua pace\ncome un fuoco con la tua gioia\ncome una luce con la tua forza.\n\nVieni Spirito, forza dall’alto, nel mio cuore\nfammi rinascere, Signore, Spirito (2v)` },
+            { num: 13, title: "13. Chiamati per nome", text: `Veniamo da te\nChiamati per nome\nChe festa, Signore, tu cammini con noi\nCi parli di te\nPer noi spezzi il pane\nTi riconosciamo e il cuore arde, sei tu\nE noi tuo popolo\nSiamo qui\n\nSiamo come terra ed argilla\nE la tua parola ci plasmerà\nBrace pronta per la scintilla\nE il tuo spirito soffierà\nC'infiammerà\n\nVeniamo da te\nChiamati per nome\nChe festa, Signore, tu cammini con noi\nCi parli di te\nPer noi spezzi il pane\nTi riconosciamo e il cuore arde, sei tu\nE noi tuo popolo\nSiamo qui\n\nSiamo come semi nel solco\nCome vigna che il suo frutto darà\nGrano del Signore risorto\nLa tua messe che fiorirà d'eternità\n\nVeniamo da te\nChiamati per nome\nChe festa, Signore, tu cammini con noi\nCi parli di te\nPer noi spezzi il pane\nTi riconosciamo e il cuore arde, sei tu\nE noi tuo popolo\nSiamo qui\nE noi tuo popolo\nSiamo qui\nSiamo qui` },
+            { num: 14, title: "14. E CONTINUIAMO A CHIAMARLO PADRE", text: `Cammina il figlio per strada\nla mano al Padre gli dà.\nSfiora leggero quei fiori:\n“colori e canto con te”.\nSicuro il viaggio con lui\nmi fermo e gioco un po’, ti và?\nIl tuo volto, che strano,\nnon invecchia mai.\n\nE allora, dai! Continua a chiamarlo Padre!\nTroverai una presenza d’amore nella tua vita.\nPer lui, vali molto di più, e certezza di Padre.\n\nTanti bambini fratelli gioca il papà,\nche festa!\nSeduto un figlio da solo,\ndura la vita è per lui.\nRide negli occhi del padre\ntende la mano e tu lo sai,\nil suo amore, che strano\ndura un’eternità.\n\nTi guardi intorno e mi chiedi:\n“quel fiore ha un nome?”. Chi sa...\nil vento, il freddo, è già sera\ndomani non ci sarà.\nPrendi quel sasso per gioco,\nguardalo bene e capirai:\n“è in armonia col mondo\nfatto d’amore per noi”.` },
+            { num: 15, title: "15. CANTATE CON NOI", text: `Scatenate la gioia oggi qui si fa festa,\ndai cantate con noi, qui la festa siamo noi.\n\nVoi che venite da lontano\ne che portate gioia e amore\nVoi che da sempre aspettavate,\ndi fare festa insieme a noi\n\nLa nostra fede ci avvicina\ne don Guanella ci accomuna\nSentiamo vivo dentro il cuore\nche siam fratelli con voi\n\nSe avete perso la speranza\nse percorrete vecchie strade\nSe ruminate stanchi amori\nripetete insieme a noi.` },
+            { num: 16, title: "16. CERCO SOLO TE", text: `Cerco solo Te Signor, mio liberatore sei\nFonte dell’amore Tu riempi la mia vita\n\nCerco solo Te Signor, mio liberatore sei\nFonte dell’amore Tu riempi la mia vita\nVolgi il Tuo sguardo su di me Dio di immensa bontà\nE rendi forte la mia vita\npiù non vacillerò\n\nCrea un cuore puro in me\nrinnova il mio spirito\nla mia bocca proclami la tua lode.` },
+            { num: 17, title: "17. DIO CI SEI", text: `Vorrei cantare che ci sei,\ndietro ogni volto tu ci sei,\ntu sei la strada della storia;\ntu sei il sogno d’infinito,\ntu sei la porta della vita\nche ci apre il cuore ad ogni istante.\n\nTu sei l’amore che si fa\npresenza viva in mezzo a noi\nquando accogliamo la tua luce;\nsei l’altalena della vita\nche ci riscatti dalla notte\ne fai volare nel tuo cielo.\n\nTu sei presenza misteriosa\nche si sommerge nel profondo\ndi ogni creatura che ti cerca.\nTu sei il Padre che conosce,\nche perdona, che accompagna\na rispecchiarci nel tuo volto.\n\nTu sei la forza che ci spinge\na scavalcare le frontiere\ndelle croci del cammino;\ntu sei speranza di ogni uomo\nche ti cerca, che ti prega,\nche ti pensa: Tu sei Dio.` },
+            { num: 18, title: "18. DUC IN ALTUM", text: `Anche quando tutto ti ha deluso\nanche quando non ti importa più\nanche quando scivoli confuso\nin un altro te che non sei tu\nSe stai cadendo giù\ne ti si spacca il cuore\nricorda che in quel cuore ci sei tu\nAnche quando ti ritrovi solo\ne non vedi amici intorno a te\nl'anima attraccata lì sul molo\nancorata a tutti i tuoi perché\nRicorda che se vuoi puoi sempre ripartire e conquistare il mare aperto\n\nDuc in altum lascia il porto con noi\ne prendi il largo grande pesca farai\nperché quel vento che gonfia\nle vele del tuo cuore\nè il soffio del Signore\nche ora è in te\ne la speranza che canta\ne danza nel mio cuore\nè il canto del Signore\nche ora è in me\n\nAnche quando non hai più parole\nla risacca le ha portate via\nle tue reti vuote stese al sole\nintrecciate di malinconia\nRicorda che se vuoi puoi sempre riprovare\ne ritornare in mare aperto RIT\n\n...e la speranza che canta\ne danza nel mio cuore\nè il canto del Signore\nche ora è in me\nche ora è in me che ora è in me` },
+            { num: 19, title: "19. E' BELLO LODARTI", text: `E' bello cantare il tuo amore,\nè bello lodare il tuo nome.\nE' bello cantare il tuo amore,\nè bello lodarti, Signore,\nè bello cantare a Te!\n\nTu che sei l'amore infinito che neppure il cielo\npuò contenere,\nti sei fatto uomo; Tu sei venuto qui\nad abitare in mezzo a noi, allora...Rit.\n\nTu che conti tutte le stelle\ne le chiami una ad una per nome,\nda mille sentieri ci hai radunati qui,\nci hai chiamati figli tuoi, allora...Rit.` },
+            { num: 20, title: "20. E’ DIO CHE FA", text: `C’è una gioia c’è un dolore\ndentro il ritmo di ogni cuore\nDove ognuno ha chiuso le sue verità.\nC’è una lacrima e un sorriso\nche passeggiano sul viso\nE ne solcano e ne mietono l’età.\nE c’è un vecchi c’è un bambino\nche si alternano in un sogno che verrà\nRimaniamo ad osservare\nl’orizzonte della vita e dio che fa\n\nE’ Dio che fa nella tua vita,\nè Dio che fa in questa storia infinita\nè Dio che fa in ogni sogno,\nè Dio che fa nella gioia e nel bisogno\nè dio che fa...\n\nQuando la notte no non dormo,\nquando mi accorgo che mi sbaglio\nmentre calpesto le mie strade\nin questo tempo che mi assale.\nIncontro un uomo e non lo sento\nperchè il mio cuore ancora è spento\nsoffocato in questo mare di realtà.\nEppure il sogno tuo che fa\nche mi fa vivere e mi da la libertà,\nsenso vero di ogni cosa\nè la speranza di una attesa, è Dio che fa` },
+            { num: 21, title: "21. MANIFESTO", text: `Noi giovani crediamo possibile\nnoi seguire i passi di don Guanella;\nnoi siamo convinti di poter vivere\nquando cantiamo e soffriamo,\nlavoriamo e amiamo, ci fermiamo\ne incerti cerchiamo la verità.\n\nLui, la nostra strada è sempre Lui.\nLui, Padre buono che veste i gigli del campo,\nLui, che nutre gli uccelli del cielo,\nun Padre pieno di misericordia\nche trasforma in Eucaristia la nostra fragilità.\n\nManifesto è\ntutti insieme ci impegniamo con costanza,\nManifesto è\ncostruire il Regno della Carità.\nManifesto è, manifesto è Carità.\n\nNoi sicuri che è Dio che fa.\nNoi speranza anche nei sacrifici.\nNoi uniti dalla carità\ninsieme siamo una famiglia\ndiamo la mano al povero\ncon semplicità.\n\nLei Madre della Provvidenza,\na Lei diamo i nostri desideri\na Lei noi diamo tutto il nostro cuore\ne camminiamo verso il Padre\ninsieme a don Guanella nella sua Carità. RIT` },
+            { num: 22, title: "22. RITORNA A NOI DON GUANELLA", text: `Un cuore fervente, che crede e sente Cristo\nnon può trattenersi senza aiutare il povero;\nperché in questo si vedrà se siamo testimoni,\nnon amiamo con parole, viviam la nostra fede..\n\nRitorna a noi don Guanella\nbuon servo della carità!\nCome tu amasti i tuoi fratelli,\ndonaci un cuore grande per amare!\n\nIl tempo non lo perdi se tu lo dai ai piccoli,\nse per amor di Cristo ti dai tutto intero;\nperché in loro trovi chiara, chiara la risposta\ndi lui stesso che ti dice: “In loro sono io”. RIT\n\nFinché ci sono poveri\nche solcano il nostro mondo,\ncontinuiamo con impegno e senza riposo;\nessi sono i prediletti del Padre Provvidente,\nil “Pane e il Signore” diamo a tutti già.\nFacciamo tutti insieme il bene ai fratelli,\nbenedizione dal cielo cadrà sopra di noi;\n“tutto il mondo è patria vostra”:\nmettiamoci in cammino,\nla carità di Cristo il mondo salverà.` },
+            { num: 23, title: "23. SEMINARE DIO", text: `Se la parola cade sulla strada\nDentro il cuore della gente che non crede\nChe ascolta e non capisce che guarda ma non vede\nè un seme abbandonato che muore e non fiorisce\nSe ascolti la parola con amore,\nma per non essere deriso o emarginato\nla soffochi nel cuore può appena germogliare\nma la tua gioia è breve se poi ti lasci andare\n\nTogliamo le spine, le pietre dai nostri cuori;\nariamo con tutto l’amore i nostri campi;\naspettiamo che passi l’inverno con la sua pioggia\ne avremo la terra imbiondita di grano,\nil sole che splende, l’arcobaleno.\n\nNon farti soffocare dalle spine\ndal mondo che ti attrae coi suoi colori\nÈ solo l’apparenza che acceca gli occhi tuoi\n\naccendi la tua vita colorati di Lui.\nE c’è un terreno fertile dell’uomo\nche fa fruttare il seme dell’amore\nChe impegna la sua vita e tutto ciò che è suo\nche si gioca l’esistenza per seminare Dio` },
+            { num: 24, title: "24. SEGNI DEL TUO AMORE", text: `Mille e mille grani nelle spighe d'oro\nmandano fragranza e danno gioia al cuore,\nquando, macinati, fanno un pane solo:\npane quotidiano, dono tuo, Signore.\n\nEcco il pane e il vino, segni del tuo amore.\nEcco questa offerta, accoglila Signore:\ntu di mille e mille cuori fai un cuore solo,\nun corpo solo in te\ne il Figlio tuo verrà, vivrà\nancora in mezzo a noi.\n\nMille grappoli maturi sotto il sole,\nfesta della terra, donano vigore,\nquando da ogni perla stilla il vino nuovo:\nvino della gioia, dono tuo, Signore.` },
+            { num: 25, title: "25. SO CHE TU SEI IL MIO SIGNOR", text: `Il volto Tuo risplende in me\nSo che Tu sei il mio Signor.\nMi illumini, mi liberi,\nso che Tu sei il mio Signor\n\nSe intorno a me io vedrò che tutto crolla\nio starò fra le tue mani nel Tuo amor\nso che Tu sei il mio Signor\n\nMia forza sei, mia gioia o Dio\nso che Tu sei il mio Signor\nMi salverai, confido in Te,\nso che Tu sei il mio Signor` },
+            { num: 26, title: "26. STELLA DEL MARE", text: `Chiaro mattino\nChe il sole baciò\nNeanche una nuvola in cielo\nDolce è la brezza\nFra i mandorli in fiore\nSpande il profumo\nInebriante calore\nUn raggio di luce Le illumina il Volto\nImmerso in profonda preghiera il Suo Cuore\nSi aprono i Cieli soltanto per lei\nE accolta è la Vergine Madre nell’Eternità\n\nE da quel giorno per sempre sarà\nRegina del Cielo e Stella del mare\nUn Cuore di Madre che batte per noi\nDifesa e consiglio per i figli suoi\nLei nostro rifugio e nostra speranza\nLe ali che portano il cuore dell’uomo al Cuore di Dio\n\nLei piena di grazia dall’eternità\nFu serva docile, ancella obbediente\nTenera madre, castissima sposa\nIncoronata Regina sarà\n\nCon una corona di dodici stelle\nVestita di sole e la luna ai Suoi piedi\nOnnipotente per grazia sarà\nColei che condusse la vita\nIn piena umiltà\n\nE da quel giorno per sempre sarà Regina del Cielo e Stella del mare\nUn Cuore di Madre che batte per noi\nDifesa e consiglio per i figli Suoi\nLei nostro rifugio e nostra speranza\nLe ali che portano il cuore dell’uomo al Cuore di Dio\n\nE tutto il creato\nAi suoi piedi sarà\nLei capolavoro di Dio\nRimase nascosta in terra con umiltà\nOra nei cieli risplenderà\n\nLei nostro rifugio e nostra speranza\nLe ali che portano il cuore dell’uomo al Cuore di Dio\nLe ali che portano il cuore dell’uomo al Cuore di Dio` },
+            { num: 27, title: "27. UNTI E’ BELLO", text: `Unto il mio cuore profuma di Dio\nil mio respiro è al passo col suo\nvoglio cantarlo e gridarlo anche a te\nsenza quel soffio vita non c’è.\n\nDammi Signore lo spirito di sapienza\nper apprezzare i frutti del tuo amore.\nDammi Signore lo spirito d’intelletto\na illuminare la mente con la luce di verità.\n\nDammi Signore lo spirito di consiglio\nper saper scegliere la via verso te.\nDammi Signore lo spirito di fortezza\nper affrontare la vita col coraggio\nche ci infonderà.\n\nDammi Signore lo spirito della scienza\nper riconoscere i doni che dai.\nDammi Signore lo spirito di pietà\nper poter servirti con amore\ncome tuo figlio ha fatto per noi.` },
+            { num: 28, title: "28. VIENI E SEGUIMI", text: `Lascia che il mondo vada per la sua strada,\nlascia che l'uomo ritorni alla sua casa,\nlascia che la gente accumuli la sua fortuna.\nMa tu, tu vieni e seguimi\ntu, vieni e seguimi.\n\nLascia che la barca in mare spieghi la vela,\nlascia che trovi affetto chi segue il cuore,\nlascia che dall'albero cadano i frutti maturi.\nMa tu, tu vieni e seguimi\ntu, vieni e seguimi.\n\nE sarai luce per gli uomini\ne sarai sale della terra\ne nel mondo deserto aprirai\nuna strada nuova. (2v)\n\nE per questa strada va, va\ne non voltarti indietro, va\ne non voltarti indietro` }
+        ];
+
+        let currentCantoIndex = 0; 
+
+        // INIT GENERALI
+        const savedName = localStorage.getItem('m2g_name') || 'Utente';
+        const savedNotes = localStorage.getItem('m2g_notes') || '';
+        const savedPic = localStorage.getItem('m2g_pic');
+        const savedFont = localStorage.getItem('m2g_fontsize') || '16';
+        const savedDark = localStorage.getItem('m2g_dark') === 'true';
+        document.getElementById('user-name-display').textContent = savedName;
+        document.getElementById('name-input').value = savedName;
+        document.getElementById('notes-input').value = savedNotes;
+        if (savedPic) document.getElementById('profile-img').src = savedPic;
+        changeFontSize(savedFont);
+        document.getElementById('font-slider').value = savedFont;
+        if (savedDark) document.body.classList.add('dark-mode');
+        document.getElementById('dark-mode-toggle').checked = savedDark;
+
+        // --- AUDIO SYSTEM ---
+        const audio = document.getElementById('global-audio');
+        const miniplayer = document.getElementById('miniplayer');
+        const mpPlayIcon = document.getElementById('mp-play-icon');
+        const mpFill = document.getElementById('mp-fill'); 
+
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return `${m}:${s < 10 ? '0' : ''}${s}`;
         }
-    ];
 
-    const VEGLIA_TEXT = `<b>Veglia di Preghiera</b><br><br>È il momento di metterci in ascolto. La luce che brilla in questa notte è il segno della nostra speranza...<br><br><i>(Inserire qui il resto del testo della veglia dal documento Word)</i>`;
+        audio.ontimeupdate = function() {
+            const curr = audio.currentTime;
+            const dur = audio.duration || 0;
+            const pct = (curr / dur) * 100;
+            
+            if (!Number.isNaN(pct)) mpFill.style.width = pct + "%";
 
-    const CANTI = [
-        { num: 1, title: "Canto di Inizio", text: "<b>Canto di Inizio</b><br><br>Siamo qui riuniti nel Tuo nome, Signore...<br>Testo completo del canto qui." },
-        { num: 2, title: "Inno M2G", text: "<b>Inno</b><br><br>È bello cantare il Tuo amore...<br>È bello lodarti Signore!" }
-    ];
-        // --- VARIABILI DI STATO ---
-    let currentLodiIndex = 0;
-    let currentCantoIndex = 0;
-    const audio = document.getElementById('global-audio');
+            const mainSeek = document.getElementById('main-seek');
+            const currTimeText = document.getElementById('curr-time-text');
+            const totalTimeText = document.getElementById('total-time-text');
+            
+            if (mainSeek) {
+                if (!Number.isNaN(dur)) mainSeek.max = Math.floor(dur);
+                mainSeek.value = Math.floor(curr);
+                currTimeText.innerText = formatTime(curr);
+                totalTimeText.innerText = formatTime(dur);
+            }
 
-    // --- NAVIGAZIONE FLUIDA (RIPRISTINATA) ---
-    function hideAll() {
-        document.querySelectorAll('.page-overlay').forEach(p => {
-            p.style.display = 'none';
-            p.classList.remove('visible');
-        });
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        document.getElementById('page-home').style.display = 'none';
-    }
+            if(curr >= dur && dur > 0) {
+                mpPlayIcon.textContent = 'play_arrow';
+                updateMainPlayIcon(false);
+            }
+        };
 
-    function animatePageEntry(pageId) {
-        const page = document.getElementById(pageId);
-        page.style.display = 'block';
-        setTimeout(() => page.classList.add('visible'), 50);
-    }
+        function seekAudio(val) { audio.currentTime = val; }
 
-    function goHome() {
-        hideAll();
-        document.getElementById('page-home').style.display = 'block';
-        document.querySelector('.nav-item:nth-child(1)').classList.add('active');
-        window.scrollTo(0,0);
-    }
+        function toggleGlobalAudio(e) {
+            if(e) e.stopPropagation();
+            if (audio.paused) {
+                audio.play();
+                mpPlayIcon.textContent = 'pause';
+                miniplayer.classList.add('visible');
+                updateMainPlayIcon(true);
+            } else {
+                audio.pause();
+                mpPlayIcon.textContent = 'play_arrow';
+                updateMainPlayIcon(false);
+            }
+        }
 
-    function goUser() {
-        hideAll();
-        animatePageEntry('page-user');
-        document.querySelector('.nav-item:nth-child(2)').classList.add('active');
-    }
-
-    // --- GESTIONE TESTI (innerHTML PER GRASSETTI) ---
-    function openLodiPage() {
-        hideAll();
-        renderLodi(0);
-        animatePageEntry('page-lodi');
-    }
-    function renderLodi(index) {
-        currentLodiIndex = index;
-        const l = LODI[index];
-        document.getElementById('lodi-title-display').innerHTML = l.title;
-        document.getElementById('lodi-text-display').innerHTML = l.text;
-        document.getElementById('lodi-counter').textContent = (index + 1) + " / " + LODI.length;
-        document.getElementById('lodi-search-input').value = index + 1;
-        document.getElementById('page-lodi').scrollTop = 0;
-    }
-    function nextLodi() { if(currentLodiIndex < LODI.length-1) renderLodi(currentLodiIndex+1); }
-    function prevLodi() { if(currentLodiIndex > 0) renderLodi(currentLodiIndex-1); }
-    function jumpToLodi(v) { let n = parseInt(v)-1; if(n>=0 && n<LODI.length) renderLodi(n); }
-
-    function openCantiPage() {
-        hideAll();
-        renderCanto(0);
-        animatePageEntry('page-canti');
-    }
-    function renderCanto(index) {
-        currentCantoIndex = index;
-        const c = CANTI[index];
-        document.getElementById('canto-title-display').innerHTML = c.title;
-        document.getElementById('canto-text-display').innerHTML = c.text;
-        document.getElementById('canto-counter').textContent = (index + 1) + " / " + CANTI.length;
-        document.getElementById('canto-search-input').value = index + 1;
-        document.getElementById('page-canti').scrollTop = 0;
-    }
-    function nextCanto() { if(currentCantoIndex < CANTI.length-1) renderCanto(currentCantoIndex+1); }
-    function prevCanto() { if(currentCantoIndex > 0) renderCanto(currentCantoIndex-1); }
-    function jumpToCanto(v) { let n = parseInt(v)-1; if(n>=0 && n<CANTI.length) renderCanto(n); }
-
-    function openVegliaPage() {
-        hideAll();
-        document.getElementById('veglia-content').innerHTML = VEGLIA_TEXT;
-        animatePageEntry('page-veglia');
-    }
-
-    function openReader(title) {
-        hideAll();
-        document.getElementById('reader-title').textContent = title;
-        document.getElementById('reader-content').innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-sec)">Contenuto di ${title} caricato correttamente dal database locale.</div>`;
-        animatePageEntry('page-reader');
-    }
-
-    function openLinkFoto() { window.open('https://photos.google.com', '_blank'); }
-
-    // --- TEATRO CELESTE & AUDIO (MOTORE COMPLETO) ---
-    function toggleGlobalAudio() {
-        const icon = document.getElementById('mp-play-icon');
-        const player = document.getElementById('miniplayer');
-        if (audio.paused) {
-            audio.play();
-            icon.textContent = 'pause';
-            player.classList.add('visible');
-            document.getElementById('celestial-container').classList.add('active');
-        } else {
+        function closeMiniplayer(e) {
+            if(e) e.stopPropagation();
             audio.pause();
-            icon.textContent = 'play_arrow';
+            audio.currentTime = 0;
+            mpPlayIcon.textContent = 'play_arrow';
+            mpFill.style.width = "0%"; 
+            miniplayer.classList.remove('visible');
+            updateMainPlayIcon(false);
         }
-    }
 
-    function closeMiniplayer() {
-        audio.pause();
-        audio.currentTime = 0;
-        document.getElementById('mp-play-icon').textContent = 'play_arrow';
-        document.getElementById('miniplayer').classList.remove('visible');
-        document.getElementById('celestial-container').classList.remove('active');
-        document.body.classList.remove('animate-sunrise', 'animate-sunset');
-    }
-
-    audio.addEventListener('timeupdate', () => {
-        if (!audio.duration) return;
-        const progressPercent = (audio.currentTime / audio.duration) * 100;
-        document.getElementById('mp-fill').style.width = progressPercent + "%";
-        
-        const isDark = document.body.classList.contains('dark-mode');
-        document.body.classList.remove('animate-sunrise', 'animate-sunset');
-        
-        // Attiva l'animazione se il brano è iniziato
-        if (audio.currentTime > 0.1) {
-            if (!isDark) document.body.classList.add('animate-sunrise');
-            else document.body.classList.add('animate-sunset');
+        function updateMainPlayIcon(isPlaying) {
+            const btn = document.getElementById('main-play-icon');
+            if(btn) btn.textContent = isPlaying ? 'pause' : 'play_arrow';
         }
-    });
 
-    // --- PERSISTENZA DATI (LOCAL STORAGE) ---
-    function saveName() {
-        const name = document.getElementById('name-input').value;
-        document.getElementById('user-name-display').textContent = name || "Utente";
-        localStorage.setItem('m2g_user_name', name);
-    }
-
-    function uploadImage(input) {
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const imgData = e.target.result;
-                document.getElementById('profile-img').src = imgData;
-                localStorage.setItem('m2g_user_pic', imgData);
-            };
-            reader.readAsDataURL(input.files[0]);
+        // --- THEMES & ANIMATION CELESTE ---
+        function handleThemeToggle(isDark) {
+            triggerCelestialAnimation(isDark);
+            if (isDark) document.body.classList.add('dark-mode');
+            else document.body.classList.remove('dark-mode');
+            localStorage.setItem('m2g_dark', isDark);
         }
-    }
 
-    function changeFontSize(val) {
-        document.documentElement.style.setProperty('--base-size', val + 'px');
-        localStorage.setItem('m2g_font_size', val);
-    }
-
-    function handleThemeToggle(isDark) {
-        document.body.classList.toggle('dark-mode', isDark);
-        localStorage.setItem('m2g_theme_mode', isDark ? 'dark' : 'light');
-    }
-
-    function saveNotes() {
-        localStorage.setItem('m2g_user_notes', document.getElementById('notes-input').value);
-    }
-
-    function openNotes() { hideAll(); animatePageEntry('page-notes'); }
-
-    // --- CARICAMENTO DATI AL BOOT ---
-    window.onload = () => {
-        const savedName = localStorage.getItem('m2g_user_name');
-        if(savedName) {
-            document.getElementById('name-input').value = savedName;
-            document.getElementById('user-name-display').textContent = savedName;
+        function triggerCelestialAnimation(isGoingToDark) {
+            const container = document.getElementById('celestial-container');
+            container.classList.add('active');
+            container.classList.remove('animate-sunrise', 'animate-sunset');
+            void container.offsetWidth; 
+            if (isGoingToDark) container.classList.add('animate-sunset');
+            else container.classList.add('animate-sunrise');
+            setTimeout(() => { container.classList.remove('active'); }, 2000);
         }
-        
-        const savedPic = localStorage.getItem('m2g_user_pic');
-        if(savedPic) document.getElementById('profile-img').src = savedPic;
-        
-        const savedFontSize = localStorage.getItem('m2g_font_size');
-        if(savedFontSize) {
-            document.getElementById('font-slider').value = savedFontSize;
-            changeFontSize(savedFontSize);
+
+        // NAVIGAZIONE
+        function animatePageEntry(pageId) {
+            const page = document.getElementById(pageId);
+            page.style.display = 'block';
+            setTimeout(() => { page.classList.add('visible'); }, 10);
         }
-        
-        const savedTheme = localStorage.getItem('m2g_theme_mode');
-        if(savedTheme === 'dark') {
-            document.getElementById('dark-mode-toggle').checked = true;
-            document.body.classList.add('dark-mode');
+        function hideAll() {
+            document.querySelectorAll('.page-overlay').forEach(p => { p.classList.remove('visible'); p.style.display = 'none'; });
+            document.getElementById('page-home').style.display = 'none';
         }
-        
-        const savedNotes = localStorage.getItem('m2g_user_notes');
-        if(savedNotes) document.getElementById('notes-input').value = savedNotes;
-    };
+        function goHome() { hideAll(); document.getElementById('page-home').style.display = 'block'; }
+        function goUser() { hideAll(); animatePageEntry('page-user'); }
+        function openNotes() { hideAll(); animatePageEntry('page-notes'); }
+        function openLinkFoto() { window.open(LINK_FOTO_RICORDO, '_blank'); }
+
+        // --- LOGICA VEGLIA ---
+        function openVegliaPage() {
+            hideAll();
+            document.getElementById('veglia-content').innerHTML = TEXT_VEGLIA;
+            animatePageEntry('page-veglia');
+            document.getElementById('page-veglia').scrollTop = 0;
+        }
+
+        // --- LOGICA LODI MATTUTINE ---
+        function openLodiPage() {
+            hideAll();
+            renderLodi(0); 
+            animatePageEntry('page-lodi');
+        }
+
+        function renderLodi(index) {
+            if (index < 0 || index >= LODI.length) return;
+            currentLodiIndex = index;
+            const lode = LODI[currentLodiIndex];
+            
+            document.getElementById('lodi-title-display').textContent = lode.title;
+            document.getElementById('lodi-text-display').innerHTML = lode.text;
+            document.getElementById('lodi-counter').textContent = `${lode.num} / ${LODI.length}`;
+            document.getElementById('lodi-search-input').value = lode.num;
+            
+            document.getElementById('page-lodi').scrollTop = 0;
+        }
+
+        function nextLodi() { if (currentLodiIndex < LODI.length - 1) renderLodi(currentLodiIndex + 1); }
+        function prevLodi() { if (currentLodiIndex > 0) renderLodi(currentLodiIndex - 1); }
+        function jumpToLodi(val) {
+            let num = parseInt(val);
+            if (isNaN(num)) return;
+            if (num < 1) num = 1;
+            if (num > LODI.length) num = LODI.length;
+            renderLodi(num - 1);
+            document.getElementById('lodi-search-input').blur();
+        }
+
+        // --- LOGICA CANTI ---
+        function openCantiPage() {
+            hideAll();
+            renderCanto(0); 
+            animatePageEntry('page-canti');
+        }
+
+        function renderCanto(index) {
+            if (index < 0 || index >= CANTI.length) return;
+            currentCantoIndex = index;
+            const canto = CANTI[currentCantoIndex];
+            
+            document.getElementById('canto-title-display').textContent = canto.title;
+            document.getElementById('canto-text-display').textContent = canto.text;
+            document.getElementById('canto-counter').textContent = `${canto.num} / ${CANTI.length}`;
+            document.getElementById('canto-search-input').value = canto.num;
+            
+            document.getElementById('page-canti').scrollTop = 0;
+        }
+
+        function nextCanto() { if (currentCantoIndex < CANTI.length - 1) renderCanto(currentCantoIndex + 1); }
+        function prevCanto() { if (currentCantoIndex > 0) renderCanto(currentCantoIndex - 1); }
+        function jumpToCanto(val) {
+            let num = parseInt(val);
+            if (isNaN(num)) return;
+            if (num < 1) num = 1;
+            if (num > CANTI.length) num = CANTI.length;
+            renderCanto(num - 1);
+            document.getElementById('canto-search-input').blur();
+        }
+
+        // --- READER GENERICO (Inno, Libretto) ---
+        function openReader(title) {
+            hideAll();
+            document.getElementById('reader-title').textContent = title;
+            const content = document.getElementById('reader-content');
+            content.innerHTML = "";
+            if (title === 'Inno') {
+                const isPlaying = !audio.paused;
+                const playIcon = isPlaying ? 'pause' : 'play_arrow';
+                content.innerHTML = `
+                    <div style="animation: elasticSlide 0.6s ease">
+                        <div class="main-player-ui">
+                            <div class="main-controls">
+                                <div class="main-play-btn" onclick="toggleGlobalAudio()">
+                                    <span id="main-play-icon" class="material-icons">${playIcon}</span>
+                                </div>
+                            </div>
+                            <div class="main-slider-container">
+                                <span id="curr-time-text">0:00</span>
+                                <input type="range" id="main-seek" class="main-slider" value="0" min="0" step="1" oninput="seekAudio(this.value)">
+                                <span id="total-time-text">0:00</span>
+                            </div>
+                        </div>
+                        <div class="text-word-style" style="background:var(--card-bg); padding:20px; border-radius:20px; box-shadow: 0 4px 15px var(--shadow);">
+${LYRICS_INNO}
+                        </div>
+                    </div>`;
+            } else if (title === 'Libretto') {
+                let htmlImages = '<div style="text-align:center">';
+                for (let i = 1; i <= 5; i++) { htmlImages += `<img src="assets/lib${i}.jpg" class="reader-image" loading="lazy" onerror="this.style.display='none'">`; }
+                htmlImages += '</div>'; content.innerHTML = htmlImages;
+            }
+            animatePageEntry('page-reader');
+        }
+
+        function saveName() { const val = document.getElementById('name-input').value; localStorage.setItem('m2g_name', val); document.getElementById('user-name-display').textContent = val; }
+        function saveNotes() { localStorage.setItem('m2g_notes', document.getElementById('notes-input').value); }
+        function uploadImage(input) { if (input.files && input.files[0]) { const reader = new FileReader(); reader.onload = function(e) { document.getElementById('profile-img').src = e.target.result; try { localStorage.setItem('m2g_pic', e.target.result); } catch(e) { alert("Immagine troppo pesante!"); } }; reader.readAsDataURL(input.files[0]); } }
+        function changeFontSize(size) { document.documentElement.style.setProperty('--base-size', size + 'px'); localStorage.setItem('m2g_fontsize', size); }
     </script>
 </body>
 </html>
