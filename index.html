@@ -169,18 +169,6 @@
         .animate-sunrise #moon-group { animation: moonsetMoveDown 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
         .animate-sunset #sun-icon { animation: sunsetMoveDown 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
         .animate-sunset #moon-group { animation: moonriseMoveUp 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; }
-
-        /* --- EFFETTO SFOGLIO LIBRO (CANTI & LODI) --- */
-        @keyframes pageTurnNext {
-            0% { transform: perspective(1000px) rotateY(90deg); opacity: 0; transform-origin: left; }
-            100% { transform: perspective(1000px) rotateY(0deg); opacity: 1; transform-origin: left; }
-        }
-        @keyframes pageTurnPrev {
-            0% { transform: perspective(1000px) rotateY(-90deg); opacity: 0; transform-origin: right; }
-            100% { transform: perspective(1000px) rotateY(0deg); opacity: 1; transform-origin: right; }
-        }
-        .flip-next { animation: pageTurnNext 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important; }
-        .flip-prev { animation: pageTurnPrev 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important; }
         /* --- STILI APP STANDARD --- */
         .page-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--bg-color); z-index: 100; padding: 20px; overflow-y: auto; opacity: 0; transform: translateY(30px); transition: opacity 0.3s ease-out, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); padding-bottom: 150px; }
         .page-overlay.visible { opacity: 1; transform: translateY(0); }
@@ -772,7 +760,7 @@ O Dio, vera luce e giorno senza tramonto, accogli la lode mattutina del tuo popo
     function animatePageEntry(pageId) {
         let page = document.getElementById(pageId);
         page.style.display = 'block';
-        // Breve timeout per permettere al display:block di applicarsi prima dell'animazione
+        // Breve timeout per permettere al display:block di applicarsi prima dell'animazione base
         setTimeout(() => page.classList.add('visible'), 10);
     }
 
@@ -806,24 +794,17 @@ O Dio, vera luce e giorno senza tramonto, accogli la lode mattutina del tuo popo
         window.open('https://photos.google.com', '_blank'); // Modifica con il link reale se necessario
     }
 
-    // --- LOGICA LODI (CON EFFETTO SFOGLIO) ---
+    // --- LOGICA LODI ---
     function openLodiPage() {
         hideAll();
-        renderLodi(0, 'next'); 
+        renderLodi(0); 
         animatePageEntry('page-lodi');
     }
 
-    function renderLodi(index, direction) {
+    function renderLodi(index) {
         if (index < 0 || index >= LODI.length) return;
         currentLodiIndex = index;
         const lode = LODI[currentLodiIndex];
-        
-        const container = document.getElementById('lodi-content-container');
-        
-        // Riavvio dell'animazione CSS
-        container.classList.remove('flip-next', 'flip-prev');
-        void container.offsetWidth; // Forza il reflow
-        container.classList.add(direction === 'next' ? 'flip-next' : 'flip-prev');
         
         // Uso innerHTML per renderizzare i tag <b> e <br> del database
         document.getElementById('lodi-title-display').innerHTML = lode.title;
@@ -835,38 +816,30 @@ O Dio, vera luce e giorno senza tramonto, accogli la lode mattutina del tuo popo
         document.getElementById('page-lodi').scrollTop = 0;
     }
 
-    function nextLodi() { if (currentLodiIndex < LODI.length - 1) renderLodi(currentLodiIndex + 1, 'next'); }
-    function prevLodi() { if (currentLodiIndex > 0) renderLodi(currentLodiIndex - 1, 'prev'); }
+    function nextLodi() { if (currentLodiIndex < LODI.length - 1) renderLodi(currentLodiIndex + 1); }
+    function prevLodi() { if (currentLodiIndex > 0) renderLodi(currentLodiIndex - 1); }
     function jumpToLodi(val) {
         let num = parseInt(val);
         if (isNaN(num)) return;
         if (num < 1) num = 1;
         if (num > LODI.length) num = LODI.length;
-        let dir = (num - 1) > currentLodiIndex ? 'next' : 'prev';
-        renderLodi(num - 1, dir);
+        renderLodi(num - 1);
         document.getElementById('lodi-search-input').blur();
     }
 
-    // --- LOGICA CANTI (CON EFFETTO SFOGLIO) ---
+    // --- LOGICA CANTI ---
     function openCantiPage() {
         hideAll();
-        renderCanto(0, 'next'); 
+        renderCanto(0); 
         animatePageEntry('page-canti');
     }
 
-    function renderCanto(index, direction) {
+    function renderCanto(index) {
         if (index < 0 || index >= CANTI.length) return;
         currentCantoIndex = index;
         const canto = CANTI[currentCantoIndex];
         
-        const container = document.getElementById('canto-content-container');
-        
-        // Riavvio dell'animazione CSS
-        container.classList.remove('flip-next', 'flip-prev');
-        void container.offsetWidth; 
-        container.classList.add(direction === 'next' ? 'flip-next' : 'flip-prev');
-        
-        // Uso innerHTML anche qui per eventuali formattazioni future
+        // Uso innerHTML anche qui
         document.getElementById('canto-title-display').innerHTML = canto.title;
         document.getElementById('canto-text-display').innerHTML = canto.text;
         
@@ -876,15 +849,14 @@ O Dio, vera luce e giorno senza tramonto, accogli la lode mattutina del tuo popo
         document.getElementById('page-canti').scrollTop = 0;
     }
 
-    function nextCanto() { if (currentCantoIndex < CANTI.length - 1) renderCanto(currentCantoIndex + 1, 'next'); }
-    function prevCanto() { if (currentCantoIndex > 0) renderCanto(currentCantoIndex - 1, 'prev'); }
+    function nextCanto() { if (currentCantoIndex < CANTI.length - 1) renderCanto(currentCantoIndex + 1); }
+    function prevCanto() { if (currentCantoIndex > 0) renderCanto(currentCantoIndex - 1); }
     function jumpToCanto(val) {
         let num = parseInt(val);
         if (isNaN(num)) return;
         if (num < 1) num = 1;
         if (num > CANTI.length) num = CANTI.length;
-        let dir = (num - 1) > currentCantoIndex ? 'next' : 'prev';
-        renderCanto(num - 1, dir);
+        renderCanto(num - 1);
         document.getElementById('canto-search-input').blur();
     }
 
@@ -972,7 +944,6 @@ O Dio, vera luce e giorno senza tramonto, accogli la lode mattutina del tuo popo
     }
 
     function changeFontSize(val) {
-        // Controlla l'ingrandimento globale gestendo la root
         document.documentElement.style.setProperty('--base-size', val + 'px');
         localStorage.setItem('m2g_fontSize', val);
     }
@@ -1019,7 +990,7 @@ O Dio, vera luce e giorno senza tramonto, accogli la lode mattutina del tuo popo
         const savedSize = localStorage.getItem('m2g_fontSize');
         if(savedSize) {
             document.getElementById('font-slider').value = savedSize;
-            changeFontSize(savedSize); // Riapplica globalmente al riavvio
+            changeFontSize(savedSize);
         }
         
         const savedTheme = localStorage.getItem('m2g_theme');
