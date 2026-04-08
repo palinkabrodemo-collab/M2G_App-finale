@@ -239,6 +239,12 @@
             margin-top: 10px;
             font-size: 1.2rem;
         }
+
+        /* NUOVO STILE: Allineamento a sinistra e spaziatura per i testi delle Lodi */
+        .testo-giustificato {
+            text-align: left !important;
+            line-height: 1.7;
+        }
     </style>
 </head>
 <body>
@@ -355,7 +361,7 @@
             <div style="width: 44px;"></div>
         </div>
         
-        <div class="veglia-text-container" id="veglia-content">
+        <div class="veglia-text-container testo-giustificato" id="veglia-content">
             </div>
     </div>
 
@@ -373,7 +379,8 @@
         
         <div id="lodi-content-container" style="background:var(--card-bg); padding:30px 20px; border-radius:20px; box-shadow: 0 4px 15px var(--shadow);">
             <h2 id="lodi-title-display" style="text-align:center; color: var(--accent); margin-top:0; margin-bottom: 20px; font-size: 1.4rem;">Titolo</h2>
-            <div id="lodi-text-display" style="white-space:pre-line; text-align:center; line-height:1.8; font-size: 1.05rem;">
+            
+            <div id="lodi-text-display" class="testo-giustificato" style="white-space:pre-line; font-size: 1.05rem;">
                 Testo lodi qui...
             </div>
             
@@ -401,7 +408,8 @@
         
         <div id="canto-content-container" style="background:var(--card-bg); padding:30px 20px; border-radius:20px; box-shadow: 0 4px 15px var(--shadow);">
             <h2 id="canto-title-display" style="text-align:center; color: var(--accent); margin-top:0; margin-bottom: 20px; font-size: 1.4rem;">Titolo</h2>
-            <div id="canto-text-display" style="white-space:pre-line; text-align:center; line-height:1.8; font-size: 1.05rem;">
+            
+            <div id="canto-text-display" class="testo-giustificato" style="white-space:pre-line; font-size: 1.05rem;">
                 Testo del canto qui...
             </div>
             
@@ -423,7 +431,7 @@
             <h2 id="reader-title" style="margin:0; font-size: 1.2rem;">Titolo</h2>
             <div style="width: 44px;"></div>
         </div>
-        <div id="reader-content"></div>
+        <div id="reader-content" class="testo-giustificato" style="padding: 0 20px;"></div>
     </div>
 
     <div id="page-user" class="page-overlay">
@@ -464,147 +472,287 @@
         <textarea id="notes-input" rows="20" placeholder="Scrivi qui..." oninput="saveNotes()"></textarea>
     </div>
     <script>
-    // --- DATABASE TESTI: LODI (Aggiornato dal documento Word) ---
+    // --- DATABASE TESTI: LODI (Aggiornato con formattazione HTML) ---
     const LODI = [
         {
             num: 1,
             title: "Lodi mattutine - 1 maggio",
-            text: `Introduzione
-V. O Dio, vieni a salvarmi.
-R. Signore, vieni presto in mio aiuto. 
-Gloria al Padre e al Figlio e allo Spirito Santo. Come era nel principio, e ora e sempre, nei secoli dei secoli. Amen. Alleluia.
+            text: `<b>Introduzione</b><br>
+<b>V.</b> O Dio, vieni a salvarmi.<br>
+<b>R.</b> Signore, vieni presto in mio aiuto. <br>
+Gloria al Padre e al Figlio e allo Spirito Santo. <br>
+Come era nel principio, e ora e sempre, nei secoli dei secoli. Amen. Alleluia.<br><br>
 
-Inno: E’ bello lodarti
-È bello cantare il Tuo amore, è bello lodare il Tuo nome. È bello cantare il Tuo amore, è bello lodarti, Signore, è bello cantare a Te! (2 volte)
+<b>E’ bello lodarti</b><br>
+È bello cantare il Tuo amore,<br>
+è bello lodare il Tuo nome.<br>
+È bello cantare il Tuo amore,<br>
+è bello lodarti, Signore,<br>
+è bello cantare a Te! (2 volte)<br><br>
 
-Tu, che sei l’Amore infinito che neppure il cielo può contenere, Ti sei fatto uomo, Tu sei venuto qui ad abitare in mezzo a noi, allora: 
-È bello cantare il tuo amore…
+Tu, che sei l’Amore infinito<br>
+che neppure il cielo può contenere,<br>
+Ti sei fatto uomo,<br>
+Tu sei venuto qui ad abitare in mezzo a noi, allora:<br> 
+È bello cantare il tuo amore…<br><br>
 
-Tu che conti tutte le stelle e le chiami ad una ad una per nome, da mille sentieri ci hai radunati qui, ci hai chiamati figli Tuoi, allora: 
-È bello cantare il tuo amore, è bello lodare il Tuo nome. È bello cantare il Tuo amore, è bello lodarti, Signore, è bello cantare a Te! (2 volte)
+Tu che conti tutte le stelle<br>
+e le chiami ad una ad una per nome,<br>
+da mille sentieri ci hai radunati qui,<br>
+ci hai chiamati figli Tuoi, allora:<br> 
+È bello cantare il tuo amore,<br>
+è bello lodare il Tuo nome.<br>
+È bello cantare il Tuo amore,<br>
+è bello lodarti, Signore,<br>
+è bello cantare a Te! (2 volte)<br><br>
 
-1 ant. Crea in me, o Dio, un cuore puro, rinnova in me uno spirito saldo.
+<b>1 ant.</b> Crea in me, o Dio, un cuore puro, rinnova in me uno spirito saldo.<br><br>
 
-Salmo 50
-Pietà di me, o Dio, secondo la tua misericordia; nel tuo grande amore cancella il mio peccato. Lavami da tutte le mie colpe, mondami dal mio peccato. Riconosco la mia colpa, il mio peccato mi sta sempre dinanzi. 
-Contro di te, contro te solo ho peccato, quello che è male ai tuoi occhi, io l’ho fatto; perciò sei giusto quando parli, retto nel tuo giudizio. 
-Ecco, nella colpa sono stato generato, nel peccato mi ha generato mia madre. Ma tu vuoi la sincerità del cuore e nell’intimo mi insegni la sapienza. 
-Purificami con issopo e sarò mondato; lavami e sarò più bianco della neve. Fammi sentire gioia e letizia; esulteranno le ossa che hai spezzato. 
-Distogli lo sguardo dai miei peccati, cancella tutte le mie colpe. Crea in me, o Dio, un cuore puro, rinnova in me uno spirito saldo. 
-Non respingermi dalla tua presenza e non privarmi del tuo Santo Spirito. Rendimi la gioia di essere salvato, sostiene in me un animo generoso. 
-Insegnerò agli erranti le tue vie e i peccatori a te ritorneranno. Liberami dal sangue, Dio, mia salvezza, la mia lingua esalterà la tua giustizia. 
-Signore, apri le mie labbra e la mia bocca proclami la tua lode, poiché non gradisci il sacrificio e se offro olocausti, non li accetti. 
-Uno spirito contrito è sacrificio a Dio, un cuore affranto e umiliato tu, o Dio, non disprezzi. 
-Nel tuo amore fa grazia a Sion, rialza le mura di Gerusalemme. Allora gradirai i sacrifici prescritti, l’olocausto e l’intera oblazione, allora immoleranno vittime sopra il tuo altare.
+<b>Salmo 50</b><br>
+Pietà di me, o Dio, secondo la tua misericordia;<br>
+nel tuo grande amore cancella il mio peccato.<br>
+Lavami da tutte le mie colpe,<br>
+mondami dal mio peccato.<br>
+Riconosco la mia colpa,<br>
+il mio peccato mi sta sempre dinanzi.<br><br>
+ 
+Contro di te, contro te solo ho peccato,<br>
+quello che è male ai tuoi occhi, io l’ho fatto;<br>
+perciò sei giusto quando parli,<br>
+retto nel tuo giudizio.<br> 
+Ecco, nella colpa sono stato generato,<br>
+nel peccato mi ha generato mia madre.<br>
+Ma tu vuoi la sincerità del cuore<br>
+e nell’intimo mi insegni la sapienza.<br><br> 
 
-1 ant. Crea in me, o Dio, un cuore puro, rinnova in me uno spirito saldo.
+Purificami con issopo e sarò mondato;<br>
+lavami e sarò più bianco della neve.<br>
+Fammi sentire gioia e letizia;<br>
+esulteranno le ossa che hai spezzato.<br> 
+Distogli lo sguardo dai miei peccati,<br>
+cancella tutte le mie colpe.<br>
+Crea in me, o Dio, un cuore puro,<br>
+rinnova in me uno spirito saldo.<br><br> 
 
-Lettura Breve (Gal 2, 20)
-Sono stato crocifisso con Cristo e non sono più io che vivo, ma Cristo vive in me. Questa vita che vivo nella carne io la vivo nella fede del Figlio di Dio, che mi ha amato e ha dato se stesso per me.
+Non respingermi dalla tua presenza<br>
+e non privarmi del tuo Santo Spirito.<br>
+Rendimi la gioia di essere salvato,<br>
+sostiene in me un animo generoso.<br> 
+Insegnerò agli erranti le tue vie<br>
+e i peccatori a te ritorneranno.<br>
+Liberami dal sangue, Dio, mia salvezza,<br>
+la mia lingua esalterà la tua giustizia.<br><br> 
 
-Responsorio breve
-R. Invocherò l’Altissimo: da lui ogni mio bene.
-V. Dal cielo manderà la sua salvezza: da lui ogni mio bene.
-Gloria la Padre e al Figlio e allo Spirito Santo. Invocherò l’Altissimo: da lui ogni mio bene.
+Signore, apri le mie labbra<br>
+e la mia bocca proclami la tua lode,<br>
+poiché non gradisci il sacrificio<br>
+e se offro olocausti, non li accetti.<br> 
+Uno spirito contrito è sacrificio a Dio,<br>
+un cuore affranto e umiliato tu, o Dio, non disprezzi.<br> 
+Nel tuo amore fa grazia a Sion,<br>
+rialza le mura di Gerusalemme.<br>
+Allora gradirai i sacrifici prescritti,<br>
+l’olocausto e l’intera oblazione,<br>
+allora immoleranno vittime sopra il tuo altare.<br><br>
 
-Antifona al Benedictus: 
-Nella sua misericordia il nostro Dio ci ha visitati dall’alto come sole che sorge.
+<b>1 ant.</b> Crea in me, o Dio, un cuore puro, rinnova in me uno spirito saldo.<br><br>
 
-Cantico di Zaccaria (Benedictus)
-Benedetto il Signore Dio d'Israele, perché ha visitato e redento il suo popolo, e ha suscitato per noi una salvezza potente nella casa di Davide, suo servo. 
-Come aveva promesso per bocca dei suoi santi profeti d'un tempo: salvezza dai nostri nemici e dalle mani di quanti ci odiano. 
-Così egli ha concesso misericordia ai nostri padri e si è ricordato della sua santa alleanza, del giuramento fatto ad Abramo, nostro padre, di concederci, liberati dalle mani dei nemici, di servirlo senza timore, in santità e giustizia al suo cospetto, per tutti i nostri giorni. 
-E tu, bambino, sarai chiamato profeta dell'Altissimo perché andrai innanzi al Signore a preparargli le strade, per dare al suo popolo la conoscenza della salvezza nella remissione dei suoi peccati. 
-Grazie alla bontà misericordiosa del nostro Dio, per cui verrà a visitarci dall'alto un sole che sorge, per rischiarare quelli che stanno nelle tenebre e nell'ombra di morte e dirigere i nostri passi sulla via della pace. Amen.
+<b>Lettura Breve (Gal 2, 20)</b><br>
+Sono stato crocifisso con Cristo e non sono più io che vivo, ma Cristo vive in me. Questa vita che vivo nella carne io la vivo nella fede del Figlio di Dio, che mi ha amato e ha dato se stesso per me.<br><br>
 
-Invocazioni
-Rivolgiamo la nostra preghiera a Dio, Padre provvidente, e diciamo insieme: 
-R. Conferma ciò che hai operato in noi, Signore.
+<b>Responsorio breve</b><br>
+<b>R.</b> Invocherò l’Altissimo: da lui ogni mio bene.<br>
+<b>V.</b> Dal cielo manderà la sua salvezza: da lui ogni mio bene.<br>
+Gloria al Padre e al Figlio e allo Spirito Santo.<br>
+Invocherò l’Altissimo: da lui ogni mio bene.<br><br>
 
-- Dio di misericordia, guidaci sulla via della santità, perché cerchiamo sempre ciò che è vero, buono e giusto.
-- Non abbandonarci, o Dio, per il tuo grande amore, non dimenticare la tua alleanza.
-- Accogli l’offerta del nostro cuore contrito e umiliato, fa’ che non siano confusi quelli che si affidano a te.
-- Tu che ci hai resi partecipi della missione profetica del Cristo, fa’ che annunziamo con le parole e le opere le meraviglie del tuo amore.
+<b>Antifona al Benedictus:</b><br> 
+Nella sua misericordia il nostro Dio ci ha visitati dall’alto come sole che sorge.<br><br>
 
-Padre Nostro
+<b>Cantico di Zaccaria (Benedictus)</b><br>
+Benedetto il Signore Dio d'Israele,<br>
+perché ha visitato e redento il suo popolo,<br>
+e ha suscitato per noi una salvezza potente<br>
+nella casa di Davide, suo servo.<br><br> 
 
-Orazione Finale
-Concedi al tuo popolo, o Dio, l’abbondanza dei tui doni, perché sia sempre fedele agli impegni del suo battesimo, e viva nella prosperità e nella pace in attesa della gioia eterna. Per il nostro Signore.
+Come aveva promesso<br>
+per bocca dei suoi santi profeti d'un tempo:<br>
+salvezza dai nostri nemici<br>
+e dalle mani di quanti ci odiano.<br><br> 
 
-Conclusione
-V. Il Signore ci benedica, ci preservi da ogni male, e ci conduca alla vita eterna. 
-R. Amen.`
+Così egli ha concesso misericordia ai nostri padri<br>
+e si è ricordato della sua santa alleanza,<br>
+del giuramento fatto ad Abramo, nostro padre,<br>
+di concederci, liberati dalle mani dei nemici,<br>
+di servirlo senza timore, in santità e giustizia<br>
+al suo cospetto, per tutti i nostri giorni.<br><br> 
+
+E tu, bambino, sarai chiamato profeta dell'Altissimo<br>
+perché andrai innanzi al Signore a preparargli le strade,<br>
+per dare al suo popolo la conoscenza della salvezza<br>
+nella remissione dei suoi peccati.<br><br> 
+
+Grazie alla bontà misericordiosa del nostro Dio,<br>
+per cui verrà a visitarci dall'alto un sole che sorge,<br>
+per rischiarare quelli che stanno nelle tenebre<br>
+e nell'ombra di morte<br>
+e dirigere i nostri passi sulla via della pace. Amen.<br><br>
+
+<b>Invocazioni</b><br>
+Rivolgiamo la nostra preghiera a Dio, Padre provvidente, e diciamo insieme: <br>
+<b>R. Conferma ciò che hai operato in noi, Signore.</b><br><br>
+
+- Dio di misericordia, guidaci sulla via della santità, perché cerchiamo sempre ciò che è vero, buono e giusto.<br>
+- Non abbandonarci, o Dio, per il tuo grande amore, non dimenticare la tua alleanza.<br>
+- Accogli l’offerta del nostro cuore contrito e umiliato, fa’ che non siano confusi quelli che si affidano a te.<br>
+- Tu che ci hai resi partecipi della missione profetica del Cristo, fa’ che annunziamo con le parole e le opere le meraviglie del tuo amore.<br><br>
+
+<b>Padre Nostro</b><br><br>
+
+<b>Orazione Finale</b><br>
+Concedi al tuo popolo, o Dio, l’abbondanza dei tui doni, perché sia sempre fedele agli impegni del suo battesimo, e viva nella prosperità e nella pace in attesa della gioia eterna. Per il nostro Signore.<br><br>
+
+<b>Conclusione</b><br>
+<b>V.</b> Il Signore ci benedica, ci preservi da ogni male, e ci conduca alla vita eterna. <br>
+<b>R.</b> Amen.`
         },
         {
             num: 2,
             title: "Lodi mattutine - 2 maggio",
-            text: `Introduzione
-V. O Dio, vieni a salvarmi.
-R. Signore, vieni presto in mio aiuto. 
-Gloria al Padre e al Figlio e allo Spirito Santo. Come era nel principio, e ora e sempre, nei secoli dei secoli. Amen. Alleluia.
+            text: `<b>Introduzione</b><br>
+<b>V.</b> O Dio, vieni a salvarmi.<br>
+<b>R.</b> Signore, vieni presto in mio aiuto. <br>
+Gloria al Padre e al Figlio e allo Spirito Santo. <br>
+Come era nel principio, e ora e sempre, nei secoli dei secoli. Amen. Alleluia.<br><br>
 
-Inno: Quale gioia è star con Te Gesù
-Ogni volta che Ti cerco, ogni volta che Ti invoco, sempre mi accogli, Signor. Grandi sono i Tuoi prodigi, Tu sei buono verso tutti, Santo, Tu regni tra noi. 
+<b>Quale gioia è star con Te Gesù</b><br>
+Ogni volta che Ti cerco, ogni volta che Ti invoco,<br>
+sempre mi accogli, Signor.<br>
+Grandi sono i Tuoi prodigi, Tu sei buono verso tutti,<br>
+Santo, Tu regni tra noi. <br><br>
 
-Quale gioia è star con Te, Gesù, vivo e vicino; bello è dar lode a Te: Tu sei il Signor. Quale dono è aver creduto in Te, che non mi abbandoni; io per sempre abiterò la Tua casa, mio Re. 
+Quale gioia è star con Te, Gesù, vivo e vicino;<br>
+bello è dar lode a Te: Tu sei il Signor.<br>
+Quale dono è aver creduto in Te, che non mi abbandoni;<br>
+io per sempre abiterò la Tua casa, mio Re. <br><br>
 
-Hai guarito il mio dolore, hai cambiato questo cuore: oggi rinasco, Signor. Grandi sono i Tuoi prodigi, Tu sei buono verso tutti, Santo, Tu regni tra noi. (Rit)
+Hai guarito il mio dolore, hai cambiato questo cuore:<br>
+oggi rinasco, Signor.<br>
+Grandi sono i Tuoi prodigi, Tu sei buono verso tutti,<br>
+Santo, Tu regni tra noi. <b>(Rit)</b><br><br>
 
-Hai salvato la mia vita, hai aperto la mia bocca; canto per Te, mio Signor. Grandi sono i Tuoi prodigi, Tu sei buono verso tutti, Santo, Tu regni tra noi. (Rit)
+Hai salvato la mia vita, hai aperto la mia bocca;<br>
+canto per Te, mio Signor.<br>
+Grandi sono i Tuoi prodigi, Tu sei buono verso tutti,<br>
+Santo, Tu regni tra noi. <b>(Rit)</b><br><br>
 
-1 ant. È bello dar lode all’Altissimo, annunziare al mattino il suo amore.
+<b>1 ant.</b> È bello dar lode all’Altissimo, annunziare al mattino il suo amore.<br><br>
 
-Salmo 91
-È bello dar lode al Signore e cantare al tuo nome, o Altissimo, annunziare al mattino il tuo amore, la tua fedeltà lungo la notte, sull'arpa a dieci corde e sulla lira, con canti sulla cetra. 
-Poiché mi rallegri, Signore con le tue meraviglie, esulto per l'opera delle tue mani. Come sono grandi le tue opere, Signore, quanto profondi i tuoi pensieri! L'uomo insensato non intende e lo stolto non capisce: se i peccatori germogliano come l'erba e fioriscono tutti i malfattori, li attende una rovina eterna: ma tu sei l'eccelso per sempre, o Signore. 
-Ecco, i tuoi nemici, o Signore, ecco, i tuoi nemici periranno, saranno dispersi tutti i malfattori. Tu mi doni la forza di un bufalo, mi cospargi di olio splendente. I miei occhi disprezzeranno i miei nemici, e contro gli iniqui che mi assalgono i miei orecchi udranno cose infauste. 
-Il giusto fiorirà come palma, crescerà come cedro del Libano; piantati nella casa del Signore, fioriranno negli atri del nostro Dio. Nella vecchiaia daranno ancora frutti, saranno vegeti e rigogliosi, per annunziare quanto è retto il Signore: mia roccia, in lui non c'è ingiustizia.
+<b>Salmo 91</b><br>
+È bello dar lode al Signore<br>
+e cantare al tuo nome, o Altissimo,<br>
+annunziare al mattino il tuo amore,<br>
+la tua fedeltà lungo la notte,<br>
+sull'arpa a dieci corde e sulla lira,<br>
+con canti sulla cetra. <br><br>
 
-Lettura Breve (2 Pt 3, 13-14)
-Secondo la promessa del Signore, noi aspettiamo nuovi cieli e una terra nuova nei quali avrà stavile dimora la giustizia. Perciò, carissimi, nell’attesa di questi eventi, cercate d’essere senza macchia e irreprensibili davanti a Dio, in pace. La magnanimità del Signore nostro giudicatela come salvezza.
+Poiché mi rallegri, Signore con le tue meraviglie,<br>
+esulto per l'opera delle tue mani.<br>
+Come sono grandi le tue opere, Signore,<br>
+quanto profondi i tuoi pensieri!<br>
+L'uomo insensato non intende<br>
+e lo stolto non capisce:<br>
+se i peccatori germogliano come l'erba<br>
+e fioriscono tutti i malfattori,<br>
+li attende una rovina eterna:<br>
+ma tu sei l'eccelso per sempre, o Signore. <br><br>
 
-Responsorio breve
-R. Esultano le mie labbra cantando le tue lodi. 
-Esultano le mie labbra cantando le tue lodi.
-V. La mia lingua proclama la tua giustizia cantando le tue lodi.
-Gloria la Padre e al Figlio e allo Spirito Santo. Invocherò l’Altissimo: da lui ogni mio bene.
+Ecco, i tuoi nemici, o Signore,<br>
+ecco, i tuoi nemici periranno,<br>
+saranno dispersi tutti i malfattori.<br>
+Tu mi doni la forza di un bufalo,<br>
+mi cospargi di olio splendente.<br>
+I miei occhi disprezzeranno i miei nemici,<br>
+e contro gli iniqui che mi assalgono<br>
+i miei orecchi udranno cose infauste. <br><br>
 
-Antifona: Guida i nostri passi, o Signore, sulla via della pace.
+Il giusto fiorirà come palma,<br>
+crescerà come cedro del Libano;<br>
+piantati nella casa del Signore,<br>
+fioriranno negli atri del nostro Dio.<br>
+Nella vecchiaia daranno ancora frutti,<br>
+saranno vegeti e rigogliosi,<br>
+per annunziare quanto è retto il Signore:<br>
+mia roccia, in lui non c'è ingiustizia.<br><br>
 
-Cantico di Zaccaria (Benedictus)
-Benedetto il Signore Dio d'Israele, perché ha visitato e redento il suo popolo, e ha suscitato per noi una salvezza potente nella casa di Davide, suo servo. 
-Come aveva promesso per bocca dei suoi santi profeti d'un tempo: salvezza dai nostri nemici e dalle mani di quanti ci odiano. 
-Così egli ha concesso misericordia ai nostri padri e si è ricordato della sua santa alleanza, del giuramento fatto ad Abramo, nostro padre, di concederci, liberati dalle mani dei nemici, di servirlo senza timore, in santità e giustizia al suo cospetto, per tutti i nostri giorni. 
-E tu, bambino, sarai chiamato profeta dell'Altissimo perché andrai innanzi al Signore a preparargli le strade, per dare al suo popolo la conoscenza della salvezza nella remissione dei suoi peccati. 
-Grazie alla bontà misericordiosa del nostro Dio, per cui verrà a visitarci dall'alto un sole che sorge, per rischiarare quelli che stanno nelle tenebre e nell'ombra di morte e dirigere i nostri passi sulla via della pace.
+<b>Lettura Breve (2 Pt 3, 13-14)</b><br>
+Secondo la promessa del Signore, noi aspettiamo nuovi cieli e una terra nuova nei quali avrà stavile dimora la giustizia. Perciò, carissimi, nell’attesa di questi eventi, cercate d’essere senza macchia e irreprensibili davanti a Dio, in pace. La magnanimità del Signore nostro giudicatela come salvezza.<br><br>
 
-Invocazioni
-Adoriamo Dio Padre, che nel Cristo, suo Figlio, ha ridato al mondo la speranza e la vita. Animati da questa certezza diciamo: 
-R. Signore ascolta la nostra preghiera.
+<b>Responsorio breve</b><br>
+<b>R.</b> Esultano le mie labbra cantando le tue lodi. <br>
+Esultano le mie labbra cantando le tue lodi.<br>
+<b>V.</b> La mia lingua proclama la tua giustizia cantando le tue lodi.<br>
+Gloria al Padre e al Figlio e allo Spirito Santo.<br>
+Invocherò l’Altissimo: da lui ogni mio bene.<br><br>
 
-- Dio, Padre di tutti, che ci hai gatto giungere all’alba del nuovo giorno, fa’ che viviamo nell’amore del Cristo a lode e gloria del tuo nome.
-- Rafforza in noi la fede, la speranza e la carità, che lo Spirito Santo ha seminato nei nostri cuori.
-- Il nostro sguardo sia sempre rivolto a te, perché rispondiamo prontamente alla tua chiamata.
-- Salvaci dalle insidie e dalle seduzioni del male, difendici da ogni pericolo nel cammino verso la patria del cielo.
+<b>Antifona:</b> Guida i nostri passi, o Signore, sulla via della pace.<br><br>
 
-Padre Nostro
+<b>Cantico di Zaccaria</b><br>
+Benedetto il Signore Dio d'Israele,<br>
+perché ha visitato e redento il suo popolo,<br>
+e ha suscitato per noi una salvezza potente<br>
+nella casa di Davide, suo servo. <br><br>
 
-Orazione Finale
-O Dio, vera luce e giorno senza tramonto, accogli la lode mattutina del tuo popolo e fa’ che il nostro spirito, libero dalle tenebre della colpa, risplenda nel fulgore della tua venuta. Per il nostro Signore.
+Come aveva promesso<br>
+per bocca dei suoi santi profeti d'un tempo:<br>
+salvezza dai nostri nemici<br>
+e dalle mani di quanti ci odiano. <br><br>
 
-Conclusione
-V. Il Signore ci benedica, ci preservi da ogni male, e ci conduca alla vita eterna. 
-R. Amen.`
+Così egli ha concesso misericordia ai nostri padri<br>
+e si è ricordato della sua santa alleanza,<br>
+del giuramento fatto ad Abramo, nostro padre,<br>
+di concederci, liberati dalle mani dei nemici,<br>
+di servirlo senza timore, in santità e giustizia<br>
+al suo cospetto, per tutti i nostri giorni. <br><br>
+
+E tu, bambino, sarai chiamato profeta dell'Altissimo<br>
+perché andrai innanzi al Signore a preparargli le strade,<br>
+per dare al suo popolo la conoscenza della salvezza<br>
+nella remissione dei suoi peccati. <br><br>
+
+Grazie alla bontà misericordiosa del nostro Dio,<br>
+per cui verrà a visitarci dall'alto un sole che sorge,<br>
+per rischiarare quelli che stanno nelle tenebre<br>
+e nell'ombra di morte<br>
+e dirigere i nostri passi sulla via della pace.<br><br>
+
+<b>Invocazioni</b><br>
+Adoriamo Dio Padre, che nel Cristo, suo Figlio, ha ridato al mondo la speranza e la vita. Animati da questa certezza diciamo: <br>
+<b>R. Signore ascolta la nostra preghiera.</b><br><br>
+
+- Dio, Padre di tutti, che ci hai fatto giungere all’alba del nuovo giorno, fa’ che viviamo nell’amore del Cristo a lode e gloria del tuo nome.<br>
+- Rafforza in noi la fede, la speranza e la carità, che lo Spirito Santo ha seminato nei nostri cuori.<br>
+- Il nostro sguardo sia sempre rivolto a te, perché rispondiamo prontamente alla tua chiamata.<br>
+- Salvaci dalle insidie e dalle seduzioni del male, difendici da ogni pericolo nel cammino verso la patria del cielo.<br><br>
+
+<b>Padre Nostro</b><br><br>
+
+<b>Orazione Finale</b><br>
+O Dio, vera luce e giorno senza tramonto, accogli la lode mattutina del tuo popolo e fa’ che il nostro spirito, libero dalle tenebre della colpa, risplenda nel fulgore della tua venuta. Per il nostro Signore.<br><br>
+
+<b>Conclusione</b><br>
+<b>V.</b> Il Signore ci benedica, ci preservi da ogni male, e ci conduca alla vita eterna. <br>
+<b>R.</b> Amen.`
         }
     ];
 
     // --- DATABASE TESTI: VEGLIA ---
-    const VEGLIA_TEXT = `<h3>Veglia di Preghiera</h3>\nInserire qui il testo completo della Veglia...`;
+    const VEGLIA_TEXT = `<h3>Veglia di Preghiera</h3><br>Inserire qui il testo completo della Veglia...`;
 
     // --- DATABASE TESTI: CANTI (Esempi) ---
     const CANTI = [
         { num: 1, title: "Canto di Inizio", text: "Testo del primo canto..." },
-        // ... Aggiungi qui gli altri 27 canti seguendo lo stesso schema
+        // Aggiungi qui gli altri canti
     ];
         // --- VARIABILI DI STATO ---
     let currentLodiIndex = 0;
@@ -677,8 +825,10 @@ R. Amen.`
         void container.offsetWidth; // Forza il reflow
         container.classList.add(direction === 'next' ? 'flip-next' : 'flip-prev');
         
-        document.getElementById('lodi-title-display').textContent = lode.title;
-        document.getElementById('lodi-text-display').textContent = lode.text;
+        // Uso innerHTML per renderizzare i tag <b> e <br> del database
+        document.getElementById('lodi-title-display').innerHTML = lode.title;
+        document.getElementById('lodi-text-display').innerHTML = lode.text;
+        
         document.getElementById('lodi-counter').textContent = `${lode.num} / ${LODI.length}`;
         document.getElementById('lodi-search-input').value = lode.num;
         
@@ -716,8 +866,10 @@ R. Amen.`
         void container.offsetWidth; 
         container.classList.add(direction === 'next' ? 'flip-next' : 'flip-prev');
         
-        document.getElementById('canto-title-display').textContent = canto.title;
-        document.getElementById('canto-text-display').textContent = canto.text;
+        // Uso innerHTML anche qui per eventuali formattazioni future
+        document.getElementById('canto-title-display').innerHTML = canto.title;
+        document.getElementById('canto-text-display').innerHTML = canto.text;
+        
         document.getElementById('canto-counter').textContent = `${canto.num} / ${CANTI.length}`;
         document.getElementById('canto-search-input').value = canto.num;
         
