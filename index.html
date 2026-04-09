@@ -235,6 +235,24 @@
             text-align: center;
             margin-top: 10px;
         }
+
+        /* Stile per le liste del programma */
+        .programma-lista {
+            list-style-type: none;
+            padding-left: 0;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+        .programma-lista li {
+            margin-bottom: 8px;
+            display: flex;
+        }
+        .programma-orario {
+            font-weight: bold;
+            color: var(--accent);
+            margin-right: 15px;
+            min-width: 50px;
+        }
     </style>
 </head>
 <body>
@@ -301,10 +319,10 @@
                 <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
             </div>
             
-            <div class="card" onclick="openReader('Libretto')">
+            <div class="card" onclick="openReader('Programma')">
                 <div class="card-left">
-                    <div class="icon-box"><img src="assets/book-open.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"><span class="material-icons fallback-icon">menu_book</span></div>
-                    <div class="card-title">Libretto</div>
+                    <div class="icon-box"><img src="assets/book-open.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"><span class="material-icons fallback-icon">event</span></div>
+                    <div class="card-title">Programma</div>
                 </div>
                 <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
             </div>
@@ -463,7 +481,59 @@
     <script>
         const LINK_FOTO_RICORDO = "https://photos.app.goo.gl/TUO_LINK_QUI"; 
         
-        // --- TESTO VEGLIA (NUOVO) ---
+        // --- TESTO PROGRAMMA (NUOVO) ---
+        const HTML_PROGRAMMA = `
+            <div style="animation: elasticSlide 0.6s ease; background:var(--card-bg); padding:25px 20px; border-radius:20px; box-shadow: 0 4px 15px var(--shadow);">
+                <h2 style="color:var(--accent); text-align:center; margin-top:0;">XXI MEETING M2G</h2>
+                <p style="text-align:center; font-weight:bold; color:var(--text-sec); margin-bottom:30px;">Fermarsi non si può: Destinazione mondo!</p>
+
+                <h3 style="color:var(--accent); border-bottom:2px solid var(--icon-bg); padding-bottom:5px; margin-top:20px;">Giovedì 30 Aprile</h3>
+                <ul class="programma-lista">
+                    <li><span class="programma-orario">16:00</span><span>Accoglienza</span></li>
+                    <li><span class="programma-orario">18:30</span><span>Apertura Meeting</span></li>
+                    <li><span class="programma-orario">20:00</span><span>Cena tipica</span></li>
+                    <li><span class="programma-orario">21:00</span><span>Serata</span></li>
+                </ul>
+
+                <h3 style="color:var(--accent); border-bottom:2px solid var(--icon-bg); padding-bottom:5px; margin-top:30px;">Venerdì 1 Maggio</h3>
+                <ul class="programma-lista">
+                    <li><span class="programma-orario">09:00</span><span>Colazione</span></li>
+                    <li><span class="programma-orario">09:45</span><span>Lodi</span></li>
+                    <li><span class="programma-orario">10:15</span><span>Testimonianza</span></li>
+                    <li><span class="programma-orario">11:30</span><span>Break</span></li>
+                    <li><span class="programma-orario">11:45</span><span>Tempo libero</span></li>
+                    <li><span class="programma-orario">13:00</span><span>Pranzo</span></li>
+                    <li><span class="programma-orario">15:15</span><span>Laboratori</span></li>
+                    <li><span class="programma-orario">17:30</span><span>Break</span></li>
+                    <li><span class="programma-orario">18:00</span><span>Ripresa laboratori</span></li>
+                    <li><span class="programma-orario">20:00</span><span>Cena</span></li>
+                    <li><span class="programma-orario">21:00</span><span>Veglia con pellegrinaggio</span></li>
+                </ul>
+
+                <h3 style="color:var(--accent); border-bottom:2px solid var(--icon-bg); padding-bottom:5px; margin-top:30px;">Sabato 2 Maggio</h3>
+                <ul class="programma-lista">
+                    <li><span class="programma-orario">08:30</span><span>Colazione</span></li>
+                    <li><span class="programma-orario">09:30</span><span>Partenza per il Duomo di Messina</span></li>
+                    <li><span class="programma-orario">11:00</span><span>Visita guidata</span></li>
+                    <li><span class="programma-orario">12:00</span><span>Campanile del Duomo</span></li>
+                    <li><span class="programma-orario">13:30</span><span>Pranzo</span></li>
+                    <li><span class="programma-orario">15:30</span><span>Incontro con il vescovo</span></li>
+                    <li><span class="programma-orario">16:00</span><span>Caccia al tesoro</span></li>
+                    <li><span class="programma-orario">18:30</span><span>Rientro</span></li>
+                    <li><span class="programma-orario">20:30</span><span>Cena</span></li>
+                    <li><span class="programma-orario">21:30</span><span>Serata di giochi</span></li>
+                </ul>
+
+                <h3 style="color:var(--accent); border-bottom:2px solid var(--icon-bg); padding-bottom:5px; margin-top:30px;">Domenica 3 Maggio</h3>
+                <ul class="programma-lista">
+                    <li><span class="programma-orario">09:00</span><span>Colazione</span></li>
+                    <li><span class="programma-orario">10:30</span><span>Messa e chiusura Meeting</span></li>
+                    <li><span class="programma-orario">11:30</span><span>Saluti e partenze</span></li>
+                </ul>
+            </div>
+        `;
+
+        // --- TESTO VEGLIA ---
         const TEXT_VEGLIA = `<b>Con Lui in Cammino, dove il bene chiama</b>
 
 <b>Celebrante:</b> Nel nome del Padre, del Figlio e dello Spirito Santo
@@ -593,23 +663,27 @@ Come era nel principio, e ora e sempre, nei secoli dei secoli. Amen. Alleluia.
 è bello lodarti, Signore,
 è bello cantare a Te!
 (2 volte)
+
 Tu, che sei l’Amore infinito
 che neppure il cielo può contenere,
 Ti sei fatto uomo,
 Tu sei venuto qui
 ad abitare in mezzo a noi, allora
-È bello cantare il tuo amore…
+
+<i>È bello cantare il tuo amore…</i>
+
 Tu che conti tutte le stelle
 e le chiami ad una ad una per nome,
 da mille sentieri
 ci hai radunati qui, 
 ci hai chiamati figli Tuoi, allora
-È bello cantare il tuo amore,
+
+<i>È bello cantare il tuo amore,
 è bello lodare il Tuo nome.
 È bello cantare il Tuo amore,
 è bello lodarti, Signore,
 è bello cantare a Te!
-(2 volte)
+(2 volte)</i>
 
 <b>1 ant.</b>
 Crea in me, o Dio, un cuore puro,
@@ -622,36 +696,44 @@ Lavami da tutte le mie colpe,
 mondami dal mio peccato.
 Riconosco la mia colpa,
 il mio peccato mi sta sempre dinanzi.
+
 Contro di te, contro te solo ho peccato,
 quello che è male ai tuoi occhi,
 io l’ho fatto;
 perciò sei giusto quando parli,
 retto nel tuo giudizio.
+
 Ecco, nella colpa sono stato generato,
 nel peccato mi ha generato mia madre.
 Ma tu vuoi la sincerità del cuore
 e nell’intimo mi insegni la sapienza.
+
 Purificami con issopo e sarò mondato;
 lavami e sarò più bianco della neve.
 Fammi sentire gioia e letizia;
 esulteranno le ossa che hai spezzato.
+
 Distogli lo sguardo dai miei peccati,
 cancella tutte le mie colpe,
 Crea in me, o Dio, un cuore puro,
 rinnova in me uno spirito saldo.
+
 Non respingermi dalla tua presenza
 e non privarmi del tuo Santo Spirito.
 Rendimi la gioia di essere salvato,
 sostiene in me un animo generoso.
+
 Insegnerò agli erranti le tue vie
 e i peccatori a te ritorneranno.
 Liberami dal sangue, Dio, mia salvezza,
 la mia lingua esalterà la tua giustizia.
+
 Signore, apri le mie labbra e la mia bocca
 proclami la tua lode, poiché non gradisci il sacrificio
 e se offro olocausti, non li accetti.
 Uno spirito contrito è sacrificio a Dio,
 un cuore affranto e umiliato tu, o Dio, non disprezzi.
+
 Nel tuo amore fa grazia a Sion,
 rialza le mura di Gerusalemme.
 Allora gradirai i sacrifici prescritti,
@@ -669,6 +751,7 @@ Questa vita che vivo nella carne io la vivo nella fede del Figlio di Dio, che mi
 <b>Responsorio breve</b>
 <b>R.</b> Invocherò l’Altissimo: da lui ogni mio bene.
 Invocherò l’altissimo: da lui ogni mio bene.
+
 <b>V.</b> Dal cielo manderà la sua salvezza:
 da lui ogni mio bene.
 Gloria la Padre e al Figlio e allo Spirito Santo.
@@ -683,20 +766,24 @@ Benedetto il Signore Dio d'Israele,
 perché ha visitato e redento il suo popolo,
 e ha suscitato per noi una salvezza potente
 nella casa di Davide, suo servo.
+
 Come aveva promesso
 per bocca dei suoi santi profeti d'un tempo:
 salvezza dai nostri nemici
 e dalle mani di quanti ci odiano.
+
 Così egli ha concesso misericordia ai nostri padri
 e si è ricordato della sua santa alleanza,
 del giuramento fatto ad Abramo, nostro padre,
 di concederci, liberati dalle mani dei nemici,
 di servirlo senza timore, in santità e giustizia
 al suo cospetto, per tutti i nostri giorni.
+
 E tu, bambino, sarai chiamato profeta dell'Altissimo
 perché andrai innanzi al Signore a preparargli le strade,
 per dare al suo popolo la conoscenza della salvezza
 nella remissione dei suoi peccati.
+
 Grazie alla bontà misericordiosa del nostro Dio,
 per cui verrà a visitarci dall'alto un sole che sorge,
 per rischiarare quelli che stanno nelle tenebre
@@ -707,12 +794,16 @@ Amen.
 <b>Invocazioni</b>
 Rivolgiamo la nostra preghiera a Dio, Padre provvidente, e diciamo insieme:
 <b>R.</b> Conferma ciò che hai operato in noi, Signore.
+
 Dio di misericordia, guidaci sulla via della santità,
 - perché cerchiamo sempre ciò che è vero, buono e giusto.
+
 Non abbandonarci, o Dio, per il tuo grande amore,
 - non dimenticare la tua alleanza.
+
 Acccogli l’offerta del nostro cuore contrito e umiliato,
 - fa’ che non siano confusi quelli che si affidano a te.
+
 Tu che ci hai resi partecipi della missione profetica del Cristo,
 - fa’ che annunziamo con le parole e le opere le meraviglie del tuo amore.
 <b>Padre Nostro</b>
@@ -730,20 +821,25 @@ Ogni volta che Ti cerco, ogni volta che Ti invoco,
 sempre mi accogli, Signor.
 Grandi sono i Tuoi prodigi, Tu sei buono verso tutti,
 Santo, Tu regni tra noi.
-Quale gioia è star con Te, Gesù, vivo e vicino;
+
+<i>Quale gioia è star con Te, Gesù, vivo e vicino;
 bello è dar lode a Te: Tu sei il Signor.
 Quale dono è aver creduto in Te, che non mi abbandoni;
-io per sempre abiterò la Tua casa, mio Re.
+io per sempre abiterò la Tua casa, mio Re.</i>
+
 Hai guarito il mio dolore, hai cambiato questo cuore:
 oggi rinasco, Signor.
 Grandi sono i Tuoi prodigi, Tu sei buono verso tutti,
 Santo, Tu regni tra noi.
-Rit
+
+<i>Rit.</i>
+
 Hai salvato la mia vita, hai aperto la mia bocca;
 canto per Te, mio Signor.
 Grandi sono i Tuoi prodigi, Tu sei buono verso tutti,
 Santo, Tu regni tra noi.
-Rit`
+
+<i>Rit.</i>`
             },
             {
                 num: 2,
@@ -760,17 +856,20 @@ Acqua siamo noi dall’antica sorgente veniamo,
 fiumi siamo noi se i ruscelli si mettono insieme,
 mari siamo noi se i torrenti si danno la mano,
 vita nuova c’è se Gesù è in mezzo a noi.
-E allora diamoci la mano
+
+<i>E allora diamoci la mano
 e tutti insieme camminiamo
 ed un oceano di pace nascerà.
 E l’egoismo cancelliamo
 un cuore limpido sentiamo
 e Dio che bagna
-del suo amor l’umanità.
+del suo amor l’umanità.</i>
+
 Su nel cielo c’è Dio Padre che vive per l’uomo,
 crea tutti noi e ci ama di amore infinito,
 figli siamo noi e fratelli di Cristo Signore,
 vita nuova c’è quando Lui è in mezzo a noi.
+
 Nuova umanità oggi nasce da chi crede in Lui,
 nuovi siamo noi se l’amore è la legge di vita,
 figli siamo noi se non siamo divisi da niente,
@@ -787,28 +886,34 @@ annunziare al mattino il tuo amore,
 la tua fedeltà lungo la notte,
 sull'arpa a dieci corde e sulla lira,
 con canti sulla cetra.
+
 Poiché mi rallegri, Signore con le tue meraviglie,
 esulto per l'opera delle tue mani.
 Come sono grandi le tue opere, Signore,
 quanto profondi i tuoi pensieri!
+
 L'uomo insensato non intende
 e lo stolto non capisce:
 se i peccatori germogliano come l'erba
 e fioriscono tutti i malfattori,
 li attende una rovina eterna:
 ma tu sei l'eccelso per sempre, o Signore.
+
 Ecco, i tuoi nemici, o Signore,
 ecco, i tuoi nemici periranno,
 saranno dispersi tutti i malfattori.
 Tu mi doni la forza di un bufalo,
 mi cospargi di olio splendente.
+
 I miei occhi disprezzeranno i miei nemici,
 e contro gli iniqui che mi assalgono
 i miei orecchi udranno cose infauste.
+
 Il giusto fiorirà come palma,
 crescerà come cedro del Libano;
 piantati nella casa del Signore,
 fioriranno negli atri del nostro Dio.
+
 Nella vecchiaia daranno ancora frutti,
 saranno vegeti e rigogliosi,
 per annunziare quanto è retto il Signore:
@@ -822,6 +927,7 @@ La magnanimità del Signore nostro giudicatela come salvezza.
 <b>Responsorio breve</b>
 <b>R.</b> Esultano le mie labbra cantando le tue lodi.
 Esultano le mie labbra cantando le tue lodi.
+
 <b>V.</b> La mia lingua proclama la tua giustizia
 cantando le tue lodi.
 Gloria la Padre e al Figlio e allo Spirito Santo.
@@ -836,20 +942,24 @@ Benedetto il Signore Dio d'Israele,
 perché ha visitato e redento il suo popolo,
 e ha suscitato per noi una salvezza potente
 nella casa di Davide, suo servo.
+
 Come aveva promesso
 per bocca dei suoi santi profeti d'un tempo:
 salvezza dai nostri nemici
 e dalle mani di quanti ci odiano.
+
 Così egli ha concesso misericordia ai nostri padri
 e si è ricordato della sua santa alleanza,
 del giuramento fatto ad Abramo, nostro padre,
 di concederci, liberati dalle mani dei nemici,
 di servirlo senza timore, in santità e giustizia
 al suo cospetto, per tutti i nostri giorni.
+
 E tu, bambino, sarai chiamato profeta dell'Altissimo
 perché andrai innanzi al Signore a preparargli le strade,
 per dare al suo popolo la conoscenza della salvezza
 nella remissione dei suoi peccati.
+
 Grazie alla bontà misericordiosa del nostro Dio,
 per cui verrà a visitarci dall'alto un sole che sorge,
 per rischiarare quelli che stanno nelle tenebre
@@ -860,12 +970,16 @@ e dirigere i nostri passi sulla via della pace.
 Adoriamo Dio Padre, che nel Cristo, suo Figlio, ha ridato al mondo la speranza e la vita.
 Animati da questa certezza diciamo:
 <b>R.</b> Signore ascolta la nostra preghiera.
+
 Dio, Padre di tutti, che ci hai fatto giungere all’alba del nuovo giorno,
 - fa’ che viviamo nell’amore del Cristo a lode e gloria del tuo nome.
+
 Rafforza in noi la fede, la speranza e la carità,
 - che lo Spirito Santo ha seminato nei nostri cuori.
+
 Il nostro sguardo sia sempre rivolto a te,
 - perché rispondiamo prontamente alla tua chiamata.
+
 Salvaci dalle insidie e dalle seduzioni del male,
 - difendici da ogni pericolo nel cammino verso la patria del cielo.
 <b>Padre Nostro</b>
@@ -883,19 +997,23 @@ Se la parola cade sulla strada,
 dentro il cuore della gente che non crede
 che ascolta e non capisce, che guarda ma non vede
 é un seme abbandonato che muore e non fiorisce.
+
 Se ascolti la parola con amore,
 ma per non essere deriso o emarginato
 la soffochi nel cuore, può appena germogliare
 ma la tua gioia é breve se poi ti lasci andare.
-TOGLIAMO LE SPINE, LE PIETRE DAI NOSTRI CUORI,
+
+<i>TOGLIAMO LE SPINE, LE PIETRE DAI NOSTRI CUORI,
 ARIAMO CON TUTTO L’AMORE I NOSTRI CAMPI
 ASPETTIAMO CHE PASSI L’INVERNO CON LA SUA PIOGGIA
 E AVREMO LA TERRA IMBIONDITA DI GRANO,
-IL SOLE CHE SPLENDE E L’ARCOBALENO. (2 VOLTE)
+IL SOLE CHE SPLENDE E L’ARCOBALENO. (2 VOLTE)</i>
+
 Non farti soffocare dalle spine
 del mondo che ti attrae coi suoi colori
 E’ solo l’apparenza che acceca gli occhi tuoi
 Accendi la tua vita, colorati di Lui.
+
 E c’è il terreno fertile dell’uomo
 che fa fruttare il seme dell’amore che impegna la sua vita,
 e tutto ciò che è suo,
@@ -1124,7 +1242,7 @@ si gioca l’esistenza per seminare Dio.`
             document.getElementById('canto-search-input').blur();
         }
 
-        // --- READER GENERICO (Inno, Libretto) ---
+        // --- READER GENERICO (Inno, Programma) ---
         function openReader(title) {
             hideAll();
             document.getElementById('reader-title').textContent = title;
@@ -1151,10 +1269,8 @@ si gioca l’esistenza per seminare Dio.`
 ${LYRICS_INNO}
                         </div>
                     </div>`;
-            } else if (title === 'Libretto') {
-                let htmlImages = '<div style="text-align:center">';
-                for (let i = 1; i <= 5; i++) { htmlImages += `<img src="assets/lib${i}.jpg" class="reader-image" loading="lazy" onerror="this.style.display='none'">`; }
-                htmlImages += '</div>'; content.innerHTML = htmlImages;
+            } else if (title === 'Programma') {
+                content.innerHTML = HTML_PROGRAMMA;
             }
             animatePageEntry('page-reader');
         }
