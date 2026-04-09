@@ -10,17 +10,13 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="M2G">
     
-    <link rel="apple-touch-icon" href="/favicons/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/favicons/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicons/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="/favicons/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="theme-color" content="#ffffff">
+    <link rel="apple-touch-icon" href="assets/m2g_logo.png?v=7">
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/m2g_logo.png?v=7">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/m2g_logo.png?v=7">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/m2g_logo.png?v=7">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/m2g_logo.png?v=7">
     
-    <link rel="manifest" href='data:application/manifest+json,{"name":"M2G App","short_name":"M2G","start_url":"./index.html","display":"standalone","background_color":"#ffffff","theme_color":"#ffffff","icons":[{"src":"/favicons/favicon-16x16.png","sizes":"192x192","type":"image/png"},{"src":"/favicons/favicon-16x16.png","sizes":"512x512","type":"image/png"}]}'>
-    
+    <link rel="manifest" href='data:application/manifest+json,{"name":"M2G App","short_name":"M2G","start_url":"./index.html","display":"standalone","background_color":"#6a8a73","theme_color":"#6a8a73","icons":[{"src":"assets/m2g_logo.png","sizes":"192x192","type":"image/png"},{"src":"assets/m2g_logo.png","sizes":"512x512","type":"image/png"}]}'>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" rel="stylesheet">
     
@@ -47,7 +43,7 @@
             background-color: var(--bg-color); color: var(--text-color);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0; padding: 0;
-            transition: background-color 0.4s ease-in-out, color 0.4s ease-in-out;
+            transition: background-color 2.0s ease-in-out, color 2.0s ease-in-out;
             -webkit-tap-highlight-color: transparent; 
             font-size: 1rem; /* Eredita dalla root per scalare tutto */
             overflow-x: hidden;
@@ -1034,7 +1030,7 @@ si gioca l’esistenza per seminare Dio.`
             }
         ];
 
-        let currentCantoIndex = 0; 
+        let currentLodiIndex = 0; 
 
         // --- DATABASE CANTI ---
         const CANTI = [
