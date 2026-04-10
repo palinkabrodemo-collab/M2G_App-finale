@@ -20,6 +20,7 @@
     <meta name="theme-color" content="#ffffff">
     
     <link rel="manifest" href='data:application/manifest+json,{"name":"M2G App","short_name":"M2G","start_url":"./index.html","display":"standalone","background_color":"#ffffff","theme_color":"#ffffff","icons":[{"src":"/favicons/favicon-16x16.png","sizes":"192x192","type":"image/png"},{"src":"/favicons/favicon-16x16.png","sizes":"512x512","type":"image/png"}]}'>
+    
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" rel="stylesheet">
     
@@ -31,7 +32,7 @@
             --border: #eeeeee; --shadow: rgba(0,0,0,0.05); --base-size: 16px;
         }
         
-        /* QUESTA È LA CHIAVE PER FAR INGRANDIRE TUTTO L'APP CON IL CURSORE */
+        /* CHIAVE PER FAR INGRANDIRE TUTTO L'APP CON IL CURSORE */
         html {
             font-size: var(--base-size);
         }
@@ -48,7 +49,7 @@
             margin: 0; padding: 0;
             transition: background-color 2.0s ease-in-out, color 2.0s ease-in-out;
             -webkit-tap-highlight-color: transparent; 
-            font-size: 1rem; /* Eredita dalla root per scalare tutto */
+            font-size: 1rem; 
             overflow-x: hidden;
             padding-bottom: 150px; 
         }
@@ -99,7 +100,7 @@
             z-index: 200; transform: translateY(150px);
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             overflow: hidden; 
-            min-height: 75px; height: auto; padding: 5px 0; /* Modificato per non tagliare testi grandi */
+            min-height: 75px; height: auto; padding: 5px 0; 
         }
         #miniplayer.visible { transform: translateY(0); }
         
@@ -143,11 +144,11 @@
             background-color: var(--card-bg); color: var(--text-color);
             font-size: 1rem; box-sizing: border-box; transition: border-color 0.3s;
             background-image: linear-gradient(var(--border) 1px, transparent 1px);
-            background-size: 100% 2rem; line-height: 2rem; resize: none; /* Le righe ora scalano col testo! */
+            background-size: 100% 2rem; line-height: 2rem; resize: none; 
         }
         #notes-input:focus { border-color: var(--accent); outline: none; }
 
-        /* --- INPUT RICERCA (Condiviso tra Lodi e Canti) --- */
+        /* --- INPUT RICERCA --- */
         .search-box {
             display: flex; align-items: center; background: var(--card-bg); 
             border-radius: 20px; padding: 5px 15px; border: 1px solid var(--border);
@@ -186,7 +187,6 @@
         .page-overlay.visible { opacity: 1; transform: translateY(0); }
         .container { padding: 0 20px; padding-bottom: 100px; }
         .card { background-color: var(--card-bg); border-radius: 22px; padding: 18px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px var(--shadow); border: 1px solid var(--border); cursor: pointer; opacity: 0; animation: elasticSlide 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-        /* Ritardi Card - Aumentati per Veglia */
         .card:nth-child(1) { animation-delay: 0.05s; } .card:nth-child(2) { animation-delay: 0.10s; } .card:nth-child(3) { animation-delay: 0.15s; } .card:nth-child(4) { animation-delay: 0.20s; } .card:nth-child(5) { animation-delay: 0.25s; } .card:nth-child(6) { animation-delay: 0.30s; }
         .card:active { transform: scale(0.95) !important; background-color: var(--border); transition: 0.1s; }
         .card-left { display: flex; align-items: center; }
@@ -225,7 +225,7 @@
         .text-word-style {
             text-align: left !important;
             line-height: 1.8;
-            font-size: 1.05rem; /* Anche questo scala con la root! */
+            font-size: 1.05rem; 
             white-space: pre-line;
             padding: 10px 5px;
         }
@@ -667,13 +667,13 @@ Un chiaro mattino che il sole baciò neanche una nuvola in cielo, dolce l'abrezz
 e da quel giorno per sempre sarà
 Regina del cielo e Stella del mare Un cuore di madre che batte per noi,
 difesa e consiglio per i figli suoi. Lei nostro rifugio e nostra speranza, Le ali che portano il cuore dell'uomo al cuore di Dio.
-Lei piena di grazia nell'eternità
-fu serva docile, ancella ubbidiente,
-tenera madre castissima sposa, incoronata regina sarà,
-con una corona di dodici stelle,
-vestita di sole, la luna ai suoi piedi, onnipotente per grazia sarà,
+Lei piena di grazia nell'eternità 
+fu serva docile, ancella ubbidiente, 
+tenera madre castissima sposa, incoronata regina sarà, 
+con una corona di dodici stelle, 
+vestita di sole, la luna ai suoi piedi, onnipotente per grazia sarà, 
 colei che condusse la vita in piena umiltà
-e da quel giorno per sempre sarà Regina del cielo e Stella del mare Un cuore di madre che batte per noi,
+e da quel giorno per sempre sarà Regina del cielo e Stella del mare Un cuore di madre che batte per noi, 
 difesa e consiglio per i figli suoi. Lei nostro rifugio e nostra speranza, Le ali che portano il cuore dell'uomo al cuore di Dio.
 e tutto il creato ai suoi piedi sarà. lei! il capolavoro di Dio rimase nascosta in terra con umiltà, ora nei cieli risplenderà Lei nostro rifugio e nostra speranza, le ali che portano il cuore dell'uomo al cuore di Dio le ali che portano il cuore dell'uomo al cuore di Dio`;
 
