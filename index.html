@@ -10,13 +10,17 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="M2G">
     
-    <link rel="apple-touch-icon" href="assets/m2g_logo.png?v=7">
-    <link rel="apple-touch-icon" sizes="152x152" href="assets/m2g_logo.png?v=7">
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/m2g_logo.png?v=7">
-    <link rel="icon" type="image/png" sizes="192x192" href="assets/m2g_logo.png?v=7">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/m2g_logo.png?v=7">
+    <link rel="apple-touch-icon" href="/favicons/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/favicons/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
     
-    <link rel="manifest" href='data:application/manifest+json,{"name":"M2G App","short_name":"M2G","start_url":"./index.html","display":"standalone","background_color":"#6a8a73","theme_color":"#6a8a73","icons":[{"src":"assets/m2g_logo.png","sizes":"192x192","type":"image/png"},{"src":"assets/m2g_logo.png","sizes":"512x512","type":"image/png"}]}'>
+    <link rel="manifest" href='data:application/manifest+json,{"name":"M2G App","short_name":"M2G","start_url":"./index.html","display":"standalone","background_color":"#ffffff","theme_color":"#ffffff","icons":[{"src":"/favicons/favicon-16x16.png","sizes":"192x192","type":"image/png"},{"src":"/favicons/favicon-16x16.png","sizes":"512x512","type":"image/png"}]}'>
+    
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" rel="stylesheet">
     
@@ -28,10 +32,8 @@
             --border: #eeeeee; --shadow: rgba(0,0,0,0.05); --base-size: 16px;
         }
         
-        /* QUESTA È LA CHIAVE PER FAR INGRANDIRE TUTTO L'APP CON IL CURSORE */
-        html {
-            font-size: var(--base-size);
-        }
+        /* SCALABILITA' FONT ROOT */
+        html { font-size: var(--base-size); }
 
         body.dark-mode {
             --bg-color: #121212; --card-bg: #1e1e1e; --text-color: #ffffff;
@@ -45,7 +47,7 @@
             margin: 0; padding: 0;
             transition: background-color 2.0s ease-in-out, color 2.0s ease-in-out;
             -webkit-tap-highlight-color: transparent; 
-            font-size: 1rem; /* Eredita dalla root per scalare tutto */
+            font-size: 1rem; 
             overflow-x: hidden;
             padding-bottom: 150px; 
         }
@@ -86,7 +88,7 @@
         .back-btn-circle:active { transform: scale(0.9); }
         .back-btn-circle .material-icons { font-size: 22px; }
 
-        /* --- MINIPLAYER CON EFFETTO "LIQUIDO" --- */
+        /* --- MINIPLAYER --- */
         #miniplayer {
             position: fixed; bottom: 90px; left: 15px; right: 15px;
             background-color: var(--accent); color: white;
@@ -96,7 +98,7 @@
             z-index: 200; transform: translateY(150px);
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             overflow: hidden; 
-            min-height: 75px; height: auto; padding: 5px 0; /* Modificato per non tagliare testi grandi */
+            min-height: 75px; height: auto; padding: 5px 0; 
         }
         #miniplayer.visible { transform: translateY(0); }
         
@@ -134,17 +136,17 @@
         .mp-playhead { font-size: 34px; }
         .mp-close { opacity: 0.8; font-size: 24px; }
 
-        /* --- NOTE "QUADERNO" --- */
+        /* --- NOTE --- */
         #notes-input {
             width: 100%; padding: 8px 18px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 15px;
             background-color: var(--card-bg); color: var(--text-color);
             font-size: 1rem; box-sizing: border-box; transition: border-color 0.3s;
             background-image: linear-gradient(var(--border) 1px, transparent 1px);
-            background-size: 100% 2rem; line-height: 2rem; resize: none; /* Le righe ora scalano col testo! */
+            background-size: 100% 2rem; line-height: 2rem; resize: none; 
         }
         #notes-input:focus { border-color: var(--accent); outline: none; }
 
-        /* --- INPUT RICERCA (Condiviso tra Lodi e Canti) --- */
+        /* --- RICERCA --- */
         .search-box {
             display: flex; align-items: center; background: var(--card-bg); 
             border-radius: 20px; padding: 5px 15px; border: 1px solid var(--border);
@@ -157,7 +159,7 @@
         }
         .search-box span { font-size: 0.9rem; color: var(--text-sec); margin-right: 5px; font-weight: bold;}
 
-        /* --- ANIMAZIONI & TEATRO CELESTE --- */
+        /* --- ANIMAZIONI CELESTI --- */
         @keyframes elasticSlide { 0% { opacity: 0; transform: translateY(50px) scale(0.8); } 60% { opacity: 1; transform: translateY(-10px) scale(1.02); } 80% { transform: translateY(5px) scale(0.98); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
         #celestial-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; opacity: 0; transition: opacity 0.5s ease; display: flex; justify-content: center; align-items: flex-end; overflow: hidden; }
         #celestial-container.active { opacity: 1; }
@@ -183,7 +185,6 @@
         .page-overlay.visible { opacity: 1; transform: translateY(0); }
         .container { padding: 0 20px; padding-bottom: 100px; }
         .card { background-color: var(--card-bg); border-radius: 22px; padding: 18px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px var(--shadow); border: 1px solid var(--border); cursor: pointer; opacity: 0; animation: elasticSlide 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-        /* Ritardi Card - Aumentati per Veglia */
         .card:nth-child(1) { animation-delay: 0.05s; } .card:nth-child(2) { animation-delay: 0.10s; } .card:nth-child(3) { animation-delay: 0.15s; } .card:nth-child(4) { animation-delay: 0.20s; } .card:nth-child(5) { animation-delay: 0.25s; } .card:nth-child(6) { animation-delay: 0.30s; }
         .card:active { transform: scale(0.95) !important; background-color: var(--border); transition: 0.1s; }
         .card-left { display: flex; align-items: center; }
@@ -218,11 +219,11 @@
         .nav-item.active { color: var(--accent); transform: translateY(-4px); }
         .nav-item .material-icons { font-size: 1.6rem; margin-bottom: 4px; }
 
-        /* Stile specifico per l'allineamento dei testi a sinistra come da Word */
+        /* Stile specifico per l'allineamento dei testi a sinistra */
         .text-word-style {
             text-align: left !important;
             line-height: 1.8;
-            font-size: 1.05rem; /* Anche questo scala con la root! */
+            font-size: 1.05rem; 
             white-space: pre-line;
             padding: 10px 5px;
         }
@@ -504,159 +505,169 @@
     <script>
         const LINK_FOTO_RICORDO = "https://photos.app.goo.gl/TUO_LINK_QUI"; 
         
-        // --- DATABASE FRASI EASTER EGG ---
+        // --- DATABASE FRASI EASTER EGG (151 FRASI) ---
         const QUOTES = [
-            "\"Tutto il mondo è patria vostra.\" - San Luigi Guanella",
-            "\"È Dio che fa.\" - San Luigi Guanella",
-            "\"Fermarsi non si può, finché ci sono poveri da soccorrere.\" - San Luigi Guanella",
-            "\"Un cuore cristiano non passa insensibile accanto a nessuna miseria.\" - San Luigi Guanella",
-            "\"Fiducia in Dio e avanti!\" - San Luigi Guanella",
-            "\"La preghiera è il respiro dell’anima.\" - San Luigi Guanella",
-            "\"Il povero è il nostro padrone, e noi siamo i suoi servi.\" - San Luigi Guanella",
-            "\"A tutto provvede il Signore, confidate in Lui.\" - San Luigi Guanella",
-            "\"Fare del bene a tutti, male a nessuno.\" - San Luigi Guanella",
-            "\"Le opere di Dio si fondano sul nulla e si mantengono con la croce.\" - San Luigi Guanella",
-            "\"La santità non consiste nel fare cose straordinarie, ma nel fare bene le ordinarie.\" - San Luigi Guanella",
-            "\"Il cuore deve essere un altare di amore per i fratelli.\" - San Luigi Guanella",
-            "\"Sia fatta la volontà di Dio, sempre e in tutto.\" - San Luigi Guanella",
-            "\"La pazienza è la chiave d'oro per ogni porta chiusa.\" - San Luigi Guanella",
-            "\"Dove c'è bisogno, lì c'è il posto per noi.\" - San Luigi Guanella",
-            "\"Non stancatevi mai di fare il bene, anche quando costa.\" - San Luigi Guanella",
-            "\"Dio è Padre, un Padre buono che non abbandona mai i suoi figli.\" - San Luigi Guanella",
-            "\"La gioia vera è il segno di un cuore che ama Dio.\" - San Luigi Guanella",
-            "\"Lavorate come se tutto dipendesse da voi, pregate come se tutto dipendesse da Dio.\" - San Luigi Guanella",
-            "\"Il paradiso si guadagna con la carità verso i più piccoli e indifesi.\" - San Luigi Guanella",
-            "\"L'umiltà è la base di ogni virtù solida.\" - San Luigi Guanella",
-            "\"Senza Dio l'uomo è nulla, con Dio può tutto.\" - San Luigi Guanella",
-            "\"Ogni povero è Gesù che bussa alla nostra porta, accogliamolo.\" - San Luigi Guanella",
-            "\"Il segreto della felicità è amare Dio sopra ogni cosa e il prossimo come noi stessi.\" - San Luigi Guanella",
-            "\"La Provvidenza divina non manca mai a chi confida ciecamente in essa.\" - San Luigi Guanella",
-            "\"Siate semplici come colombe e prudenti come serpenti nelle opere di carità.\" - San Luigi Guanella",
-            "\"L'amore di Dio accende il cuore di zelo per la salvezza delle anime.\" - San Luigi Guanella",
-            "\"La croce e la sofferenza, accettate con amore, diventano grazia.\" - San Luigi Guanella",
-            "\"Non cercate le glorie vane del mondo, ma i tesori del cielo.\" - San Luigi Guanella",
-            "\"Un sorriso e una parola buona possono sollevare l'animo più afflitto.\" - San Luigi Guanella",
-            "\"L'educazione della gioventù è opera del cuore e della grazia.\" - San Luigi Guanella",
-            "\"Vivete sempre uniti al Signore.\" - San Luigi Guanella",
-            "\"La carità è il fuoco che deve ardere sempre nelle nostre case.\" - San Luigi Guanella",
-            "\"Cercate prima il regno di Dio, e la Provvidenza penserà al resto.\" - San Luigi Guanella",
-            "\"La vita terrena è solo un pellegrinaggio verso la nostra vera casa, l'eternità.\" - San Luigi Guanella",
-            "\"La preghiera del Rosario è la catena dolce che ci lega a Maria.\" - San Luigi Guanella",
-            "\"Amate Maria come la vostra madre più dolce e tenera.\" - San Luigi Guanella",
-            "\"Ogni piccola opera buona fatta con amore è un seme di vita eterna.\" - San Luigi Guanella",
-            "\"La fede sposta le montagne delle nostre miserie umane.\" - San Luigi Guanella",
-            "\"Non abbiate paura delle prove, Dio vi darà le spalle per portare la croce.\" - San Luigi Guanella",
-            "\"Chi dà ai poveri, presta a Dio.\" - San Luigi Guanella",
-            "\"La carità è il vincolo perfetto che unisce i fratelli.\" - San Luigi Guanella",
-            "\"Siate grati a Dio per ogni piccolo boccone di pane.\" - San Luigi Guanella",
-            "\"La mitezza disarma i cuori più duri.\" - San Luigi Guanella",
-            "\"La speranza cristiana non delude mai.\" - San Luigi Guanella",
-            "\"Siamo tutti strumenti inutili nelle mani sapienti di Dio.\" - San Luigi Guanella",
-            "\"L'obbedienza fiduciosa è la via più sicura verso la santità.\" - San Luigi Guanella",
-            "\"Il pane materiale e il Pane eucaristico sono i nostri sostegni.\" - San Luigi Guanella",
-            "\"Vivete ogni giorno come se fosse quello dell'incontro con il Signore.\" - San Luigi Guanella",
-            "\"Tenete fisso lo sguardo al Cielo.\" - San Luigi Guanella",
-            "\"Ama e fa' ciò che vuoi.\" - Sant'Agostino",
-            "\"Cominciate col fare ciò che è necessario, poi ciò che è possibile. E all’improvviso vi sorprenderete a fare l’impossibile.\" - San Francesco d’Assisi",
-            "\"Non tutti possiamo fare grandi cose, ma possiamo fare piccole cose con grande amore.\" - Santa Teresa di Calcutta",
-            "\"Prega, spera e non agitarti. L'agitazione non giova a nulla.\" - San Pio da Pietrelcina",
-            "\"Prendete in mano la vostra vita e fatene un capolavoro.\" - San Giovanni Paolo II",
-            "\"Per chi ha fede, nessuna spiegazione è necessaria. Per chi non ha fede, nessuna spiegazione è possibile.\" - San Tommaso d’Aquino",
-            "\"Nulla ti turbi, nulla ti spaventi. Tutto passa, Dio non muta.\" - Santa Teresa d’Avila",
-            "\"L'educazione è cosa di cuore, e Dio solo ne è il padrone.\" - San Giovanni Bosco",
-            "\"Ora et labora.\" - San Benedetto da Norcia",
-            "\"State buoni, se potete.\" - San Filippo Neri",
-            "\"Se sarete quello che dovete essere, metterete fuoco a tutto il mondo.\" - Santa Caterina da Siena",
-            "\"Si prendono più mosche con una goccia di miele che con un barile di aceto.\" - San Francesco di Sales",
-            "\"Agisci come se tutto dipendesse da te, sapendo che in realtà tutto dipende da Dio.\" - Sant'Ignazio di Loyola",
-            "\"Signore, fa' di me uno strumento della tua pace.\" - San Francesco d’Assisi",
-            "\"Chi canta prega due volte.\" - Sant'Agostino",
-            "\"L'amore non è amato!\" - San Francesco d'Assisi",
-            "\"La tristezza è lo sguardo rivolto verso se stessi, la felicità è lo sguardo rivolto verso Dio.\" - Carlo Acutis (Beato)",
-            "\"Tutti nasciamo originali, ma molti muoiono fotocopie.\" - Carlo Acutis (Beato)",
-            "\"Non amate a parole né con la lingua, ma con i fatti e nella verità.\" - San Giovanni Apostolo",
-            "\"Fate quello che vi dirà.\" - Maria Santissima (Vangelo, non santa ma la madre di tutti i santi)",
-            "\"Oltre l'amore non c'è altro.\" - San Massimiliano Kolbe",
-            "\"L'odio distrugge, l'amore solo crea.\" - San Massimiliano Kolbe",
-            "\"Dio ha creato il mondo perché ci fosse un posto dove poterci amare.\" - San Francesco di Sales",
-            "\"La misura dell'amore è amare senza misura.\" - Sant'Agostino",
-            "\"Vi affido ai giovani: amate ciò che amano i giovani, affinché essi amino ciò che amate voi.\" - San Giovanni Bosco",
-            "\"Dammi un'anima e prenditi tutto il resto.\" - San Giovanni Bosco",
-            "\"Tutto per amore, niente per forza.\" - San Francesco di Sales",
-            "\"Sera della vita saremo giudicati sull'amore.\" - San Giovanni della Croce",
-            "\"Non ho altro modo per provarti il mio amore che gettare fiori.\" - Santa Teresa di Lisieux",
-            "\"Voglio passare il mio cielo a fare del bene sulla terra.\" - Santa Teresa di Lisieux",
-            "\"Io sono una piccola matita nelle mani di Dio.\" - Santa Teresa di Calcutta",
-            "\"Quello che noi facciamo è solo una goccia nell'oceano, ma se non lo facessimo l'oceano avrebbe una goccia in meno.\" - Santa Teresa di Calcutta",
-            "\"La pace inizia con un sorriso.\" - Santa Teresa di Calcutta",
-            "\"Dio non ci chiede di avere successo, ci chiede di essere fedeli.\" - Santa Teresa di Calcutta",
-            "\"Non abbiate paura! Aprite, anzi, spalancate le porte a Cristo!\" - San Giovanni Paolo II",
-            "\"La famiglia è la cellula fondamentale della società.\" - San Giovanni Paolo II",
-            "\"Dammi un cuore che ascolta.\" - San Salomone (Antico Testamento)",
-            "\"Non cercare di capire per credere, ma credi per capire.\" - Sant'Agostino",
-            "\"Il nostro cuore è inquieto finché non riposa in Te.\" - Sant'Agostino",
-            "\"Tardi ti ho amato, bellezza tanto antica e tanto nuova!\" - Sant'Agostino",
-            "\"Fidatevi di Dio. Egli provvede in modi insperati.\" - San Vincenzo de' Paoli",
-            "\"Amare Dio a spese delle nostre braccia e col sudore del nostro volto.\" - San Vincenzo de' Paoli",
-            "\"La perfezione consiste nel fare la volontà di Dio.\" - San Vincenzo de' Paoli",
-            "\"Un'anima umile fa violenza al cuore di Dio.\" - San Pio da Pietrelcina",
-            "\"La preghiera è la chiave che apre il cuore di Dio.\" - San Pio da Pietrelcina",
-            "\"Ama la Madonna e falla amare.\" - San Pio da Pietrelcina",
-            "\"È nel dare che noi riceviamo.\" - San Francesco d'Assisi",
-            "\"Un raggio di sole è sufficiente per spazzare via molte ombre.\" - San Francesco d'Assisi",
-            "\"Il sangue dei martiri è il seme dei cristiani.\" - Tertulliano (Scrittore cristiano antico)",
-            "\"Cammina con i piedi in terra e con il cuore in cielo.\" - San Giovanni Bosco",
-            "\"Niente ti turbi, chi ha Dio non manca di nulla.\" - Santa Teresa d'Avila",
-            "\"Il Signore si serve di strumenti deboli per compiere le sue grandi opere.\" - San Francesco d'Assisi",
-            "\"I poveri sono i nostri maestri.\" - San Vincenzo de' Paoli",
-            "\"L'amicizia, se è vera, non può finire.\" - San Girolamo",
-            "\"L’ignoranza delle Scritture è ignoranza di Cristo.\" - San Girolamo",
-            "\"Chi non ama, non ha conosciuto Dio.\" - San Giovanni Apostolo",
-            "\"Non v'è croce, per piccola che sia, che non sia dono di Dio.\" - San Pio da Pietrelcina",
-            "\"Non c'è amore più grande di questo: dare la vita per i propri amici.\" - Gesù Cristo (Vangelo di Giovanni)",
-            "\"Non spegnete lo Spirito.\" - San Paolo Apostolo",
-            "\"Rallegratevi sempre nel Signore.\" - San Paolo Apostolo",
-            "\"La speranza ha due bellissime figlie: lo sdegno e il coraggio.\" - Sant'Agostino",
-            "\"Senza la domenica non possiamo vivere.\" - Santi Martiri di Abitene",
-            "\"La castità è la purezza dell'amore.\" - San Giovanni Paolo II",
-            "\"È bello per noi essere qui.\" - San Pietro Apostolo",
-            "\"Il diavolo ha paura della gente allegra.\" - San Giovanni Bosco",
-            "\"Dove c'è amore, lì c'è Dio.\" - Sant'Agostino",
-            "\"Il vero amore è sempre umile.\" - Santa Teresa di Lisieux",
-            "\"Non lamentatevi della vostra croce.\" - San Pio da Pietrelcina",
-            "\"L'amore è un fuoco che non si spegne mai.\" - Santa Caterina da Siena",
-            "\"Nessuno è così povero da non poter donare un sorriso.\" - Santa Teresa di Calcutta",
-            "\"La misericordia di Dio è infinita.\" - Santa Faustina Kowalska",
-            "\"Gesù, confido in Te.\" - Santa Faustina Kowalska",
-            "\"Vivere senza una fede, senza un patrimonio da difendere, non è vivere ma vivacchiare.\" - Pier Giorgio Frassati (Beato)",
-            "\"Verso l'alto!\" - Pier Giorgio Frassati (Beato)",
-            "\"Ogni giorno è un'opportunità per amare.\" - Santa Teresa di Lisieux",
-            "\"La via della croce è la via della luce.\" - San Giovanni Paolo II",
-            "\"Siate santi, perché io sono santo.\" - Dio (Levitico/San Pietro)",
-            "\"Dio ama chi dona con gioia.\" - San Paolo Apostolo",
-            "\"La superbia è la fonte di ogni peccato.\" - Sant'Agostino",
-            "\"O Maria, concepita senza peccato, prega per noi.\" - Santa Caterina Labouré",
-            "\"L'Eucaristia è la mia autostrada per il Cielo.\" - Carlo Acutis (Beato)",
-            "\"Non posso vivere senza di Lui.\" - San Policarpo",
-            "\"Chi si umilia sarà esaltato.\" - Gesù Cristo (Vangelo)",
-            "\"Fatevi santi e presto.\" - San Giuseppe Moscati",
-            "\"La scienza senza la fede è cieca.\" - San Giuseppe Moscati",
-            "\"Amatevi gli uni gli altri come io ho amato voi.\" - Gesù Cristo (Vangelo)",
-            "\"La vita è breve, l'eternità è lunga.\" - San Filippo Neri",
-            "\"L'umiltà è la virtù dei grandi.\" - Sant'Agostino",
-            "\"La pace non è assenza di guerra, ma la virtù che nasce dalla forza d'animo.\" - San Tommaso d'Aquino",
-            "\"I veri cristiani si riconoscono dal fatto che amano.\" - Sant'Ignazio di Antiochia",
-            "\"Il martirio non è una punizione, ma una grazia.\" - San Massimiliano Kolbe",
-            "\"Chi prega si salva, chi non prega si danna.\" - Sant'Alfonso Maria de' Liguori",
-            "\"Non ho paura della morte, perché sto andando a casa.\" - Santa Giuseppina Bakhita",
-            "\"Siate felici nel tempo e nell'eternità.\" - San Giovanni Bosco",
-            "\"Ogni lacrima asciugata è una stella nel cielo.\" - Sant'Agostino",
-            "\"L'amore ci rende simili a Dio.\" - San Clemente Romano",
-            "\"Non dobbiamo mai disperare della salvezza di nessuno.\" - Sant'Ambrogio",
-            "\"Il cuore parla al cuore.\" - San John Henry Newman",
-            "\"La grazia presuppone la natura e la perfeziona.\" - San Tommaso d'Aquino",
-            "\"Ora capisco che le circostanze della nascita sono irrilevanti; è ciò che fai con il dono della vita che determina chi sei.\" - Mewtwo",
-            "\"il mio starter preferito è Charmander\" - Colui che sta al di là"
+            `"Tutto il mondo è patria vostra." - San Luigi Guanella`,
+            `"È Dio che fa." - San Luigi Guanella`,
+            `"Fermarsi non si può, finché ci sono poveri da soccorrere." - San Luigi Guanella`,
+            `"Un cuore cristiano non passa insensibile accanto a nessuna miseria." - San Luigi Guanella`,
+            `"Fiducia in Dio e avanti!" - San Luigi Guanella`,
+            `"La preghiera è il respiro dell’anima." - San Luigi Guanella`,
+            `"Il povero è il nostro padrone, e noi siamo i suoi servi." - San Luigi Guanella`,
+            `"A tutto provvede il Signore, confidate in Lui." - San Luigi Guanella`,
+            `"Fare del bene a tutti, male a nessuno." - San Luigi Guanella`,
+            `"Le opere di Dio si fondano sul nulla e si mantengono con la croce." - San Luigi Guanella`,
+            `"La santità non consiste nel fare cose straordinarie, ma nel fare bene le ordinarie." - San Luigi Guanella`,
+            `"Il cuore deve essere un altare di amore per i fratelli." - San Luigi Guanella`,
+            `"Sia fatta la volontà di Dio, sempre e in tutto." - San Luigi Guanella`,
+            `"La pazienza è la chiave d'oro per ogni porta chiusa." - San Luigi Guanella`,
+            `"Dove c'è bisogno, lì c'è il posto per noi." - San Luigi Guanella`,
+            `"Non stancatevi mai di fare il bene, anche quando costa." - San Luigi Guanella`,
+            `"Dio è Padre, un Padre buono che non abbandona mai i suoi figli." - San Luigi Guanella`,
+            `"La gioia vera è il segno di un cuore che ama Dio." - San Luigi Guanella`,
+            `"Lavorate come se tutto dipendesse da voi, pregate come se tutto dipendesse da Dio." - San Luigi Guanella`,
+            `"Il paradiso si guadagna con la carità verso i più piccoli e indifesi." - San Luigi Guanella`,
+            `"L'umiltà è la base di ogni virtù solida." - San Luigi Guanella`,
+            `"Senza Dio l'uomo è nulla, con Dio può tutto." - San Luigi Guanella`,
+            `"Ogni povero è Gesù che bussa alla nostra porta, accogliamolo." - San Luigi Guanella`,
+            `"Il segreto della felicità è amare Dio sopra ogni cosa e il prossimo come noi stessi." - San Luigi Guanella`,
+            `"La Provvidenza divina non manca mai a chi confida ciecamente in essa." - San Luigi Guanella`,
+            `"Siate semplici come colombe e prudenti come serpenti nelle opere di carità." - San Luigi Guanella`,
+            `"L'amore di Dio accende il cuore di zelo per la salvezza delle anime." - San Luigi Guanella`,
+            `"La croce e la sofferenza, accettate con amore, diventano grazia." - San Luigi Guanella`,
+            `"Non cercate le glorie vane del mondo, ma i tesori del cielo." - San Luigi Guanella`,
+            `"Un sorriso e una parola buona possono sollevare l'animo più afflitto." - San Luigi Guanella`,
+            `"L'educazione della gioventù è opera del cuore e della grazia." - San Luigi Guanella`,
+            `"Vivete sempre uniti al Signore." - San Luigi Guanella`,
+            `"La carità è il fuoco che deve ardere sempre nelle nostre case." - San Luigi Guanella`,
+            `"Cercate prima il regno di Dio, e la Provvidenza penserà al resto." - San Luigi Guanella`,
+            `"La vita terrena è solo un pellegrinaggio verso la nostra vera casa, l'eternità." - San Luigi Guanella`,
+            `"La preghiera del Rosario è la catena dolce che ci lega a Maria." - San Luigi Guanella`,
+            `"Amate Maria come la vostra madre più dolce e tenera." - San Luigi Guanella`,
+            `"Ogni piccola opera buona fatta con amore è un seme di vita eterna." - San Luigi Guanella`,
+            `"La fede sposta le montagne delle nostre miserie umane." - San Luigi Guanella`,
+            `"Non abbiate paura delle prove, Dio vi darà le spalle per portare la croce." - San Luigi Guanella`,
+            `"Chi dà ai poveri, presta a Dio." - San Luigi Guanella`,
+            `"La carità è il vincolo perfetto che unisce i fratelli." - San Luigi Guanella`,
+            `"Siate grati a Dio per ogni piccolo boccone di pane." - San Luigi Guanella`,
+            `"La mitezza disarma i cuori più duri." - San Luigi Guanella`,
+            `"La speranza cristiana non delude mai." - San Luigi Guanella`,
+            `"Siamo tutti strumenti inutili nelle mani sapienti di Dio." - San Luigi Guanella`,
+            `"L'obbedienza fiduciosa è la via più sicura verso la santità." - San Luigi Guanella`,
+            `"Il pane materiale e il Pane eucaristico sono i nostri sostegni." - San Luigi Guanella`,
+            `"Vivete ogni giorno come se fosse quello dell'incontro con il Signore." - San Luigi Guanella`,
+            `"Tenete fisso lo sguardo al Cielo." - San Luigi Guanella`,
+            `"Ama e fa' ciò che vuoi." - Sant'Agostino`,
+            `"Cominciate col fare ciò che è necessario, poi ciò che è possibile. E all’improvviso vi sorprenderete a fare l’impossibile." - San Francesco d’Assisi`,
+            `"Non tutti possiamo fare grandi cose, ma possiamo fare piccole cose con grande amore." - Santa Teresa di Calcutta`,
+            `"Prega, spera e non agitarti. L'agitazione non giova a nulla." - San Pio da Pietrelcina`,
+            `"Prendete in mano la vostra vita e fatene un capolavoro." - San Giovanni Paolo II`,
+            `"Per chi ha fede, nessuna spiegazione è necessaria. Per chi non ha fede, nessuna spiegazione è possibile." - San Tommaso d’Aquino`,
+            `"Nulla ti turbi, nulla ti spaventi. Tutto passa, Dio non muta." - Santa Teresa d’Avila`,
+            `"L'educazione è cosa di cuore, e Dio solo ne è il padrone." - San Giovanni Bosco`,
+            `"Ora et labora." - San Benedetto da Norcia`,
+            `"State buoni, se potete." - San Filippo Neri`,
+            `"Se sarete quello che dovete essere, metterete fuoco a tutto il mondo." - Santa Caterina da Siena`,
+            `"Si prendono più mosche con una goccia di miele che con un barile di aceto." - San Francesco di Sales`,
+            `"Agisci come se tutto dipendesse da te, sapendo che in realtà tutto dipende da Dio." - Sant'Ignazio di Loyola`,
+            `"Signore, fa' di me uno strumento della tua pace." - San Francesco d’Assisi`,
+            `"Chi canta prega due volte." - Sant'Agostino`,
+            `"L'amore non è amato!" - San Francesco d'Assisi`,
+            `"La tristezza è lo sguardo rivolto verso se stessi, la felicità è lo sguardo rivolto verso Dio." - Carlo Acutis (Beato)`,
+            `"Tutti nasciamo originali, ma molti muoiono fotocopie." - Carlo Acutis (Beato)`,
+            `"Non amate a parole né con la lingua, ma con i fatti e nella verità." - San Giovanni Apostolo`,
+            `"Fate quello che vi dirà." - Maria Santissima`,
+            `"Oltre l'amore non c'è altro." - San Massimiliano Kolbe`,
+            `"L'odio distrugge, l'amore solo crea." - San Massimiliano Kolbe`,
+            `"Dio ha creato il mondo perché ci fosse un posto dove poterci amare." - San Francesco di Sales`,
+            `"La misura dell'amore è amare senza misura." - Sant'Agostino`,
+            `"Vi affido ai giovani: amate ciò che amano i giovani, affinché essi amino ciò che amate voi." - San Giovanni Bosco`,
+            `"Dammi un'anima e prenditi tutto il resto." - San Giovanni Bosco`,
+            `"Tutto per amore, niente per forza." - San Francesco di Sales`,
+            `"Sera della vita saremo giudicati sull'amore." - San Giovanni della Croce`,
+            `"Non ho altro modo per provarti il mio amore che gettare fiori." - Santa Teresa di Lisieux`,
+            `"Voglio passare il mio cielo a fare del bene sulla terra." - Santa Teresa di Lisieux`,
+            `"Io sono una piccola matita nelle mani di Dio." - Santa Teresa di Calcutta`,
+            `"Quello che noi facciamo è solo una goccia nell'oceano, ma se non lo facessimo l'oceano avrebbe una goccia in meno." - Santa Teresa di Calcutta`,
+            `"La pace inizia con un sorriso." - Santa Teresa di Calcutta`,
+            `"Dio non ci chiede di avere successo, ci chiede di essere fedeli." - Santa Teresa di Calcutta`,
+            `"Non abbiate paura! Aprite, anzi, spalancate le porte a Cristo!" - San Giovanni Paolo II`,
+            `"La famiglia è la cellula fondamentale della società." - San Giovanni Paolo II`,
+            `"Dammi un cuore che ascolta." - Re Salomone`,
+            `"Non cercare di capire per credere, ma credi per capire." - Sant'Agostino`,
+            `"Il nostro cuore è inquieto finché non riposa in Te." - Sant'Agostino`,
+            `"Tardi ti ho amato, bellezza tanto antica e tanto nuova!" - Sant'Agostino`,
+            `"Fidatevi di Dio. Egli provvede in modi insperati." - San Vincenzo de' Paoli`,
+            `"Amare Dio a spese delle nostre braccia e col sudore del nostro volto." - San Vincenzo de' Paoli`,
+            `"La perfezione consiste nel fare la volontà di Dio." - San Vincenzo de' Paoli`,
+            `"Un'anima umile fa violenza al cuore di Dio." - San Pio da Pietrelcina`,
+            `"La preghiera è la chiave che apre il cuore di Dio." - San Pio da Pietrelcina`,
+            `"Ama la Madonna e falla amare." - San Pio da Pietrelcina`,
+            `"È nel dare che noi riceviamo." - San Francesco d'Assisi`,
+            `"Un raggio di sole è sufficiente per spazzare via molte ombre." - San Francesco d'Assisi`,
+            `"Il sangue dei martiri è il seme dei cristiani." - Tertulliano`,
+            `"Cammina con i piedi in terra e con il cuore in cielo." - San Giovanni Bosco`,
+            `"Niente ti turbi, chi ha Dio non manca di nulla." - Santa Teresa d'Avila`,
+            `"Il Signore si serve di strumenti deboli per compiere le sue grandi opere." - San Francesco d'Assisi`,
+            `"I poveri sono i nostri maestri." - San Vincenzo de' Paoli`,
+            `"L'amicizia, se è vera, non può finire." - San Girolamo`,
+            `"L’ignoranza delle Scritture è ignoranza di Cristo." - San Girolamo`,
+            `"Chi non ama, non ha conosciuto Dio." - San Giovanni Apostolo`,
+            `"Non v'è croce, per piccola che sia, che non sia dono di Dio." - San Pio da Pietrelcina`,
+            `"Non c'è amore più grande di questo: dare la vita per i propri amici." - Gesù Cristo`,
+            `"Non spegnete lo Spirito." - San Paolo Apostolo`,
+            `"Rallegratevi sempre nel Signore." - San Paolo Apostolo`,
+            `"La speranza ha due bellissime figlie: lo sdegno e il coraggio." - Sant'Agostino`,
+            `"Senza la domenica non possiamo vivere." - Santi Martiri di Abitene`,
+            `"La castità è la purezza dell'amore." - San Giovanni Paolo II`,
+            `"È bello per noi essere qui." - San Pietro Apostolo`,
+            `"Il diavolo ha paura della gente allegra." - San Giovanni Bosco`,
+            `"Dove c'è amore, lì c'è Dio." - Sant'Agostino`,
+            `"Il vero amore è sempre umile." - Santa Teresa di Lisieux`,
+            `"Non lamentatevi della vostra croce." - San Pio da Pietrelcina`,
+            `"L'amore è un fuoco che non si spegne mai." - Santa Caterina da Siena`,
+            `"Nessuno è così povero da non poter donare un sorriso." - Santa Teresa di Calcutta`,
+            `"La misericordia di Dio è infinita." - Santa Faustina Kowalska`,
+            `"Gesù, confido in Te." - Santa Faustina Kowalska`,
+            `"Vivere senza una fede, senza un patrimonio da difendere, non è vivere ma vivacchiare." - Pier Giorgio Frassati (Beato)`,
+            `"Verso l'alto!" - Pier Giorgio Frassati (Beato)`,
+            `"Ogni giorno è un'opportunità per amare." - Santa Teresa di Lisieux`,
+            `"La via della croce è la via della luce." - San Giovanni Paolo II`,
+            `"Siate santi, perché io sono santo." - Dio`,
+            `"Dio ama chi dona con gioia." - San Paolo Apostolo`,
+            `"La superbia è la fonte di ogni peccato." - Sant'Agostino`,
+            `"O Maria, concepita senza peccato, prega per noi." - Santa Caterina Labouré`,
+            `"L'Eucaristia è la mia autostrada per il Cielo." - Carlo Acutis (Beato)`,
+            `"Non posso vivere senza di Lui." - San Policarpo`,
+            `"Chi si umilia sarà esaltato." - Gesù Cristo`,
+            `"Fatevi santi e presto." - San Giuseppe Moscati`,
+            `"La scienza senza la fede è cieca." - San Giuseppe Moscati`,
+            `"Amatevi gli uni gli altri come io ho amato voi." - Gesù Cristo`,
+            `"La vita è breve, l'eternità è lunga." - San Filippo Neri`,
+            `"L'umiltà è la virtù dei grandi." - Sant'Agostino`,
+            `"La pace non è assenza di guerra, ma la virtù che nasce dalla forza d'animo." - San Tommaso d'Aquino`,
+            `"I veri cristiani si riconoscono dal fatto che amano." - Sant'Ignazio di Antiochia`,
+            `"Il martirio non è una punizione, ma una grazia." - San Massimiliano Kolbe`,
+            `"Chi prega si salva, chi non prega si danna." - Sant'Alfonso Maria de' Liguori`,
+            `"Non ho paura della morte, perché sto andando a casa." - Santa Giuseppina Bakhita`,
+            `"Siate felici nel tempo e nell'eternità." - San Giovanni Bosco`,
+            `"Ogni lacrima asciugata è una stella nel cielo." - Sant'Agostino`,
+            `"L'amore ci rende simili a Dio." - San Clemente Romano`,
+            `"Non dobbiamo mai disperare della salvezza di nessuno." - Sant'Ambrogio`,
+            `"Il cuore parla al cuore." - San John Henry Newman`,
+            `"La grazia presuppone la natura e la perfeziona." - San Tommaso d'Aquino`,
+            `"Non preoccuparti del domani, Dio è già lì." - San Giovanni Bosco`,
+            `"Un cuore che ama è sempre giovane." - Proverbio Cristiano`,
+            `"Chi ha Dio ha tutto." - Santa Teresa d'Avila`,
+            `"Tutto posso in colui che mi dà la forza." - San Paolo Apostolo`,
+            `"Il bene non fa rumore." - San Giovanni Bosco`,
+            `"Cerca la pace e perseguila." - Salmo 34`,
+            `"Amiamo, perché Egli ci ha amati per primo." - San Giovanni Apostolo`,
+            `"Sii un dono per gli altri." - San Giovanni Paolo II`,
+            `"La preghiera è la nostra forza." - Papa Francesco`,
+            `"La carità copre una moltitudine di peccati." - San Pietro Apostolo`,
+            `"Ora capisco che le circostanze della nascita sono irrilevanti; è ciò che fai con il dono della vita che determina chi sei." - Mewtwo`,
+            `"Il mio starter preferito è Charmander" - Colui che sta al di là`
         ];
 
         function showRandomQuote() {
@@ -681,7 +692,7 @@
             }, 300);
         }
         
-        // --- TESTO PROGRAMMA (NUOVO) ---
+        // --- TESTO PROGRAMMA ---
         const HTML_PROGRAMMA = `
             <div style="animation: elasticSlide 0.6s ease; background:var(--card-bg); padding:25px 20px; border-radius:20px; box-shadow: 0 4px 15px var(--shadow);">
                 <h2 style="color:var(--accent); text-align:center; margin-top:0;">XXI MEETING M2G</h2>
@@ -735,186 +746,161 @@
 
         // --- TESTO VEGLIA ---
         const TEXT_VEGLIA = `<div style="animation: elasticSlide 0.6s ease; background:var(--card-bg); padding:25px 20px; border-radius:20px; box-shadow: 0 4px 15px var(--shadow);">
-                <h2 style="color:var(--accent); text-align:center; margin-top:0;">XXI MEETING M2G</h2>
-                <p style="text-align:center; font-weight:bold; color:var(--text-sec); margin-bottom:30px;">Fermarsi non si può: Destinazione mondo!</p>
+                <h2 style="color:var(--accent); text-align:center; margin-top:0;">Con Lui in Cammino, dove il bene chiama</h2><br>
 
-                <h3 style="color:var(--accent); border-bottom:2px solid var(--icon-bg); padding-bottom:5px; margin-top:20px;">Giovedì 30 Aprile</h3>
-                <ul class="programma-lista">
-                    <li><span class="programma-orario">16:00</span><span>Accoglienza</span></li>
-                    <li><span class="programma-orario">18:30</span><span>Apertura Meeting</span></li>
-                    <li><span class="programma-orario">20:00</span><span>Cena tipica</span></li>
-                    <li><span class="programma-orario">21:00</span><span>Serata</span></li>
-                </ul>
+<b>Celebrante:</b> Nel nome del Padre, del Figlio e dello Spirito Santo<br>
+<b>Assemblea:</b> Amen<br>
+<b>Celebrante:</b> Il Signore sia con voi.<br>
+<b>Celebrante:</b> La pace del Signore nostro Gesù Cristo, l’amore di Dio Padre e la comunione nello Spirito Santo, siano con tutti voi.<br><br>
 
-                <h3 style="color:var(--accent); border-bottom:2px solid var(--icon-bg); padding-bottom:5px; margin-top:30px;">Venerdì 1 Maggio</h3>
-                <ul class="programma-lista">
-                    <li><span class="programma-orario">09:00</span><span>Colazione</span></li>
-                    <li><span class="programma-orario">09:45</span><span>Lodi</span></li>
-                    <li><span class="programma-orario">10:15</span><span>Testimonianza</span></li>
-                    <li><span class="programma-orario">11:30</span><span>Break</span></li>
-                    <li><span class="programma-orario">11:45</span><span>Tempo libero</span></li>
-                    <li><span class="programma-orario">13:00</span><span>Pranzo</span></li>
-                    <li><span class="programma-orario">15:15</span><span>Laboratori</span></li>
-                    <li><span class="programma-orario">17:30</span><span>Break</span></li>
-                    <li><span class="programma-orario">18:00</span><span>Ripresa laboratori</span></li>
-                    <li><span class="programma-orario">20:00</span><span>Cena</span></li>
-                    <li><span class="programma-orario">21:00</span><span>Veglia con pellegrinaggio</span></li>
-                </ul>
+<b>Guida:</b> Dio non ci ha creati per stare comodi, ci ha creati per camminare. Questa sera non resteremo fermi: cammineremo per le strade portando Gesù con noi. Lo porteremo fuori, tra la gente, perché la fede non si chiude, si dona. Chiediamo il coraggio di partire e di fidarci di Lui. Perché non siamo fatti per restare. Siamo fatti per andare.<br><br>
 
-                <h3 style="color:var(--accent); border-bottom:2px solid var(--icon-bg); padding-bottom:5px; margin-top:30px;">Sabato 2 Maggio</h3>
-                <ul class="programma-lista">
-                    <li><span class="programma-orario">08:30</span><span>Colazione</span></li>
-                    <li><span class="programma-orario">09:30</span><span>Partenza per il Duomo di Messina</span></li>
-                    <li><span class="programma-orario">11:00</span><span>Visita guidata</span></li>
-                    <li><span class="programma-orario">12:00</span><span>Campanile del Duomo</span></li>
-                    <li><span class="programma-orario">13:30</span><span>Pranzo</span></li>
-                    <li><span class="programma-orario">15:30</span><span>Incontro con il vescovo</span></li>
-                    <li><span class="programma-orario">16:00</span><span>???</span></li>
-                    <li><span class="programma-orario">18:30</span><span>Rientro</span></li>
-                    <li><span class="programma-orario">20:30</span><span>Cena</span></li>
-                    <li><span class="programma-orario">21:30</span><span>Serata di giochi</span></li>
-                </ul>
+<i>Esposizione Eucaristica<br>
+Canto Eucaristico: Davanti al Re</i><br><br>
+DAVANTI AL RE<br>
+C’ INCHINIAMO INSIEM<br>
+PER ADORARLO CON TUTTO IL CUOR<br>
+VERSO DI LUI<br>
+ELEVIAMO INSIEM<br>
+CANTI DI GIOIA AL NOSTRO RE DEI RE<br><br>
 
-                <h3 style="color:var(--accent); border-bottom:2px solid var(--icon-bg); padding-bottom:5px; margin-top:30px;">Domenica 3 Maggio</h3>
-                <ul class="programma-lista">
-                    <li><span class="programma-orario">09:00</span><span>Colazione</span></li>
-                    <li><span class="programma-orario">10:30</span><span>Messa e chiusura Meeting</span></li>
-                    <li><span class="programma-orario">11:30</span><span>Saluti e partenze</span></li>
-                </ul>
-            </div>
-        `;
+<h3 style="color:var(--accent); border-bottom:2px solid var(--icon-bg); padding-bottom:5px; margin-top:20px;">1° TAPPA: PARTIRE - “Non sei fatto per restare”</h3>
+<b>Dai discorsi di Papa Francesco</b><br>
+Camminare. L’uomo è un essere in cammino. Per tutta la vita è chiamato a mettersi in cammino, in continua uscita da dove si trova: da quando esce dal grembo della madre a quando passa da un’età della vita a un’altra; dal momento in cui lascia la casa dei genitori fino a quando esce da questa esistenza terrena. Il cuore ci invita ad andare, a raggiungere una meta. Ma camminare è una disciplina, una fatica, servono pazienza quotidiana e allenamento costante. Occorre rinunciare a tante strade per scegliere quella che conduce alla meta e ravvivare la memoria per non smarrirla. Camminare richiede l’umiltà di tornare sui propri passi, quando è necessario, e la cura per i compagni di viaggio, perché solo insieme si cammina bene. Camminare, insomma, esige una conversione continua di sé. Per questo tanti vi rinunciano, preferendo la quiete domestica, dove curare comodamente i propri affari senza esporsi ai rischi del viaggio. Ma così ci si aggrappa a sicurezze effimere, che non danno quella pace e quella gioia cui il cuore aspira, e che si trovano solo uscendo da sé stessi.<br><br>
 
-        // --- TESTO VEGLIA ---
-        const TEXT_VEGLIA = `<h2 style="text-align:center; font-size:1.8rem; color:var(--accent); margin-bottom:20px; line-height:1.2;">Con Lui in Cammino, dove il bene chiama</h2>
+<b>Guida:</b> Siamo fatti per camminare. Eppure, a volte, ci fermiamo: per paura, per comodità, perché ogni passo richiede coraggio. Camminare è scegliere, è fidarsi anche quando la strada non è del tutto chiara. Questa sera vogliamo rimetterci in cammino con Lui e affidargli i nostri passi. Dove ti sei fermato? A che punto sei del tuo cammino? Come ti senti davvero? Lasciamo ora un breve spazio di silenzio, perché queste domande possano scendere nel cuore. Tra poco, il sacerdote, portando Gesù Eucaristia, si incamminerà verso l’esterno. Adesso, a un rappresentante per ogni realtà verrà consegnata una lanterna accesa. Questa luce è un segno concreto: rappresenta Cristo che illumina il nostro cammino e la speranza che siamo chiamati a portare nelle strade del mondo. Le lanterne non sono solo un gesto simbolico, ma un impegno: ciascuno di noi è chiamato a custodire quella luce e a lasciarla brillare, accompagnando Gesù lungo il cammino. Cammineremo insieme dietro di Lui, seguendo il canto, portando la sua presenza tra le vie che attraverseremo. Il nostro muoverci verso la prossima tappa diventa così un segno visibile e concreto: non vogliamo restare fermi, ma scegliere di camminare con Lui, dietro di Lui, portando la sua luce e la sua presenza nelle strade del mondo.<br><br>
 
-<b>Celebrante:</b> Nel nome del Padre, del Figlio e dello Spirito Santo
-<b>Assemblea:</b> Amen
-<b>Celebrante:</b> Il Signore sia con voi.
-<b>Celebrante:</b> La pace del Signore nostro Gesù Cristo, l’amore di Dio Padre e la comunione nello Spirito Santo, siano con tutti voi.
+<i>Canto: Come tu mi vuoi</i><br><br>
+Eccomi Signor, vengo a Te mio re, che si compia in me la Tua volontà.<br>
+Eccomi Signor, vengo a Te mio Dio, plasma il cuore mio e di Te vivrò.<br>
+Se Tu lo vuoi Signore manda me e il Tuo nome annuncerò.<br><br>
 
-<b>Guida:</b> Dio non ci ha creati per stare comodi, ci ha creati per camminare. Questa sera non resteremo fermi: cammineremo per le strade portando Gesù con noi. Lo porteremo fuori, tra la gente, perché la fede non si chiude, si dona. Chiediamo il coraggio di partire e di fidarci di Lui. Perché non siamo fatti per restare. Siamo fatti per andare.
+<i>Come Tu mi vuoi io sarò, dove Tu mi vuoi io andrò.<br>
+Questa vita io voglio donarla a Te, per dar gloria al Tuo nome mio re.<br>
+Come Tu mi vuoi io sarò, dove Tu mi vuoi io andrò.<br>
+Se mi guida il Tuo amore paura non ho, per sempre io sarò come Tu mi vuoi.</i><br><br>
 
-<i>Esposizione Eucaristica
-Canto Eucaristico: Davanti al Re</i>
-DAVANTI AL RE
-C’ INCHINIAMO INSIEM
-PER ADORARLO CON TUTTO IL CUOR
-VERSO DI LUI
-ELEVIAMO INSIEM
-CANTI DI GIOIA AL NOSTRO RE DEI RE
+Eccomi Signor, vengo a Te mio re, che si compia in me la Tua volontà.<br>
+Eccomi Signor, vengo a Te mio Dio, plasma il cuore mio e di Te vivrò.<br>
+Tra le Tue mani mai più vacillerò e strumento Tuo sarò.<br><br>
 
-<h3>1° TAPPA: PARTIRE - “Non sei fatto per restare”</h3>
-<b>Dai discorsi di Papa Francesco</b>
-Camminare. L’uomo è un essere in cammino. Per tutta la vita è chiamato a mettersi in cammino, in continua uscita da dove si trova: da quando esce dal grembo della madre a quando passa da un’età della vita a un’altra; dal momento in cui lascia la casa dei genitori fino a quando esce da questa esistenza terrena. Il cuore ci invita ad andare, a raggiungere una meta. Ma camminare è una disciplina, una fatica, servono pazienza quotidiana e allenamento costante. Occorre rinunciare a tante strade per scegliere quella che conduce alla meta e ravvivare la memoria per non smarrirla. Camminare richiede l’umiltà di tornare sui propri passi, quando è necessario, e la cura per i compagni di viaggio, perché solo insieme si cammina bene. Camminare, insomma, esige una conversione continua di sé. Per questo tanti vi rinunciano, preferendo la quiete domestica, dove curare comodamente i propri affari senza esporsi ai rischi del viaggio. Ma così ci si aggrappa a sicurezze effimere, che non danno quella pace e quella gioia cui il cuore aspira, e che si trovano solo uscendo da sé stessi.
+<i>Come Tu mi vuoi io sarò, dove Tu mi vuoi io andrò.<br>
+Questa vita io voglio donarla a Te, per dar gloria al Tuo nome mio re.<br>
+Come Tu mi vuoi io sarò, dove Tu mi vuoi io andrò.<br>
+Se mi guida il Tuo amore paura non ho, per sempre io sarò come Tu mi vuoi.<br>
+Come Tu mi vuoi… Come Tu mi vuoi... io sarò<br>
+Come Tu mi vuoi... io sarò<br>
+Come Tu mi vuoi.</i><br><br>
 
-<b>Guida:</b> Siamo fatti per camminare. Eppure, a volte, ci fermiamo: per paura, per comodità, perché ogni passo richiede coraggio. Camminare è scegliere, è fidarsi anche quando la strada non è del tutto chiara. Questa sera vogliamo rimetterci in cammino con Lui e affidargli i nostri passi. Dove ti sei fermato? A che punto sei del tuo cammino? Come ti senti davvero? Lasciamo ora un breve spazio di silenzio, perché queste domande possano scendere nel cuore. Tra poco, il sacerdote, portando Gesù Eucaristia, si incamminerà verso l’esterno. Adesso, a un rappresentante per ogni realtà verrà consegnata una lanterna accesa. Questa luce è un segno concreto: rappresenta Cristo che illumina il nostro cammino e la speranza che siamo chiamati a portare nelle strade del mondo. Le lanterne non sono solo un gesto simbolico, ma un impegno: ciascuno di noi è chiamato a custodire quella luce e a lasciarla brillare, accompagnando Gesù lungo il cammino. Cammineremo insieme dietro di Lui, seguendo il canto, portando la sua presenza tra le vie che attraverseremo. Il nostro muoverci verso la prossima tappa diventa così un segno visibile e concreto: non vogliamo restare fermi, ma scegliere di camminare con Lui, dietro di Lui, portando la sua luce e la sua presenza nelle strade del mondo.
+<h3 style="color:var(--accent); border-bottom:2px solid var(--icon-bg); padding-bottom:5px; margin-top:20px;">2° TAPPA: LUNGO LA VIA - “ Gesù si accostò e camminava con loro”</h3>
+<b>Dal Vangelo secondo Luca</b><br>
+In quello stesso giorno due dei discepoli erano in cammino verso un villaggio chiamato Emmaus e conversavano tra loro di tutto ciò che era accaduto. Mentre discorrevano insieme, Gesù in persona si accostò e camminava con loro, ma i loro occhi erano incapaci di riconoscerlo. Ed egli, lungo la via, spiegò loro nelle Scritture ciò che si riferiva a lui. Giunti al villaggio, lo invitarono dicendo: «Resta con noi, perché si fa sera». Quando fu a tavola con loro, prese il pane, pronunciò la benedizione, lo spezzò e lo diede loro. Allora si aprirono i loro occhi e lo riconobbero. Ed essi dissero l’uno all’altro: «Non ardeva forse il nostro cuore mentre conversava con noi lungo il cammino?». E senza indugio partirono e tornarono a Gerusalemme per annunciare che il Signore è davvero risorto.<br><br>
 
-<i>Canto: Come tu mi vuoi</i>
-Eccomi Signor, vengo a Te mio re, che si compia in me la Tua volontà.
-Eccomi Signor, vengo a Te mio Dio, plasma il cuore mio e di Te vivrò.
-Se Tu lo vuoi Signore manda me e il Tuo nome annuncerò.
-Come Tu mi vuoi io sarò, dove Tu mi vuoi io andrò.
-Questa vita io voglio donarla a Te, per dar gloria al Tuo nome mio re.
-Come Tu mi vuoi io sarò, dove Tu mi vuoi io andrò.
-Se mi guida il Tuo amore paura non ho, per sempre io sarò come Tu mi vuoi.
-Eccomi Signor, vengo a Te mio re, che si compia in me la Tua volontà.
-Eccomi Signor, vengo a Te mio Dio, plasma il cuore mio e di Te vivrò.
-Tra le Tue mani mai più vacillerò e strumento Tuo sarò.
-Come Tu mi vuoi io sarò, dove Tu mi vuoi io andrò.
-Questa vita io voglio donarla a Te, per dar gloria al Tuo nome mio re.
-Come Tu mi vuoi io sarò, dove Tu mi vuoi io andrò.
-Se mi guida il Tuo amore paura non ho, per sempre io sarò come Tu mi vuoi.
-Come Tu mi vuoi… Come Tu mi vuoi... io sarò
-Come Tu mi vuoi... io sarò
-Come Tu mi vuoi.
+<b>Dagli scritti di Sant’Agostino</b><br>
+Qual è dunque il contenuto specifico che la presente lettura offre a noi? Davvero importante, se lo comprendiamo. Gesù appare: i discepoli lo vedevano con gli occhi, ma senza riconoscerlo. Il Maestro camminava con loro per via, anzi egli stesso era la via, ma loro non camminavano per quella via. Egli stesso dovette constatare che erano andati fuori della via. Nel tempo trascorso con loro prima della passione, infatti, egli aveva predetto ogni cosa: che avrebbe patito, che sarebbe morto, che il terzo giorno sarebbe risorto. Aveva predetto tutto, ma la sua morte fu per loro come una perdita di memoria. Quando lo videro sospeso al patibolo furono così turbati che dimenticarono i suoi insegnamenti, non attesero più la sua resurrezione, non rimasero saldi nelle sue promesse. Dicono: Noi speravamo che egli fosse il redentore d'Israele. Oh discepoli, l'avevate sperato. Vuol dire che adesso non lo sperate più. Ecco, Cristo vive, ma in voi la speranza è morta. Sì, Cristo è veramente vivo; ma questo Cristo vivo trova morti i cuori dei discepoli. Apparve e non apparve ai loro occhi; era visibile e insieme nascosto. In effetti, se non lo si vedeva, come potevano udire le sue domande e rispondere ad esse? Camminava per la via come un compagno di viaggio, anzi era lui che li conduceva. Quindi lo vedevano, ma non erano in grado di riconoscerlo. I loro occhi, abbiamo così inteso erano impediti dal riconoscerlo. Erano impediti non di vederlo ma di riconoscerlo.<br><br>
 
-<h3>2° TAPPA: LUNGO LA VIA - “ Gesù si accostò e camminava con loro”</h3>
-<b>Dal Vangelo secondo Luca</b>
-In quello stesso giorno due dei discepoli erano in cammino verso un villaggio chiamato Emmaus e conversavano tra loro di tutto ciò che era accaduto. Mentre discorrevano insieme, Gesù in persona si accostò e camminava con loro, ma i loro occhi erano incapaci di riconoscerlo. Ed egli, lungo la via, spiegò loro nelle Scritture ciò che si riferiva a lui. Giunti al villaggio, lo invitarono dicendo: «Resta con noi, perché si fa sera». Quando fu a tavola con loro, prese il pane, pronunciò la benedizione, lo spezzò e lo diede loro. Allora si aprirono i loro occhi e lo riconobbero. Ed essi dissero l’uno all’altro: «Non ardeva forse il nostro cuore mentre conversava con noi lungo il cammino?». E senza indugio partirono e tornarono a Gerusalemme per annunciare che il Signore è davvero risorto.
+<b>Guida:</b> Anche noi, come i discepoli di Emmaus, a volte camminiamo con il cuore stanco, pieni di dubbi e di domande. Ci sono momenti in cui la strada sembra difficile e possiamo sentirci soli. Ma il Vangelo ci ricorda che Gesù cammina accanto a noi, anche quando non riusciamo a riconoscerlo. E ci dona dei compagni di viaggio, perché la fede non si vive da soli. Per questo, come segno di questo cammino condiviso, prendiamoci per mano e, come una sola famiglia, insieme cantiamo la preghiera del Padre Nostro.<br><br>
 
-<b>Dagli scritti di Sant’Agostino</b>
-Qual è dunque il contenuto specifico che la presente lettura offre a noi? Davvero importante, se lo comprendiamo. Gesù appare: i discepoli lo vedevano con gli occhi, ma senza riconoscerlo. Il Maestro camminava con loro per via, anzi egli stesso era la via, ma loro non camminavano per quella via. Egli stesso dovette constatare che erano andati fuori della via. Nel tempo trascorso con loro prima della passione, infatti, egli aveva predetto ogni cosa: che avrebbe patito, che sarebbe morto, che il terzo giorno sarebbe risorto. Aveva predetto tutto, ma la sua morte fu per loro come una perdita di memoria. Quando lo videro sospeso al patibolo furono così turbati che dimenticarono i suoi insegnamenti, non attesero più la sua resurrezione, non rimasero saldi nelle sue promesse. Dicono: Noi speravamo che egli fosse il redentore d'Israele. Oh discepoli, l'avevate sperato. Vuol dire che adesso non lo sperate più. Ecco, Cristo vive, ma in voi la speranza è morta. Sì, Cristo è veramente vivo; ma questo Cristo vivo trova morti i cuori dei discepoli. Apparve e non apparve ai loro occhi; era visibile e insieme nascosto. In effetti, se non lo si vedeva, come potevano udire le sue domande e rispondere ad esse? Camminava per la via come un compagno di viaggio, anzi era lui che li conduceva. Quindi lo vedevano, ma non erano in grado di riconoscerlo. I loro occhi, abbiamo così inteso erano impediti dal riconoscerlo. Erano impediti non di vederlo ma di riconoscerlo.
+<i>Canto: Resta accanto a me</i><br><br>
+Ora vado sulla mia strada con l'amore tuo che mi guida<br>
+o Signore, ovunque io vada resta accanto a me<br>
+Io ti prego, stammi vicino ogni passo del mio cammino<br>
+ogni notte, ogni mattino resta accanto a me.<br><br>
 
-<b>Guida:</b> Anche noi, come i discepoli di Emmaus, a volte camminiamo con il cuore stanco, pieni di dubbi e di domande. Ci sono momenti in cui la strada sembra difficile e possiamo sentirci soli. Ma il Vangelo ci ricorda che Gesù cammina accanto a noi, anche quando non riusciamo a riconoscerlo. E ci dona dei compagni di viaggio, perché la fede non si vive da soli. Per questo, come segno di questo cammino condiviso, prendiamoci per mano e, come una sola famiglia, insieme cantiamo la preghiera del Padre Nostro.
+<i>Il tuo sguardo puro sia luce per me e la tua parola sia voce per me.<br>
+Che io trovi il senso del mio andare solo in te, nel tuo fedele amare il mio perché.</i><br><br>
 
-<i>Canto: Resta accanto a me</i>
-Ora vado sulla mia strada con l'amore tuo che mi guida
-o Signore, ovunque io vada resta accanto a me
-Io ti prego, stammi vicino ogni passo del mio cammino
-ogni notte, ogni mattino resta accanto a me.
-Il tuo sguardo puro sia luce per me e la tua parola sia voce per me.
-Che io trovi il senso del mio andare solo in te, nel tuo fedele amare il mio perché.
-Fa' che chi mi guarda non veda che te fa' che chi mi ascolta non senta che te
-e chi pensa a me, fa' che nel cuore pensi a te e trovi quell'amore che hai dato a me.
-Ora vado sulla mia strada…
+Fa' che chi mi guarda non veda che te fa' che chi mi ascolta non senta che te<br>
+e chi pensa a me, fa' che nel cuore pensi a te e trovi quell'amore che hai dato a me.<br><br>
 
-<h3>3° TAPPA: RICONCILIARSI - “Ripartire insieme”</h3>
-<b>Dal Vangelo secondo Matteo</b>
-Avete inteso che fu detto: Occhio per occhio e dente per dente. Ma io vi dico di non opporvi al malvagio; anzi, se uno ti dà uno schiaffo sulla guancia destra, tu porgi gli anche l’altra, e a chi vuole portarti in tribunale e toglierti la tunica, tu lascia anche il mantello. E se uno ti costringerà ad accompagnarlo per un miglio, tu con lui fanne due. Dà a chi ti chiede, e a chi desidera da te un prestito non voltare le spalle. Avete inteso che fu detto: Amerai il tuo prossimo e odierai il tuo nemico. Ma io vi dico: amate i vostri nemici e pregate per quelli che vi perseguitano, affinché siate figli del Padre vostro che è nei cieli; egli fa sorgere il suo sole sui cattivi e sui buoni, e fa piovere sui giusti e sugli ingiusti. Infatti, se amate quelli che vi amano, quale ricompensa ne avete? Non fanno così anche i pubblicani? E se date il saluto soltanto ai vostri fratelli, che cosa fate di straordinario? Non fanno così anche i pagani? Voi, dunque, siate perfetti come è perfetto il Padre vostro celeste.
+Ora vado sulla mia strada…<br><br>
 
-<b>Lettore1:</b> Nulla rende gli uomini così forti nel cammino come la pace tra di loro. Dove c’è carità, lì abita Cristo; dove i fratelli vivono uniti, lì il Signore cammina in mezzo a loro.
+<h3 style="color:var(--accent); border-bottom:2px solid var(--icon-bg); padding-bottom:5px; margin-top:20px;">3° TAPPA: RICONCILIARSI - “Ripartire insieme”</h3>
+<b>Dal Vangelo secondo Matteo</b><br>
+Avete inteso che fu detto: Occhio per occhio e dente per dente. Ma io vi dico di non opporvi al malvagio; anzi, se uno ti dà uno schiaffo sulla guancia destra, tu porgi gli anche l’altra, e a chi vuole portarti in tribunale e toglierti la tunica, tu lascia anche il mantello. E se uno ti costringerà ad accompagnarlo per un miglio, tu con lui fanne due. Dà a chi ti chiede, e a chi desidera da te un prestito non voltare le spalle. Avete inteso che fu detto: Amerai il tuo prossimo e odierai il tuo nemico. Ma io vi dico: amate i vostri nemici e pregate per quelli che vi perseguitano, affinché siate figli del Padre vostro che è nei cieli; egli fa sorgere il suo sole sui cattivi e sui buoni, e fa piovere sui giusti e sugli ingiusti. Infatti, se amate quelli che vi amano, quale ricompensa ne avete? Non fanno così anche i pubblicani? E se date il saluto soltanto ai vostri fratelli, che cosa fate di straordinario? Non fanno così anche i pagani? Voi, dunque, siate perfetti come è perfetto il Padre vostro celeste.<br><br>
 
-<b>Guida:</b> Nel cammino della vita non mancano le fatiche: a volte ci si ferma, a volte ci si allontana, a volte il cuore perde la pace. Ma il Signore ci chiama sempre a ritrovarci e a riprendere la strada insieme. Prima di continuare il nostro cammino, compiamo allora un gesto semplice ma vero: riconoscerci fratelli. Scambiamoci ora un segno di pace, una stretta di mano, uno sguardo, un abbraccio, perché chi cammina con Cristo non lascia indietro nessuno.
+<b>Lettore1:</b> Nulla rende gli uomini così forti nel cammino come la pace tra di loro. Dove c’è carità, lì abita Cristo; dove i fratelli vivono uniti, lì il Signore cammina in mezzo a loro.<br><br>
 
-<i>Canto: Pace sia, Pace a voi</i>
-RIT: Pace sia, pace a voi la tua pace sarà
-sulla terra com’è nei cieli.
-Pace sia, pace a voi la tua pace sarà
-gioia nei nostri occhi, nei cuori.
+<b>Guida:</b> Nel cammino della vita non mancano le fatiche: a volte ci si ferma, a volte ci si allontana, a volte il cuore perde la pace. Ma il Signore ci chiama sempre a ritrovarci e a riprendere la strada insieme. Prima di continuare il nostro cammino, compiamo allora un gesto semplice ma vero: riconoscerci fratelli. Scambiamoci ora un segno di pace, una stretta di mano, uno sguardo, un abbraccio, perché chi cammina con Cristo non lascia indietro nessuno.<br><br>
 
-Pace sia, pace a voi la tua pace sarà
-luce limpida nei pensieri.
-Pace sia, pace a voi la tua pace sarà
-una casa per tutti.
+<i>Canto: Pace sia, Pace a voi</i><br><br>
+<i>RIT: Pace sia, pace a voi la tua pace sarà<br>
+sulla terra com’è nei cieli.<br>
+Pace sia, pace a voi la tua pace sarà<br>
+gioia nei nostri occhi, nei cuori.</i><br><br>
 
-Pace a voi sia il tuo dono visibile
-Pace a voi la tua eredità.
-Pace a voi come un canto all’unisono
-che sale dalle nostre città.
+Pace sia, pace a voi la tua pace sarà<br>
+luce limpida nei pensieri.<br>
+Pace sia, pace a voi la tua pace sarà<br>
+una casa per tutti.<br><br>
 
-<h3>4° TAPPA: ANDARE - “Destinazione mondo”</h3>
-<b>Dal Vangelo secondo Matteo</b>
-In quel tempo, gli undici discepoli andarono in Galilea, sul monte che Gesù aveva loro indicato. Quando lo videro, si prostrarono. Essi però dubitarono. Gesù si avvicinò e disse loro: «A me è stato dato ogni potere in cielo e sulla terra. Andate dunque e fate discepoli tutti i popoli, battezzandoli nel nome del Padre e del Figlio e dello Spirito Santo, insegnando loro a osservare tutto ciò che vi ho comandato. Ed ecco, io sono con voi tutti i giorni, fino alla fine del mondo».
+Pace a voi sia il tuo dono visibile<br>
+Pace a voi la tua eredità.<br>
+Pace a voi come un canto all’unisono<br>
+che sale dalle nostre città.<br><br>
 
-<i>Silenzio</i>
+<h3 style="color:var(--accent); border-bottom:2px solid var(--icon-bg); padding-bottom:5px; margin-top:20px;">4° TAPPA: ANDARE - “Destinazione mondo”</h3>
+<b>Dal Vangelo secondo Matteo</b><br>
+In quel tempo, gli undici discepoli andarono in Galilea, sul monte che Gesù aveva loro indicato. Quando lo videro, si prostrarono. Essi però dubitarono. Gesù si avvicinò e disse loro: «A me è stato dato ogni potere in cielo e sulla terra. Andate dunque e fate discepoli tutti i popoli, battezzandoli nel nome del Padre e del Figlio e dello Spirito Santo, insegnando loro a osservare tutto ciò che vi ho comandato. Ed ecco, io sono con voi tutti i giorni, fino alla fine del mondo».<br><br>
 
-<b>Dai discorsi di Papa Leone ai giovani</b>
-Carissimi giovani, forse vi rammaricate di aver ereditato un mondo lacerato da guerre e sfigurato dalle ingiustizie sociali. Eppure c’è speranza, in voi risiede speranza! Voi avete un dono, che spesso a noi adulti sembra ormai sfuggire. Voi avete speranza! Voi avete il tempo! Avete più tempo per sognare, organizzare e compiere il bene. Voi siete il presente e tra le vostre mani già si sta costruendo il futuro! E avete l’entusiasmo per cambiare il corso della storia! La vera resistenza al male non è il male, ma l’amore, capace di guarire le proprie ferite, mentre si curano quelle degli altri.
+<i>Silenzio</i><br><br>
 
-<i>Silenzio</i>
+<b>Dai discorsi di Papa Leone ai giovani</b><br>
+Carissimi giovani, forse vi rammaricate di aver ereditato un mondo lacerato da guerre e sfigurato dalle ingiustizie sociali. Eppure c’è speranza, in voi risiede speranza! Voi avete un dono, che spesso a noi adulti sembra ormai sfuggire. Voi avete speranza! Voi avete il tempo! Avete più tempo per sognare, organizzare e compiere il bene. Voi siete il presente e tra le vostre mani già si sta costruendo il futuro! E avete l’entusiasmo per cambiare il corso della storia! La vera resistenza al male non è il male, ma l’amore, capace di guarire le proprie ferite, mentre si curano quelle degli altri.<br><br>
 
-<b>Guida:</b> Il mondo che abitiamo è spesso ferito, segnato da guerre, ingiustizie e solitudini. Ma il Signore affida proprio a noi la missione di portare luce: ognuno può essere una piccola luce nel mondo. Ai piedi dell’altare è posto un mappamondo. Ogni realtà porrà sotto l’altare la lanterna ricevuta durante la veglia. È il segno della nostra missione: portare la luce di Cristo nel mondo, nei luoghi della nostra vita.
+<i>Silenzio</i><br><br>
 
-<i>Canto: Noi, chiamati a trasformare il mondo / È Dio che fa</i>
+<b>Guida:</b> Il mondo che abitiamo è spesso ferito, segnato da guerre, ingiustizie e solitudini. Ma il Signore affida proprio a noi la missione di portare luce: ognuno può essere una piccola luce nel mondo. Ai piedi dell’altare è posto un mappamondo. Ogni realtà porrà sotto l’altare la lanterna ricevuta durante la veglia. È il segno della nostra missione: portare la luce di Cristo nel mondo, nei luoghi della nostra vita.<br><br>
 
-<b>Preghiera finale</b>
-Signore Gesù,
-questa sera abbiamo camminato con Te
-e abbiamo scoperto che il cammino non finisce qui.
-La nostra destinazione è il mondo:
-le nostre case, le nostre amicizie,
-i luoghi della vita di ogni giorno.
-Donaci il coraggio di vivere ciò che ci ha insegnato
-Luigi Guanella: “fermarsi non si può”
-Quando c’è amore da donare e bene da compiere.
-Fa’ che la nostra vita diventi missione,
-perché chi incontra Te
-non può restare fermo. Amen
+<i>Canto: Noi, chiamati a trasformare il mondo / È Dio che fa</i><br><br>
 
-<i>Canto finale: Stella del mare</i>
-Un chiaro mattino che il sole baciò neanche una nuvola in cielo, dolce l'abrezza fra i mandorli in fior spande profumo, enebriante calor, un raggio di luce le illumina il volto, immerso in profonda preghiera il suo cuore, Si aprono i cieli soltanto per lei è accolta la vergine madre nell'eternità
-e da quel giorno per sempre sarà
-Regina del cielo e Stella del mare Un cuore di madre che batte per noi,
-difesa e consiglio per i figli suoi. Lei nostro rifugio e nostra speranza, Le ali che portano il cuore dell'uomo al cuore di Dio.
-Lei piena di grazia nell'eternità 
-fu serva docile, ancella ubbidiente, 
-tenera madre castissima sposa, incoronata regina sarà, 
-con una corona di dodici stelle, 
-vestita di sole, la luna ai suoi piedi, onnipotente per grazia sarà, 
-colei che condusse la vita in piena umiltà
-e da quel giorno per sempre sarà Regina del cielo e Stella del mare Un cuore di madre che batte per noi, 
-difesa e consiglio per i figli suoi. Lei nostro rifugio e nostra speranza, Le ali che portano il cuore dell'uomo al cuore di Dio.
-e tutto il creato ai suoi piedi sarà. lei! il capolavoro di Dio rimase nascosta in terra con umiltà, ora nei cieli risplenderà Lei nostro rifugio e nostra speranza, le ali che portano il cuore dell'uomo al cuore di Dio le ali che portano il cuore dell'uomo al cuore di Dio`;
+<b>Preghiera finale</b><br>
+Signore Gesù,<br>
+questa sera abbiamo camminato con Te<br>
+e abbiamo scoperto che il cammino non finisce qui.<br>
+La nostra destinazione è il mondo:<br>
+le nostre case, le nostre amicizie,<br>
+i luoghi della vita di ogni giorno.<br>
+Donaci il coraggio di vivere ciò che ci ha insegnato<br>
+Luigi Guanella: “fermarsi non si può”<br>
+Quando c’è amore da donare e bene da compiere.<br>
+Fa’ che la nostra vita diventi missione,<br>
+perché chi incontra Te<br>
+non può restare fermo. Amen<br><br>
+
+<i>Canto finale: Stella del mare</i><br><br>
+Un chiaro mattino che il sole baciò neanche una nuvola in cielo,<br>
+dolce l'abrezza fra i mandorli in fior spande profumo, enebriante calor,<br>
+un raggio di luce le illumina il volto, immerso in profonda preghiera il suo cuore,<br>
+Si aprono i cieli soltanto per lei è accolta la vergine madre nell'eternità<br><br>
+
+<i>E da quel giorno per sempre sarà<br>
+Regina del cielo e Stella del mare<br>
+Un cuore di madre che batte per noi,<br>
+difesa e consiglio per i figli suoi.<br>
+Lei nostro rifugio e nostra speranza,<br>
+Le ali che portano il cuore dell'uomo al cuore di Dio.</i><br><br>
+
+Lei piena di grazia nell'eternità <br>
+fu serva docile, ancella ubbidiente, <br>
+tenera madre castissima sposa, incoronata regina sarà, <br>
+con una corona di dodici stelle, <br>
+vestita di sole, la luna ai suoi piedi, onnipotente per grazia sarà, <br>
+colei che condusse la vita in piena umiltà<br><br>
+
+<i>E da quel giorno per sempre sarà<br>
+Regina del cielo e Stella del mare<br>
+Un cuore di madre che batte per noi, <br>
+difesa e consiglio per i figli suoi.<br>
+Lei nostro rifugio e nostra speranza,<br>
+Le ali che portano il cuore dell'uomo al cuore di Dio.</i><br><br>
+
+E tutto il creato ai suoi piedi sarà. lei! il capolavoro di Dio<br>
+rimase nascosta in terra con umiltà, ora nei cieli risplenderà<br><br>
+
+<i>Lei nostro rifugio e nostra speranza,<br>
+le ali che portano il cuore dell'uomo al cuore di Dio<br>
+le ali che portano il cuore dell'uomo al cuore di Dio</i></div>`;
 
         // --- TESTO INNO PRINCIPALE ---
         const LYRICS_INNO = `From far and wide to gather in this place
@@ -967,22 +953,22 @@ Is yours`;
 <b>T.</b> Signore, vieni presto in mio aiuto. Gloria al Padre e al Figlio e allo Spirito Santo.
 Come era nel principio, e ora e sempre, nei secoli dei secoli. Amen. Alleluia.
 
-<b>E’ bello lodarti</b>
-È bello cantare il Tuo amore, è bello lodare il Tuo nome.
-È bello cantare il Tuo amore, è bello lodarti, Signore, è bello cantare a Te!
-(2 volte)
+<b>E’ bello lodarti</b><br>
+È bello cantare il Tuo amore, è bello lodare il Tuo nome.<br>
+È bello cantare il Tuo amore, è bello lodarti, Signore, è bello cantare a Te!<br>
+(2 volte)<br><br>
 
-Tu, che sei l’Amore infinito che neppure il cielo può contenere,
-Ti sei fatto uomo, Tu sei venuto qui ad abitare in mezzo a noi, allora
+Tu, che sei l’Amore infinito che neppure il cielo può contenere,<br>
+Ti sei fatto uomo, Tu sei venuto qui ad abitare in mezzo a noi, allora<br><br>
 
-<i>È bello cantare il tuo amore…</i>
+<i>È bello cantare il tuo amore…</i><br><br>
 
-Tu che conti tutte le stelle e le chiami ad una ad una per nome,
-da mille sentieri ci hai radunati qui, ci hai chiamati figli Tuoi, allora
+Tu che conti tutte le stelle e le chiami ad una ad una per nome,<br>
+da mille sentieri ci hai radunati qui, ci hai chiamati figli Tuoi, allora<br><br>
 
-<i>È bello cantare il tuo amore, è bello lodare il Tuo nome.
-È bello cantare il Tuo amore, è bello lodarti, Signore, è bello cantare a Te!
-(2 volte)</i>
+<i>È bello cantare il tuo amore, è bello lodare il Tuo nome.<br>
+È bello cantare il Tuo amore, è bello lodarti, Signore, è bello cantare a Te!<br>
+(2 volte)</i><br><br>
 
 <b>1 ant.</b>
 Crea in me, o Dio, un cuore puro, rinnova in me uno spirito saldo.
@@ -1055,23 +1041,28 @@ Tu che ci hai resi partecipi della missione profetica del Cristo,
 <b>Padre Nostro</b>
 
 <b>Orazione Finale</b>
-Concedi al tuo popolo, o Dio, l’abbondanza dei tui doni, perché sia sempre fedele agli impegni del suo battesimo, e viva nella prosperità e nella pace in attesa della gioia eterna.
+Concedi al tuo popolo, o Dio, l’abbondanza dei tuoi doni, perché sia sempre fedele agli impegni del suo battesimo, e viva nella prosperità e nella pace in attesa della gioia eterna.
 Per il nostro Signore.
 
 <b>Conclusione</b>
 <b>C.</b> Il Signore ci benedica, ci preservi da ogni male, e ci conduca alla vita eterna.
 <b>T.</b> Amen.
 
-<b>Quale gioia è star con Te Gesù</b>
-Ogni volta che Ti cerco, ogni volta che Ti invoco, sempre mi accogli, Signor.
-Grandi sono i Tuoi prodigi, Tu sei buono verso tutti, Santo, Tu regni tra noi.
-<i>Quale gioia è star con Te, Gesù, vivo e vicino; bello è dar lode a Te: Tu sei il Signor.
-Quale dono è aver creduto in Te, che non mi abbandoni; io per sempre abiterò la Tua casa, mio Re.</i>
-Hai guarito il mio dolore, hai cambiato questo cuore: oggi rinasco, Signor.
-Grandi sono i Tuoi prodigi, Tu sei buono verso tutti, Santo, Tu regni tra noi.
-<i>Rit</i>
-Hai salvato la mia vita, hai aperto la mia bocca; canto per Te, mio Signor.
-Grandi sono i Tuoi prodigi, Tu sei buono verso tutti, Santo, Tu regni tra noi.
+<b>Quale gioia è star con Te Gesù</b><br>
+Ogni volta che Ti cerco, ogni volta che Ti invoco, sempre mi accogli, Signor.<br>
+Grandi sono i Tuoi prodigi, Tu sei buono verso tutti, Santo, Tu regni tra noi.<br><br>
+
+<i>Quale gioia è star con Te, Gesù, vivo e vicino; bello è dar lode a Te: Tu sei il Signor.<br>
+Quale dono è aver creduto in Te, che non mi abbandoni; io per sempre abiterò la Tua casa, mio Re.</i><br><br>
+
+Hai guarito il mio dolore, hai cambiato questo cuore: oggi rinasco, Signor.<br>
+Grandi sono i Tuoi prodigi, Tu sei buono verso tutti, Santo, Tu regni tra noi.<br><br>
+
+<i>Rit</i><br><br>
+
+Hai salvato la mia vita, hai aperto la mia bocca; canto per Te, mio Signor.<br>
+Grandi sono i Tuoi prodigi, Tu sei buono verso tutti, Santo, Tu regni tra noi.<br><br>
+
 <i>Rit</i>`
             },
             {
@@ -1084,26 +1075,30 @@ Gloria al Padre e al Figlio e allo Spirito Santo.
 Come era nel principio, e ora e sempre, nei secoli dei secoli.
 Amen. Alleluia.
 
-<b>Acqua siamo noi</b>
-Acqua siamo noi dall’antica sorgente veniamo,
-fiumi siamo noi se i ruscelli si mettono insieme,
-mari siamo noi se i torrenti si danno la mano,
-vita nuova c’è se Gesù è in mezzo a noi.
-<i>E allora diamoci la mano e tutti insieme camminiamo ed un oceano di pace nascerà.
-E l’egoismo cancelliamo un cuore limpido sentiamo e Dio che bagna del suo amor l’umanità.</i>
-Su nel cielo c’è Dio Padre che vive per l’uomo,
-crea tutti noi e ci ama di amore infinito,
-figli siamo noi e fratelli di Cristo Signore,
-vita nuova c’è quando Lui è in mezzo a noi.
-<i>E allora diamoci la mano…</i>
-Nuova umanità oggi nasce da chi crede in Lui,
-nuovi siamo noi se l’amore è la legge di vita,
-figli siamo noi se non siamo divisi da niente,
-vita eterna c’è quando Lui è dentro a noi.
-<i>E allora diamoci la mano…</i>
+<b>Acqua siamo noi</b><br>
+Acqua siamo noi dall’antica sorgente veniamo,<br>
+fiumi siamo noi se i ruscelli si mettono insieme,<br>
+mari siamo noi se i torrenti si danno la mano,<br>
+vita nuova c’è se Gesù è in mezzo a noi.<br><br>
 
-<b>1 ant.</b>
-È bello dar lode all’Altissimo, annunziare al mattino il suo amore.
+<i>E allora diamoci la mano e tutti insieme camminiamo ed un oceano di pace nascerà.<br>
+E l’egoismo cancelliamo un cuore limpido sentiamo e Dio che bagna del suo amor l’umanità.</i><br><br>
+
+Su nel cielo c’è Dio Padre che vive per l’uomo,<br>
+crea tutti noi e ci ama di amore infinito,<br>
+figli siamo noi e fratelli di Cristo Signore,<br>
+vita nuova c’è quando Lui è in mezzo a noi.<br><br>
+
+<i>E allora diamoci la mano…</i><br><br>
+
+Nuova umanità oggi nasce da chi crede in Lui,<br>
+nuovi siamo noi se l’amore è la legge di vita,<br>
+figli siamo noi se non siamo divisi da niente,<br>
+vita eterna c’è quando Lui è dentro a noi.<br><br>
+
+<i>E allora diamoci la mano…</i><br><br>
+
+<b>1 ant.</b> È bello dar lode all’Altissimo, annunziare al mattino il suo amore.
 
 <b>Salmo 91</b>
 È bello dar lode al Signore e cantare al tuo nome, o Altissimo,
@@ -1124,8 +1119,7 @@ piantati nella casa del Signore, fioriranno negli atri del nostro Dio.
 Nella vecchiaia daranno ancora frutti, saranno vegeti e rigogliosi,
 per annunziare quanto è retto il Signore: mia roccia, in lui non c'è ingiustizia.
 
-<b>1 ant.</b>
-È bello dar lode all’Altissimo, annunziare al mattino il suo amore.
+<b>1 ant.</b> È bello dar lode all’Altissimo, annunziare al mattino il suo amore.
 
 <b>Lettura Breve (2 Pt 3, 13-14)</b>
 Secondo la promessa del Signore, noi aspettiamo nuovi cieli e una terra nuova nei quali avrà stavile dimora la giustizia.
@@ -1133,8 +1127,7 @@ Perciò, carissimi, nell’attesa di questi eventi, cercate d’essere senza mac
 La magnanimità del Signore nostro giudicatela come salvezza.
 
 <b>Responsorio breve</b>
-<b>C.</b> Esultano le mie labbra cantando le tue lodi.
-Esultano le mie labbra cantando le tue lodi.
+<b>C.</b> Esultano le mie labbra cantando le tue lodi. Esultano le mie labbra cantando le tue lodi.
 <b>T.</b> La mia lingua proclama la tua giustizia cantando le tue lodi.
 Gloria la Padre e al Figlio e allo Spirito Santo.
 Invocherò l’Altissimo: da lui ogni mio bene
@@ -1174,38 +1167,40 @@ Salvaci dalle insidie e dalle seduzioni del male,
 
 <b>Orazione Finale</b>
 O Dio, vera luce e giorno senza tramonto, accogli la lode mattutina del tuo popolo e fa’ che il nostro spirito, libero dalle tenebre della colpa, risplenda nel fulgore della tua venuta.
-Peri il nostro Signore.
+Per il nostro Signore.
 
 <b>Conclusione</b>
 <b>C.</b> Il Signore ci benedica, ci preservi da ogni male, e ci conduca alla vita eterna.
 <b>T.</b> Amen.
 
-<b>SEMINARE DIO</b>
-Se la parola cade sulla strada,
-dentro il cuore della gente che non crede
-che ascolta e non capisce, che guarda ma non vede
-é un seme abbandonato che muore e non fiorisce.
-Se ascolti la parola con amore,
-ma per non essere deriso o emarginato
-la soffochi nel cuore, può appena germogliare
-ma la tua gioia é breve se poi ti lasci andare.
-<i>TOGLIAMO LE SPINE, LE PIETRE DAI NOSTRI CUORI,
-ARIAMO CON TUTTO L’AMORE I NOSTRI CAMPI
-ASPETTIAMO CHE PASSI L’INVERNO CON LA SUA PIOGGIA
-E AVREMO LA TERRA IMBIONDITA DI GRANO,
-IL SOLE CHE SPLENDE E L’ARCOBALENO. (2 VOLTE)</i>
-Non farti soffocare dalle spine
-del mondo che ti attrae coi suoi colori
-E’ solo l’apparenza che acceca gli occhi tuoi
-Accendi la tua vita, colorati di Lui.
-E c’è il terreno fertile dell’uomo
-che fa fruttare il seme dell’amore che impegna la sua vita,
-e tutto ciò che è suo,
-si gioca l’esistenza per seminare Dio.`
+<b>SEMINARE DIO</b><br>
+Se la parola cade sulla strada, dentro il cuore della gente che non crede<br>
+che ascolta e non capisce, che guarda ma non vede<br>
+é un seme abbandonato che muore e non fiorisce.<br><br>
+
+Se ascolti la parola con amore, ma per non essere deriso o emarginato<br>
+la soffochi nel cuore, può appena germogliare<br>
+ma la tua gioia é breve se poi ti lasci andare.<br><br>
+
+<i>TOGLIAMO LE SPINE, LE PIETRE DAI NOSTRI CUORI,<br>
+ARIAMO CON TUTTO L’AMORE I NOSTRI CAMPI<br>
+ASPETTIAMO CHE PASSI L’INVERNO CON LA SUA PIOGGIA<br>
+E AVREMO LA TERRA IMBIONDITA DI GRANO,<br>
+IL SOLE CHE SPLENDE E L’ARCOBALENO.<br>
+(2 VOLTE)</i><br><br>
+
+Non farti soffocare dalle spine del mondo che ti attrae coi suoi colori<br>
+E’ solo l’apparenza che acceca gli occhi tuoi<br>
+Accendi la tua vita, colorati di Lui.<br><br>
+
+E c’è il terreno fertile dell’uomo che fa fruttare il seme dell’amore che impegna la sua vita,<br>
+e tutto ciò che è suo, si gioca l’esistenza per seminare Dio.<br><br>
+
+<i>TOGLIAMO LE SPINE, LE PIETRE DAI NOSTRI CUORI…</i>`
             }
         ];
 
-        let currentLodiIndex = 0; 
+        let currentCantoIndex = 0; 
 
         // --- DATABASE CANTI ---
         const CANTI = [
