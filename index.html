@@ -391,6 +391,14 @@
                 <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
             </div>
 
+            <div class="card" onclick="openReader('Vescovo')">
+                <div class="card-left">
+                    <div class="icon-box"><span class="material-icons" style="color:var(--accent)">account_balance</span></div>
+                    <div class="card-title">Incontro con il Vescovo</div>
+                </div>
+                <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
+            </div>
+            
             <div class="card" onclick="openMap()">
                 <div class="card-left">
                     <div class="icon-box"><img src="assets/map.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"><span class="material-icons fallback-icon">map</span></div>
@@ -773,6 +781,71 @@
             </div>
         `;
 
+         const HTML_VESCOVO = `
+            <div style="animation: elasticSlide 0.6s ease; background:var(--card-bg); padding:25px 20px; border-radius:20px; box-shadow: 0 4px 15px var(--shadow);">
+                <h2 style="color:var(--accent); text-align:center; margin-top:0;">INCONTRO CON IL VESCOVO DI MESSINA</h2>
+                
+                <h3 style="color:var(--accent); border-bottom:2px solid var(--icon-bg); padding-bottom:5px; margin-top:20px;">Canto di Inizio: Manifesto</h3>
+                <p style="line-height: 1.8;">Noi giovani crediamo possibile<br>
+                noi seguire i passi di don Guanella;<br>
+                noi siamo convinti di poter vivere<br>
+                quando cantiamo e soffriamo,<br>
+                lavoriamo e amiamo, ci fermiamo<br>
+                e incerti cerchiamo la verità.</p>
+
+                <p style="line-height: 1.8;">Lui, la nostra strada è sempre Lui.<br>
+                Lui, Padre buono che veste i gigli del campo,<br>
+                Lui, che nutre gli uccelli del cielo,<br>
+                un Padre pieno di misericordia<br>
+                che trasforma in Eucaristia la nostra fragilità.</p>
+
+                <p style="line-height: 1.8;">Manifesto è<br>
+                tutti insieme ci impegniamo con costanza,<br>
+                Manifesto è<br>
+                costruire il Regno della Carità.<br>
+                Manifesto è, manifesto è Carità.</p>
+
+                <p style="line-height: 1.8;">Noi sicuri che è Dio che fa.<br>
+                Noi speranza anche nei sacrifici.<br>
+                Noi uniti dalla carità<br>
+                insieme siamo una famiglia<br>
+                diamo la mano al povero<br>
+                con semplicità.</p>
+
+                <p style="line-height: 1.8;">Lei Madre della Provvidenza,<br>
+                a Lei diamo i nostri desideri<br>
+                a Lei noi diamo tutto il nostro cuore<br>
+                e camminiamo verso il Padre<br>
+                insieme a don Guanella nella sua Carità. RIT.</p>
+
+                <h3 style="color:var(--accent); border-bottom:2px solid var(--icon-bg); padding-bottom:5px; margin-top:30px;">Saluto del Vescovo</h3>
+
+                <h3 style="color:var(--accent); border-bottom:2px solid var(--icon-bg); padding-bottom:5px; margin-top:30px;">Preghiera corale</h3>
+                <p style="line-height: 1.8;">Signore Gesù,<br>
+                Tu ci chiami a metterci in cammino:<br>
+                donaci il coraggio di non fermarci.<br>
+                Rendici giovani capaci di sognare,<br>
+                di amare e di servire<br>
+                sulle strade del mondo.<br>
+                Insegnaci a portare la Tua luce<br>
+                a chi incontriamo ogni giorno,<br>
+                seguendo l’esempio di San Luigi Guanella.<br>
+                Nelle nostre partenze e nei nostri ritorni,<br>
+                guidaci, Signore.<br>
+                Quando siamo stanchi,<br>
+                ricordaci che sei Tu la nostra meta<br>
+                e la forza del cammino.<br>
+                Perché fermarsi non si può,<br>
+                se il cuore è acceso da Te<br>
+                e il mondo ci aspetta.<br>
+                Amen.</p>
+
+                <h3 style="color:var(--accent); border-bottom:2px solid var(--icon-bg); padding-bottom:5px; margin-top:30px;">Benedizione del Vescovo</h3>
+
+                <h3 style="color:var(--accent); border-bottom:2px solid var(--icon-bg); padding-bottom:5px; margin-top:30px;">Conclusione con l’Inno del XXI Meeting M2G</h3>
+            </div>
+        `;
+        
         // --- TESTO VEGLIA ---
         const TEXT_VEGLIA = `<div style="animation: elasticSlide 0.6s ease; background:var(--card-bg); padding:25px 20px; border-radius:20px; box-shadow: 0 4px 15px var(--shadow);">
                 <h2 style="color:var(--accent); text-align:center; margin-top:0;">Con Lui in Cammino, dove il bene chiama</h2><br>
@@ -1659,6 +1732,8 @@ ${LYRICS_INNO}
                     </div>`;
             } else if (title === 'Programma') {
                 content.innerHTML = HTML_PROGRAMMA;
+            } else if (title === 'Vescovo') {
+                content.innerHTML = HTML_VESCOVO;
             }
             animatePageEntry('page-reader');
         }
