@@ -379,6 +379,14 @@
                 <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
             </div>
             
+            <div class="card" onclick="openReader('Apertura')">
+                <div class="card-left">
+                    <div class="icon-box"><span class="material-icons" style="color:var(--accent)">flight</span></div>
+                    <div class="card-title">Cerimonia di Apertura</div>
+                </div>
+                <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
+            </div>
+            
             <div class="card" onclick="openVegliaPage()">
                 <div class="card-left">
                     <div class="icon-box"><span class="material-icons" style="color:var(--accent)">local_fire_department</span></div>
@@ -841,6 +849,38 @@
             </div>
         `;
 
+const HTML_APERTURA_MEETING = `
+            <div style="animation: elasticSlide 0.6s ease; background:var(--card-bg); padding:25px 20px; border-radius:20px; box-shadow: 0 4px 15px var(--shadow);">
+                <h2 style="color:var(--accent); text-align:center; margin-top:0;">PREGHIERA PER L’APERTURA UFFICIALE DEL MEETING</h2>
+                
+                <p><strong>Canto d’inizio:</strong> Dio per amico</p>
+                <p style="line-height: 1.8;"><strong>Celebrante:</strong> Nel nome del Padre, del Figlio e dello Spirito Santo,<br>
+                <strong>Tutti:</strong> Amen</p>
+                
+                <p style="line-height: 1.8;"><strong>Guida:</strong> Cari giovani, siamo qui perché il Signore ci chiama ancora una volta a metterci in cammino. Il tema che guiderà questi giorni è: “Fermarsi non si può: Destinazione mondo”. Non è solo uno slogan, ma una chiamata evangelica: la chiamata di Gesù che invia e di Don Guanella che ha vissuto il Vangelo senza fermarsi, donandosi agli ultimi. Accogliamo questo invito e iniziamo insieme il nostro cammino, affidando al Signore questi giorni e il mondo verso cui siamo mandati.</p>
+                
+                <h3 style="color:var(--accent); border-bottom:2px solid var(--icon-bg); padding-bottom:5px; margin-top:20px;">Canto al Vangelo</h3>
+                <p><strong>Dal Vangelo secondo Matteo</strong></p>
+                <p style="line-height: 1.8;">“Chiamati a sé i dodici discepoli, diede loro il potere di scacciare gli spiriti immondi e di guarire ogni sorta di malattie e d'infermità. I nomi dei dodici apostoli sono: primo, Simone, chiamato Pietro, e Andrea, suo fratello; Giacomo di Zebedèo e Giovanni suo fratello, Filippo e Bartolomeo, Tommaso e Matteo il pubblicano, Giacomo di Alfeo e Taddeo, Simone il Cananeo e Giuda l'Iscariota, che poi lo tradì. Questi dodici Gesù li inviò dopo averli così istruiti: «Non andate fra i pagani e non entrate nelle città dei Samaritani; rivolgetevi piuttosto alle pecore perdute della casa d'Israele. E strada facendo, predicate che il regno dei cieli è vicino. Guarite gli infermi, risuscitate i morti, sanate i lebbrosi, cacciate i demòni. Gratuitamente avete ricevuto, gratuitamente date”</p>
+                
+                <h3 style="color:var(--accent); border-bottom:2px solid var(--icon-bg); padding-bottom:5px; margin-top:20px;">Gesto: Il Coraggio di Partire</h3>
+                <p style="line-height: 1.8;"><strong>Guida:</strong> Gesù invia i suoi discepoli nel mondo, e oggi invia ciascuno di noi. Ci chiede di non avere paura, di fidarci di Lui e di fare la differenza. Per partire è necessario uno zaino segno di un cammino che inizia.<br>
+                In esso metteremo alcune parole: ciò che desideriamo portare con noi in questi giorni e ciò che vogliamo offrire al mondo che ci attende.<br>
+                Con questo gesto affidiamo al Signore il nostro partire, certi che fermarsi non si può, perché il mondo ha bisogno di giovani pronti a camminare con Lui.</p>
+                
+                <p><strong>Canto:</strong> E la strada si apre</p>
+                <p style="line-height: 1.8;"><em>Durante il canto viene portato davanti al palco uno zaino e delle parole, una per ogni realtà partecipante, simbolo di tutto quello che serve per mettersi in viaggio.</em></p>
+                
+                <h3 style="color:var(--accent); border-bottom:2px solid var(--icon-bg); padding-bottom:5px; margin-top:20px;">Preghiamo insieme:</h3>
+                <p style="line-height: 1.8;">Signore Gesù,<br>
+                siamo qui all’inizio di un viaggio.\n Siamo arrivati con passi diversi, con storie diverse,\n ma con lo stesso desiderio nel cuore: non restare fermi.\n Tu ci chiami a partire,\n a uscire dalle nostre sicurezze,\n a fidarci della strada anche quando non ne vediamo la fine.\n Insegnaci a camminare con Te,\n a riconoscerti compagno di viaggio,\n a scoprire la tua presenza in ogni incontro.\n Rendici capaci di camminare insieme,\n di sostenerci quando il passo si fa lento,\n di aspettarci, di incoraggiarci, di non lasciare indietro nessuno.\n Fa’ che questo Meeting sia per noi un tempo di ripartenza,\n in cui riscoprire la gioia del servizio,\n il coraggio della missione\n e la bellezza di donare la vita, come ci ha insegnato Don Guanella.\n Affidiamo a Te il nostro cammino e il mondo verso cui siamo mandati.\n Guidaci con il tuo Spirito,\n perché con Te sappiamo che fermarsi non si può.<br>
+                Amen.</p>
+                
+                <h3 style="color:var(--accent); border-bottom:2px solid var(--icon-bg); padding-bottom:5px; margin-top:30px;">Apertura ufficiale del meeting</h3>
+                <p style="text-align:center; font-weight:bold; font-size:1.2rem; color:var(--accent);">INNO</p>
+            </div>
+        `;
+        
           // --- TESTO VEGLIA ---
         const TEXT_VEGLIA = `<div style="animation: elasticSlide 0.6s ease; background:var(--card-bg); padding:25px 20px; border-radius:20px; box-shadow: 0 4px 15px var(--shadow);">
                 <h2 style="color:var(--accent); text-align:center; margin-top:0;">Con Lui in Cammino, dove il bene chiama</h2><br>
@@ -1340,6 +1380,8 @@ ${LYRICS_INNO}
                 content.innerHTML = HTML_PROGRAMMA;
             } else if (title === 'Vescovo') {
                 content.innerHTML = HTML_VESCOVO;
+            } else if (title === 'Apertura') { 
+                content.innerHTML = HTML_APERTURA;
             }
             animatePageEntry('page-reader');
         }
