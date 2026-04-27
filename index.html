@@ -378,12 +378,12 @@
                 <span class="material-icons" style="color:var(--text-sec)">open_in_new</span>
             </div>
             
-            <div class="card" onclick="openLinkFoto()">
+           <div class="card" onclick="openFotoPage()">
                 <div class="card-left">
                     <div class="icon-box"><img src="assets/camera.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"><span class="material-icons fallback-icon">photo_camera</span></div>
                     <div class="card-title">Foto ricordo</div>
                 </div>
-                <span class="material-icons" style="color:var(--text-sec)">open_in_new</span>
+                <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
             </div>
             
         </div>
@@ -444,6 +444,32 @@
                     <div class="card-title">Incontro con il Vescovo</div>
                 </div>
                 <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
+            </div>
+        </div>
+    </div>
+    <div id="page-foto" class="page-overlay">
+        <div class="top-bar">
+            <div class="back-btn-circle" onclick="goHome()">
+                <span class="material-icons">arrow_back</span>
+            </div>
+            <h2 style="margin:0; font-size: 1.2rem;">Foto ricordo</h2>
+            <div style="width: 44px;"></div>
+        </div>
+        
+        <div class="container" style="padding: 0; padding-top: 10px;">
+            <div class="card" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSeTmD7aTBYh23Nbi1jFh7yejqU0yRA-xyKk-amtqNJ7_dC9Mg/viewform?usp=dialog', '_blank')">
+                <div class="card-left">
+                    <div class="icon-box"><span class="material-icons" style="color:var(--accent)">cloud_upload</span></div>
+                    <div class="card-title">CARICA FOTO</div>
+                </div>
+                <span class="material-icons" style="color:var(--text-sec)">open_in_new</span>
+            </div>
+
+            <div class="card" style="opacity: 0.6; cursor: default;">
+                <div class="card-left">
+                    <div class="icon-box"><span class="material-icons" style="color:var(--text-sec)">lock</span></div>
+                    <div class="card-title" style="color:var(--text-sec)">COMING SOON...</div>
+                </div>
             </div>
         </div>
     </div>
@@ -1254,14 +1280,19 @@ function toggleGlobalAudio(e) {
             page.style.display = 'block';
             setTimeout(() => { page.classList.add('visible'); }, 10);
         }
-function hideAll() {
-            document.querySelectorAll('.page-overlay').forEach(p => { p.classList.remove('visible'); p.style.display = 'none'; });
+        function hideAll() {
+            document.querySelectorAll('.page-overlay').forEach(p => { 
+                p.classList.remove('visible'); 
+                p.style.display = 'none'; 
+            });
             document.getElementById('page-home').style.display = 'none';
             document.getElementById('miniplayer').classList.remove('visible');
             
-            // Nasconde la barra in TUTTE le schede di lettura (Inno, Canti, ecc.)
             const navbar = document.getElementById('bottom-navbar');
             if (navbar) navbar.style.display = 'none';
+
+            // Aggiungi questa riga se non presente
+            document.getElementById('page-foto').style.display = 'none';
         }
 
         function goHome() { 
@@ -1294,6 +1325,12 @@ function hideAll() {
             hideAll();
             animatePageEntry('page-preghiera');
             document.getElementById('page-preghiera').scrollTop = 0;
+        }
+
+        function openFotoPage() {
+            hideAll();
+            animatePageEntry('page-foto');
+            document.getElementById('page-foto').scrollTop = 0;
         }
         
         // --- LOGICA VEGLIA ---
