@@ -99,22 +99,30 @@
         .back-btn-circle:active { transform: scale(0.9); }
         .back-btn-circle .material-icons { font-size: 22px; }
 
-        /* --- MINIPLAYER MODIFICATO --- */
+        /* --- MINI PLAYER CORRETTO --- */
         #miniplayer {
-            display: none; /* <--- Lo nascondiamo completamente di base */
             position: fixed;
-            bottom: 90px; left: 15px; right: 15px;
+            bottom: 20px; /* Più in basso per non stare in mezzo */
+            left: 15px; right: 15px;
             background-color: var(--accent); color: white;
             border-radius: 16px; 
+            display: flex; 
             align-items: center; justify-content: space-between;
             box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-            z-index: 200; 
+            z-index: 1000; 
             overflow: hidden; 
             min-height: 75px;
             height: auto; padding: 5px 0; 
+            /* Animazione e trasparenza iniziale */
+            transform: translateY(200px); 
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
         }
         #miniplayer.visible { 
-            display: flex; /* <--- Appare solo quando ha la classe .visible */
+            transform: translateY(0); 
+            opacity: 1;
+            pointer-events: auto;
         }
         
         @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
@@ -1187,10 +1195,17 @@ Hai salvato la mia vita,\nhai aperto la mia bocca;\ncanto per Te, mio Signor.\nG
 
 function toggleGlobalAudio(e) {
             if(e) e.stopPropagation();
+            const mp = document.getElementById('miniplayer');
             if (audio.paused) {
                 audio.play();
                 mpPlayIcon.textContent = 'pause';
-                // La riga del miniplayer è stata rimossa da qui
+                
+                // Se siamo nella pagina dell'Inno, facciamo riapparire il miniplayer se era stato chiuso
+                if (document.getElementById('page-reader').classList.contains('visible') && 
+                    document.getElementById('reader-title').textContent === 'Inno') {
+                    mp.classList.add('visible');
+                }
+                
                 updateMainPlayIcon(true);
             } else {
                 audio.pause();
@@ -1328,7 +1343,7 @@ function toggleGlobalAudio(e) {
         }
 
         // --- READER GENERICO (Inno, Programma) ---
-        function openReader(title) {
+         function openReader(title) {
             hideAll();
             document.getElementById('reader-title').textContent = title;
             const content = document.getElementById('reader-content');
