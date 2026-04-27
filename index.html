@@ -1310,8 +1310,15 @@ function toggleGlobalAudio(e) {
         }
 
         function goUser() { 
-            hideAll(); 
+            hideAll();
             animatePageEntry('page-user'); 
+            
+            // La fa riapparire SOLO nel Profilo e illumina il tasto
+            const navbar = document.getElementById('bottom-navbar');
+            if (navbar) navbar.style.display = 'flex';
+            document.getElementById('nav-home').classList.remove('active');
+            document.getElementById('nav-user').classList.add('active');
+        }
 
         function goBack() {
             const readerTitle = document.getElementById('reader-title').textContent;
@@ -1337,13 +1344,7 @@ function toggleGlobalAudio(e) {
                 goHome();
             }
         }
-            
-            // La fa riapparire SOLO nel Profilo e illumina il tasto
-            const navbar = document.getElementById('bottom-navbar');
-            if (navbar) navbar.style.display = 'flex';
-            document.getElementById('nav-home').classList.remove('active');
-            document.getElementById('nav-user').classList.add('active');
-        }
+        
         function openNotes() { hideAll(); animatePageEntry('page-notes'); }
         function openLinkFoto() { window.open(LINK_FOTO_RICORDO, '_blank'); }
         function openMap() { window.open('https://www.google.com/maps/d/edit?mid=1qIAoelICzwVYC3RKo25PBX-vUs9dJCM&usp=sharing', '_blank'); }
