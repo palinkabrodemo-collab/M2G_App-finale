@@ -544,7 +544,7 @@
 
     <div id="page-reader" class="page-overlay">
         <div class="top-bar">
-            <div class="back-btn-circle" onclick="goHome()">
+            <div class="back-btn-circle" onclick="goBack()">
                 <span class="material-icons">arrow_back</span>
             </div>
             <h2 id="reader-title" style="margin:0; font-size: 1.2rem;">Titolo</h2>
@@ -1548,13 +1548,15 @@ ${LYRICS_INNO}
             if (diffY > 60) return; 
 
             if (diffX > 70) {
-                // SWIPE VERSO DESTRA -> Canto Precedente oppure Torna Indietro
+                // SWIPE VERSO DESTRA -> Canto/Lode Precedente oppure Torna Indietro
                 if (document.getElementById('page-canti').style.display === 'block') {
-                    prevCanto();
+                    if (currentCantoIndex > -1) prevCanto(); // Se non sei all'indice, vai al canto prima
+                    else goBack(); // Se sei all'indice, torna al menu Preghiera
                 } else if (document.getElementById('page-lodi').style.display === 'block') {
-                    prevLodi();
+                    if (currentLodiIndex > 0) prevLodi(); // Se sei al giorno 2, vai al giorno 1
+                    else goBack(); // Se sei al giorno 1, torna al menu Preghiera
                 } else {
-                    // Cerca quale pagina overlay è attualmente aperta e chiudila
+                    // Per tutte le altre pagine: cerca quale è aperta e usa la logica di uscita
                     const openPage = Array.from(document.querySelectorAll('.page-overlay')).find(p => p.style.display === 'block');
                     if (openPage) {
                         if (openPage.id === 'page-notes') goUser(); // Dalle note torna al profilo
