@@ -1250,6 +1250,7 @@ function toggleGlobalAudio(e) {
         // NAVIGAZIONE
         function animatePageEntry(pageId) {
             const page = document.getElementById(pageId);
+            page.scrollTop = 0;
             page.style.display = 'block';
             setTimeout(() => { page.classList.add('visible'); }, 10);
         }
