@@ -236,7 +236,7 @@
         .main-slider-container { display: flex; align-items: center; gap: 10px; font-size: 0.8rem; color: var(--text-sec); font-variant-numeric: tabular-nums; }
         .main-slider { flex: 1; -webkit-appearance: none; height: 6px; border-radius: 3px; background: #e0e0e0; outline: none; accent-color: var(--accent); }
         .main-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); cursor: pointer; }
-        .navbar { position: fixed; bottom: 25px; left: 25px; right: 25px; background-color: var(--card-bg); border-radius: 25px; padding: 12px 0; display: flex; justify-content: space-around; box-shadow: 0 10px 25px var(--shadow); z-index: 50; transition: transform 0.3s; }
+        .navbar { position: fixed; bottom: 25px; left: 25px; right: 25px; background-color: var(--card-bg); border-radius: 25px; padding: 12px 0; display: flex; justify-content: space-around; box-shadow: 0 10px 25px var(--shadow); z-index: 150; transition: transform 0.3s; }
         .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 0.7rem; font-weight: 700; color: #bbbbbb; transition: color 0.3s, transform 0.3s; }
         .nav-item.active { color: var(--accent); transform: translateY(-4px); }
         .nav-item .material-icons { font-size: 1.6rem; margin-bottom: 4px; }
@@ -387,9 +387,9 @@
             </div>
             
         </div>
-        <div class="navbar">
-            <div class="nav-item active" onclick="goHome()"><span class="material-icons">home</span><span>HOME</span></div>
-            <div class="nav-item" onclick="goUser()"><span class="material-icons">person</span><span>PROFILO</span></div>
+    </div> <div class="navbar" id="bottom-navbar">
+        <div class="nav-item active" id="nav-home" onclick="goHome()"><span class="material-icons">home</span><span>HOME</span></div>
+        <div class="nav-item" id="nav-user" onclick="goUser()"><span class="material-icons">person</span><span>PROFILO</span></div>
         </div>
     </div>
 
@@ -1253,14 +1253,37 @@ function toggleGlobalAudio(e) {
             page.style.display = 'block';
             setTimeout(() => { page.classList.add('visible'); }, 10);
         }
-        function hideAll() {
+function hideAll() {
             document.querySelectorAll('.page-overlay').forEach(p => { p.classList.remove('visible'); p.style.display = 'none'; });
             document.getElementById('page-home').style.display = 'none';
-            // AGGIUNGI QUESTA RIGA:
             document.getElementById('miniplayer').classList.remove('visible');
+            
+            // Nasconde la barra in TUTTE le schede di lettura (Inno, Canti, ecc.)
+            const navbar = document.getElementById('bottom-navbar');
+            if (navbar) navbar.style.display = 'none';
         }
-        function goHome() { hideAll(); document.getElementById('page-home').style.display = 'block'; }
-        function goUser() { hideAll(); animatePageEntry('page-user'); }
+
+        function goHome() { 
+            hideAll(); 
+            document.getElementById('page-home').style.display = 'block'; 
+            
+            // La fa riapparire SOLO nella Home e illumina il tasto
+            const navbar = document.getElementById('bottom-navbar');
+            if (navbar) navbar.style.display = 'flex';
+            document.getElementById('nav-home').classList.add('active');
+            document.getElementById('nav-user').classList.remove('active');
+        }
+
+        function goUser() { 
+            hideAll(); 
+            animatePageEntry('page-user'); 
+            
+            // La fa riapparire SOLO nel Profilo e illumina il tasto
+            const navbar = document.getElementById('bottom-navbar');
+            if (navbar) navbar.style.display = 'flex';
+            document.getElementById('nav-home').classList.remove('active');
+            document.getElementById('nav-user').classList.add('active');
+        }
         function openNotes() { hideAll(); animatePageEntry('page-notes'); }
         function openLinkFoto() { window.open(LINK_FOTO_RICORDO, '_blank'); }
         function openMap() { window.open('https://www.google.com/maps/d/edit?mid=1qIAoelICzwVYC3RKo25PBX-vUs9dJCM&usp=sharing', '_blank'); }
