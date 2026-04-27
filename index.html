@@ -395,7 +395,7 @@
 
 <div id="page-preghiera" class="page-overlay">
         <div class="top-bar">
-            <div class="back-btn-circle" onclick="goHome()">
+            <div class="back-btn-circle" onclick="goBack()">
                 <span class="material-icons">arrow_back</span>
             </div>
             <h2 style="margin:0; font-size: 1.2rem;">Preghiera</h2>
@@ -449,7 +449,7 @@
     </div>
     <div id="page-foto" class="page-overlay">
         <div class="top-bar">
-            <div class="back-btn-circle" onclick="goHome()">
+            <div class="back-btn-circle" onclick="goBack()">
                 <span class="material-icons">arrow_back</span>
             </div>
             <h2 style="margin:0; font-size: 1.2rem;">Foto ricordo</h2>
@@ -475,7 +475,7 @@
     </div>
     <div id="page-veglia" class="page-overlay">
         <div class="top-bar">
-            <div class="back-btn-circle" onclick="goHome()">
+            <div class="back-btn-circle" onclick="goBack()">
                 <span class="material-icons">arrow_back</span>
             </div>
             <h2 style="margin:0; font-size: 1.2rem;">Veglia</h2>
@@ -488,7 +488,7 @@
 
     <div id="page-lodi" class="page-overlay">
         <div class="top-bar">
-            <div class="back-btn-circle" onclick="goHome()">
+            <div class="back-btn-circle" onclick="goBack()">
                 <span class="material-icons">arrow_back</span>
             </div>
             
@@ -516,7 +516,7 @@
 
     <div id="page-canti" class="page-overlay">
         <div class="top-bar">
-            <div class="back-btn-circle" onclick="goHome()">
+            <div class="back-btn-circle" onclick="goBack()">
                 <span class="material-icons">arrow_back</span>
             </div>
             
@@ -555,7 +555,7 @@
 
     <div id="page-user" class="page-overlay">
         <div class="top-bar">
-            <div class="back-btn-circle" onclick="goHome()">
+            <div class="back-btn-circle" onclick="goBack()">
                 <span class="material-icons">arrow_back</span>
             </div>
             <h2 style="margin:0; font-size: 1.2rem;">Profilo</h2>
@@ -1276,9 +1276,12 @@ function toggleGlobalAudio(e) {
         // NAVIGAZIONE
         function animatePageEntry(pageId) {
             const page = document.getElementById(pageId);
-            page.scrollTop = 0;
             page.style.display = 'block';
-            setTimeout(() => { page.classList.add('visible'); }, 10);
+            page.scrollTop = 0; // Reset immediato prima dell'animazione
+            setTimeout(() => { 
+                page.classList.add('visible'); 
+                page.scrollTop = 0; // Secondo reset per sicurezza durante l'animazione
+            }, 10);
         }
         function hideAll() {
             document.querySelectorAll('.page-overlay').forEach(p => { 
@@ -1309,6 +1312,31 @@ function toggleGlobalAudio(e) {
         function goUser() { 
             hideAll(); 
             animatePageEntry('page-user'); 
+
+        function goBack() {
+            const readerTitle = document.getElementById('reader-title').textContent;
+            const openPage = Array.from(document.querySelectorAll('.page-overlay')).find(p => p.style.display === 'block');
+            
+            if (!openPage) return;
+
+            // Definiamo quali pagine devono tornare al menu Preghiera
+            const subPreghiera = ['page-veglia', 'page-lodi', 'page-canti'];
+            
+            if (subPreghiera.includes(openPage.id)) {
+                openPreghieraPage();
+            } else if (openPage.id === 'page-reader') {
+                // Se il reader mostra il Vescovo o l'Apertura, torna a Preghiera
+                if (readerTitle === 'Vescovo' || readerTitle === 'Apertura') {
+                    openPreghieraPage();
+                } else {
+                    goHome();
+                }
+            } else if (openPage.id === 'page-notes') {
+                goUser();
+            } else {
+                goHome();
+            }
+        }
             
             // La fa riapparire SOLO nel Profilo e illumina il tasto
             const navbar = document.getElementById('bottom-navbar');
@@ -1529,7 +1557,7 @@ ${LYRICS_INNO}
                     const openPage = Array.from(document.querySelectorAll('.page-overlay')).find(p => p.style.display === 'block');
                     if (openPage) {
                         if (openPage.id === 'page-notes') goUser(); // Dalle note torna al profilo
-                        else goHome(); // Da tutte le altre torna alla home
+                        else goBack(); // Usa la logica di navigazione intelligente
                     }
                 }
             } else if (diffX < -70) {
