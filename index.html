@@ -342,7 +342,7 @@
             <div class="welcome-text">Bentornato, <br><span id="user-name-display" style="color:var(--accent)">Utente</span></div>
         </div>
 
-        <div class="container">
+<div class="container">
             
             <div class="card" onclick="openReader('Programma')">
                 <div class="card-left">
@@ -352,10 +352,10 @@
                 <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
             </div>
 
-            <div class="card" onclick="openLodiPage()">
+            <div class="card" onclick="openPreghieraPage()">
                 <div class="card-left">
-                    <div class="icon-box"><img src="assets/sunrise.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"><span class="material-icons fallback-icon">wb_sunny</span></div>
-                    <div class="card-title">Lodi Mattutine</div>
+                    <div class="icon-box"><span class="material-icons" style="color:var(--accent)">menu_book</span></div>
+                    <div class="card-title">Preghiera</div>
                 </div>
                 <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
             </div>
@@ -364,41 +364,6 @@
                 <div class="card-left">
                     <div class="icon-box"><img src="assets/music.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"><span class="material-icons fallback-icon">music_note</span></div>
                     <div class="card-title">Inno</div>
-                </div>
-                <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
-            </div>
-            
-            <div class="card" onclick="openCantiPage()">
-                <div class="card-left">
-                    <div class="icon-box">
-                        <img src="assets/canti.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
-                        <span class="material-icons fallback-icon">library_music</span>
-                    </div>
-                    <div class="card-title">Canti</div>
-                </div>
-                <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
-            </div>
-            
-            <div class="card" onclick="openReader('Apertura')">
-                <div class="card-left">
-                    <div class="icon-box"><span class="material-icons" style="color:var(--accent)">flight</span></div>
-                    <div class="card-title">Cerimonia di Apertura</div>
-                </div>
-                <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
-            </div>
-            
-            <div class="card" onclick="openVegliaPage()">
-                <div class="card-left">
-                    <div class="icon-box"><span class="material-icons" style="color:var(--accent)">local_fire_department</span></div>
-                    <div class="card-title">Veglia</div>
-                </div>
-                <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
-            </div>
-
-            <div class="card" onclick="openReader('Vescovo')">
-                <div class="card-left">
-                    <div class="icon-box"><span class="material-icons" style="color:var(--accent)">church</span></div>
-                    <div class="card-title">Incontro con il Vescovo</div>
                 </div>
                 <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
             </div>
@@ -418,6 +383,7 @@
                 </div>
                 <span class="material-icons" style="color:var(--text-sec)">open_in_new</span>
             </div>
+            
         </div>
         <div class="navbar">
             <div class="nav-item active" onclick="goHome()"><span class="material-icons">home</span><span>HOME</span></div>
@@ -425,6 +391,60 @@
         </div>
     </div>
 
+<div id="page-preghiera" class="page-overlay">
+        <div class="top-bar">
+            <div class="back-btn-circle" onclick="goHome()">
+                <span class="material-icons">arrow_back</span>
+            </div>
+            <h2 style="margin:0; font-size: 1.2rem;">Preghiera</h2>
+            <div style="width: 44px;"></div>
+        </div>
+        
+        <div class="container" style="padding: 0; padding-top: 10px;">
+            <div class="card" onclick="openReader('Apertura')">
+                <div class="card-left">
+                    <div class="icon-box"><span class="material-icons" style="color:var(--accent)">flight</span></div>
+                    <div class="card-title">Cerimonia di Apertura</div>
+                </div>
+                <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
+            </div>
+
+            <div class="card" onclick="openLodiPage()">
+                <div class="card-left">
+                    <div class="icon-box"><img src="assets/sunrise.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"><span class="material-icons fallback-icon">wb_sunny</span></div>
+                    <div class="card-title">Lodi Mattutine</div>
+                </div>
+                <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
+            </div>
+            
+            <div class="card" onclick="openCantiPage()">
+                <div class="card-left">
+                    <div class="icon-box">
+                        <img src="assets/canti.png" class="asset-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                        <span class="material-icons fallback-icon">library_music</span>
+                    </div>
+                    <div class="card-title">Canti</div>
+                </div>
+                <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
+            </div>
+
+            <div class="card" onclick="openVegliaPage()">
+                <div class="card-left">
+                    <div class="icon-box"><span class="material-icons" style="color:var(--accent)">local_fire_department</span></div>
+                    <div class="card-title">Veglia</div>
+                </div>
+                <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
+            </div>
+
+            <div class="card" onclick="openReader('Vescovo')">
+                <div class="card-left">
+                    <div class="icon-box"><span class="material-icons" style="color:var(--accent)">church</span></div>
+                    <div class="card-title">Incontro con il Vescovo</div>
+                </div>
+                <span class="material-icons" style="color:var(--text-sec)">chevron_right</span>
+            </div>
+        </div>
+    </div>
     <div id="page-veglia" class="page-overlay">
         <div class="top-bar">
             <div class="back-btn-circle" onclick="goHome()">
@@ -1280,6 +1300,13 @@ Hai salvato la mia vita,\nhai aperto la mia bocca;\ncanto per Te, mio Signor.\nG
         function openLinkFoto() { window.open(LINK_FOTO_RICORDO, '_blank'); }
         function openMap() { window.open('https://www.google.com/maps/d/edit?mid=1qIAoelICzwVYC3RKo25PBX-vUs9dJCM&usp=sharing', '_blank'); }
 
+        // --- LOGICA SOTTOMENÙ PREGHIERA ---
+        function openPreghieraPage() {
+            hideAll();
+            animatePageEntry('page-preghiera');
+            document.getElementById('page-preghiera').scrollTop = 0;
+        }
+        
         // --- LOGICA VEGLIA ---
         function openVegliaPage() {
             hideAll();
