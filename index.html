@@ -99,28 +99,22 @@
         .back-btn-circle:active { transform: scale(0.9); }
         .back-btn-circle .material-icons { font-size: 22px; }
 
-        /* --- MINIPLAYER CON EFFETTO "LIQUIDO" --- */
+        /* --- MINIPLAYER MODIFICATO --- */
         #miniplayer {
-            position: fixed; bottom: 90px; left: 15px; right: 15px;
+            display: none; /* <--- Lo nascondiamo completamente di base */
+            position: fixed;
+            bottom: 90px; left: 15px; right: 15px;
             background-color: var(--accent); color: white;
             border-radius: 16px; 
-            display: flex; align-items: center; justify-content: space-between;
+            align-items: center; justify-content: space-between;
             box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-            z-index: 200; transform: translateY(150px);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 200; 
             overflow: hidden; 
-            min-height: 75px; height: auto; padding: 5px 0; 
+            min-height: 75px;
+            height: auto; padding: 5px 0; 
         }
-        #miniplayer.visible { transform: translateY(0); }
-        
-        .mp-fill-layer {
-            position: absolute; top: 0; left: 0; bottom: 0;
-            width: 0%; 
-            background-color: rgba(255, 255, 255, 0.25);
-            z-index: 1; 
-            transition: width 0.25s linear; 
-            border-right: 3px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 2px 0 15px rgba(255, 255, 255, 0.5);
+        #miniplayer.visible { 
+            display: flex; /* <--- Appare solo quando ha la classe .visible */
         }
         
         @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
@@ -1012,7 +1006,7 @@ in questo viaggio con umiltà
 e la nostra strada si aprirà
 e da lassù coraggio ci darà.
 Don Guanella ci guiderà
-in questa strada con umiltà
+sul cammino di carità
 e da lontano ci griderà:
 FERMARSI NON SI PUÒ, DESTINAZIONE MONDO!
 
@@ -1191,12 +1185,12 @@ Hai salvato la mia vita,\nhai aperto la mia bocca;\ncanto per Te, mio Signor.\nG
 
         function seekAudio(val) { audio.currentTime = val; }
 
-        function toggleGlobalAudio(e) {
+function toggleGlobalAudio(e) {
             if(e) e.stopPropagation();
             if (audio.paused) {
                 audio.play();
                 mpPlayIcon.textContent = 'pause';
-                miniplayer.classList.add('visible');
+                // La riga del miniplayer è stata rimossa da qui
                 updateMainPlayIcon(true);
             } else {
                 audio.pause();
@@ -1247,6 +1241,8 @@ Hai salvato la mia vita,\nhai aperto la mia bocca;\ncanto per Te, mio Signor.\nG
         function hideAll() {
             document.querySelectorAll('.page-overlay').forEach(p => { p.classList.remove('visible'); p.style.display = 'none'; });
             document.getElementById('page-home').style.display = 'none';
+            // AGGIUNGI QUESTA RIGA:
+            document.getElementById('miniplayer').classList.remove('visible');
         }
         function goHome() { hideAll(); document.getElementById('page-home').style.display = 'block'; }
         function goUser() { hideAll(); animatePageEntry('page-user'); }
@@ -1338,6 +1334,8 @@ Hai salvato la mia vita,\nhai aperto la mia bocca;\ncanto per Te, mio Signor.\nG
             const content = document.getElementById('reader-content');
             content.innerHTML = "";
             if (title === 'Inno') {
+                document.getElementById('miniplayer').classList.add('visible');
+                
                 const isPlaying = !audio.paused;
                 const playIcon = isPlaying ? 'pause' : 'play_arrow';
                 content.innerHTML = `
