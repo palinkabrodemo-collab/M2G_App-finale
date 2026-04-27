@@ -324,8 +324,8 @@
         </div>
     </div>
 
-    <div id="quote-overlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center; padding:20px; opacity:0; transition: opacity 0.3s;">
-        <div style="background:var(--card-bg); padding:30px; border-radius:20px; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.3); max-width:400px; transform:scale(0.8); transition: transform 0.3s;" id="quote-box">
+   <div id="quote-overlay" onclick="closeQuote()" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center; padding:20px; opacity:0; transition: opacity 0.3s;">
+        <div style="background:var(--card-bg); padding:30px; border-radius:20px; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.3); max-width:400px; transform:scale(0.8); transition: transform 0.3s;" id="quote-box" onclick="event.stopPropagation()">
             <span class="material-icons" style="font-size:50px; color:#FFD700; margin-bottom:15px; text-shadow: 0 0 15px rgba(255,215,0,0.5);">lightbulb</span>
             <p id="quote-text" style="font-size:1.1rem; font-style:italic; line-height:1.6; color:var(--text-color); margin-bottom:25px;"></p>
             <div class="back-btn-circle" style="margin:0 auto; background:var(--accent); color:white; border:none;" onclick="closeQuote()"><span class="material-icons">close</span></div>
@@ -1422,6 +1422,53 @@ ${LYRICS_INNO}
                 }
             });
         });
+// --- GESTIONE SWIPE (GESTURES TOUCH) ---
+        let touchstartX = 0;
+        let touchstartY = 0;
+        let touchendX = 0;
+        let touchendY = 0;
+
+        document.addEventListener('touchstart', e => {
+            touchstartX = e.changedTouches[0].screenX;
+            touchstartY = e.changedTouches[0].screenY;
+        }, {passive: true});
+
+        document.addEventListener('touchend', e => {
+            touchendX = e.changedTouches[0].screenX;
+            touchendY = e.changedTouches[0].screenY;
+            handleSwipeGesture();
+        }, {passive: true});
+
+        function handleSwipeGesture() {
+            const diffX = touchendX - touchstartX;
+            const diffY = Math.abs(touchendY - touchstartY);
+            
+            // Se l'utente ha scrollato in verticale (più di 60px), ignoriamo lo swipe orizzontale
+            if (diffY > 60) return; 
+
+            if (diffX > 70) {
+                // SWIPE VERSO DESTRA -> Canto Precedente oppure Torna Indietro
+                if (document.getElementById('page-canti').style.display === 'block') {
+                    prevCanto();
+                } else if (document.getElementById('page-lodi').style.display === 'block') {
+                    prevLodi();
+                } else {
+                    // Cerca quale pagina overlay è attualmente aperta e chiudila
+                    const openPage = Array.from(document.querySelectorAll('.page-overlay')).find(p => p.style.display === 'block');
+                    if (openPage) {
+                        if (openPage.id === 'page-notes') goUser(); // Dalle note torna al profilo
+                        else goHome(); // Da tutte le altre torna alla home
+                    }
+                }
+            } else if (diffX < -70) {
+                // SWIPE VERSO SINISTRA -> Canto Successivo (o Lode)
+                if (document.getElementById('page-canti').style.display === 'block') {
+                    nextCanto();
+                } else if (document.getElementById('page-lodi').style.display === 'block') {
+                    nextLodi();
+                }
+            }
+        }
     </script>
 </body>
 </html>
