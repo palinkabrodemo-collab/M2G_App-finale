@@ -1337,31 +1337,65 @@ function hideAll() {
         // --- LOGICA CANTI ---
         function openCantiPage() {
             hideAll();
-            renderCanto(0); 
+            renderCanto(-1); // -1 indica la visualizzazione dell'indice
             animatePageEntry('page-canti');
         }
 
-        function renderCanto(index) {
-            if (index < 0 || index >= CANTI.length) return;
+         function renderCanto(index) {
+            if (index < -1 || index >= CANTI.length) return;
             currentCantoIndex = index;
-            const canto = CANTI[currentCantoIndex];
-            
-            document.getElementById('canto-title-display').textContent = canto.title;
-            document.getElementById('canto-text-display').textContent = canto.text;
-            document.getElementById('canto-counter').textContent = `${canto.num} / ${CANTI.length}`;
-            document.getElementById('canto-search-input').value = canto.num;
+            const titleDisp = document.getElementById('canto-title-display');
+            const textDisp = document.getElementById('canto-text-display');
+            const counterDisp = document.getElementById('canto-counter');
+            const searchInput = document.getElementById('canto-search-input');
+
+            if (index === -1) {
+                // VISUALIZZAZIONE INDICE
+                titleDisp.textContent = "Indice dei Canti";
+                
+                let indexHtml = '<div style="display:flex; flex-direction:column; gap:5px;">';
+                CANTI.forEach((canto, i) => {
+                    indexHtml += `
+                        <div onclick="renderCanto(${i})" style="padding:12px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; cursor:pointer; active:background-color:var(--border);">
+                            <span style="font-weight:600; color:var(--text-color);">${canto.num}. ${canto.title.replace(canto.num + '. ', '')}</span>
+                            <span class="material-icons" style="font-size:18px; color:var(--accent)">chevron_right</span>
+                        </div>`;
+                });
+                indexHtml += '</div>';
+                
+                textDisp.innerHTML = indexHtml;
+                counterDisp.textContent = "Indice";
+                searchInput.value = 0;
+            } else {
+                // VISUALIZZAZIONE CANTO SINGOLO
+                const canto = CANTI[index];
+                titleDisp.textContent = canto.title;
+                textDisp.textContent = canto.text; // Usiamo textContent per preservare i ritorni a capo
+                counterDisp.textContent = `${canto.num} / ${CANTI.length}`;
+                searchInput.value = canto.num;
+            }
             
             document.getElementById('page-canti').scrollTop = 0;
         }
 
-        function nextCanto() { if (currentCantoIndex < CANTI.length - 1) renderCanto(currentCantoIndex + 1); }
-        function prevCanto() { if (currentCantoIndex > 0) renderCanto(currentCantoIndex - 1); }
+        function nextCanto() { 
+            if (currentCantoIndex < CANTI.length - 1) renderCanto(currentCantoIndex + 1); 
+        }
+
+        function prevCanto() { 
+            if (currentCantoIndex > -1) renderCanto(currentCantoIndex - 1); 
+        }
+
         function jumpToCanto(val) {
             let num = parseInt(val);
             if (isNaN(num)) return;
-            if (num < 1) num = 1;
-            if (num > CANTI.length) num = CANTI.length;
-            renderCanto(num - 1);
+            if (num === 0) {
+                renderCanto(-1);
+            } else {
+                if (num < 1) num = 1;
+                if (num > CANTI.length) num = CANTI.length;
+                renderCanto(num - 1);
+            }
             document.getElementById('canto-search-input').blur();
         }
 
